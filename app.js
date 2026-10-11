@@ -1,21 +1,27 @@
 import { DATA_URL, DATA_URL_FALLBACK, ALL_MODELS, CONSENSUS_MODELS } from './lib/config.js';
-import { forecastUrl, foehnUrl, ensembleUrl, validateRefreshUrl } from './lib/urls.js';
-import { romeDate, romeHHMM, romeHourly, addDays, dayLabel, hoursAgo, wallFor } from './lib/time.js';
+import { forecastUrl, foehnUrl, ensembleUrl, longRangeUrl, validateRefreshUrl } from './lib/urls.js';
+import { romeDate, romeHHMM, romeHourly, addDays, dayLabel, wallFor } from './lib/time.js';
 import { normalizeForecast, verdictLabel, outlookLabel, confidenceLabel, foehnLabel } from './lib/forecast-json.js';
 import { foehnSeries, ensembleSeries, dayFoehnDp, dayExtremes } from './lib/foehn.js';
+import { ensembleFoehnDaily, longRangeRows } from './lib/longrange.js';
 import { modelHour, consensusHour } from './lib/model.js';
 import { scoreHour, foehnClass } from './lib/score.js';
 import { wmoGroup } from './lib/icons.js';
 import { createPoller } from './lib/poll.js';
+import { parseWindow, hourStrip } from './lib/layout.js';
+import { statusLine } from './lib/status.js';
 import { el } from './ui/dom.js';
 import { foehnChartSvg, foehnLegend } from './ui/chart.js';
-import { hourlyTable, modelTable } from './ui/hourly.js';
+import { hourGrid, hourStripEl, hourDetail } from './ui/hourly.js';
+import { modelCharts } from './ui/models.js';
+import { longRangeView } from './ui/longrange.js';
 
 const HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17];
 const REFRESH_KEY = 'grappa.refreshUrl';
 const UNIT_KEY = 'grappa.unit';
 const POLL_MS = 30000;
 const POLL_MAX = 20; // 10 minutes
+const LONG_RANGE_DAYS = 15;
 const DATA_SOURCES = [
   { url: DATA_URL, headers: { Accept: 'application/vnd.github.raw+json' } },
   { url: DATA_URL_FALLBACK },
@@ -36,6 +42,8 @@ const state = {
   cachedAt: null,
   selected: null,
 };
+
+let dayCols = []; // columns of the day on screen, for the hour dialog
 
 // ---- storage (private mode can throw) ----
 
@@ -89,7 +97,25 @@ async function fetchVerdict() {
   throw lastError;
 }
 
-function buildLive(main, foehnLocations, ensembleLocations) {
+/** The 15 local days of the long-range table, from today. */
+function longRangeDates() {
+  const today = romeDate();
+  return Array.from({ length: LONG_RANGE_DAYS }, (_, n) => addDays(today, n));
+}
+
+/** Long-range rows, or null when the response is unusable. A failure here never breaks the deterministic data. */
+function buildLongRange(json, ensembleLocal) {
+  try {
+    if (!Array.isArray(json?.hourly?.time)) return null;
+    const dates = longRangeDates();
+    const foehnByDate = ensembleLocal ? ensembleFoehnDaily(ensembleLocal, dates) : null;
+    return longRangeRows(romeHourly(json.hourly), dates, foehnByDate);
+  } catch {
+    return null;
+  }
+}
+
+function buildLive(main, foehnLocations, ensembleLocations, longRangeJson) {
   if (!main?.hourly?.time || !Array.isArray(foehnLocations) || foehnLocations.length < 4) {
     throw new Error('unexpected Open-Meteo response');
   }
@@ -97,22 +123,30 @@ function buildLive(main, foehnLocations, ensembleLocations) {
   const hourly = romeHourly(main.hourly);
   const localLocations = foehnLocations.map((loc) => ({ ...loc, hourly: romeHourly(loc.hourly) }));
   const hasEnsemble = Array.isArray(ensembleLocations) && ensembleLocations.length >= 2;
+  const ensembleLocal = hasEnsemble ? ensembleLocations.map((loc) => ({ ...loc, hourly: romeHourly(loc.hourly) })) : null;
   return {
     hourly,
     index: new Map(hourly.time.map((t, i) => [t, i])),
     foehn: foehnSeries(localLocations),
-    ensemble: hasEnsemble ? ensembleSeries(ensembleLocations.map((loc) => ({ ...loc, hourly: romeHourly(loc.hourly) }))) : null,
+    ensemble: ensembleLocal ? ensembleSeries(ensembleLocal) : null,
+    longRange: buildLongRange(longRangeJson, ensembleLocal),
   };
 }
 
 async function fetchLive() {
-  const [main, foehn, ens] = await Promise.allSettled([getJson(forecastUrl()), getJson(foehnUrl()), getJson(ensembleUrl())]);
+  const [main, foehn, ens, lr] = await Promise.allSettled([
+    getJson(forecastUrl()),
+    getJson(foehnUrl()),
+    getJson(ensembleUrl()),
+    getJson(longRangeUrl()),
+  ]);
   if (main.status === 'rejected') throw main.reason;
   if (foehn.status === 'rejected') throw foehn.reason;
   const ensemble = ens.status === 'fulfilled' ? ens.value : null;
-  const cached = [main.value.cachedAt, foehn.value.cachedAt, ensemble?.cachedAt].filter((x) => Number.isFinite(x));
+  const longRange = lr.status === 'fulfilled' ? lr.value : null;
+  const cached = [main.value.cachedAt, foehn.value.cachedAt, ensemble?.cachedAt, longRange?.cachedAt].filter((x) => Number.isFinite(x));
   return {
-    live: buildLive(main.value.json, foehn.value.json, ensemble?.json ?? null),
+    live: buildLive(main.value.json, foehn.value.json, ensemble?.json ?? null, longRange?.json ?? null),
     cachedAt: cached.length ? Math.min(...cached) : null,
   };
 }
@@ -155,8 +189,10 @@ async function loadAll() {
 }
 
 async function reloadLive() {
-  setStatusLine('live', 'Reloading live data…');
+  const btn = $('btn-reload');
+  btn.classList.add('busy');
   await loadLiveState();
+  btn.classList.remove('busy');
   updateCachedAt();
   render();
 }
@@ -207,6 +243,17 @@ function fmtDp(v) {
   return `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v).toFixed(1)} hPa`;
 }
 
+/** Words for a day's foehn: a positive ΔP is south flow, otherwise '<class> north foehn'. */
+function foehnWords(dp, cls) {
+  if (!Number.isFinite(dp)) return 'foehn unknown';
+  if (dp >= 0) return 'no north foehn (south flow)';
+  return cls === 'none' ? 'no north foehn' : `${cls} north foehn`;
+}
+
+function foehnBadge(cls, prefix) {
+  return el('span', { class: `badge foehn-${cls ?? 'unknown'}`, text: prefix ? `${prefix}: ${foehnLabel(cls)}` : foehnLabel(cls) });
+}
+
 function foehnSummaryText(dateKey) {
   const ex = dayExtremes(state.live.foehn, dateKey);
   const cls = foehnClass(dayFoehnDp(state.live.foehn, dateKey));
@@ -216,6 +263,17 @@ function foehnSummaryText(dateKey) {
   );
 }
 
+/** The day with the most negative foehn value in the next five days (tomorrow to +5). */
+function strongestNext(today) {
+  let best = null;
+  for (let n = 1; n <= 5; n++) {
+    const date = addDays(today, n);
+    const dp = dayFoehnDp(state.live.foehn, date);
+    if (Number.isFinite(dp) && (best === null || dp < best.dp)) best = { date, dp };
+  }
+  return best;
+}
+
 function dayList() {
   const today = romeDate();
   return [0, 1, 2, 3, 4, 5].map((n) => addDays(today, n));
@@ -223,21 +281,11 @@ function dayList() {
 
 // ---- rendering ----
 
-function setStatusLine(which, text) {
-  $(`${which}-status`).textContent = text;
-}
-
 function renderStatus() {
   const v = state.verdict;
-  if (state.verdictState === 'loading') setStatusLine('verdict', 'Loading verdict…');
-  else if (state.verdictState === 'missing') setStatusLine('verdict', 'No Claude verdict yet');
-  else if (state.verdictState === 'error' && !v) setStatusLine('verdict', 'Verdict unavailable');
-  else if (state.verdictState === 'error') setStatusLine('verdict', `Verdict refresh failed; showing the one written ${romeHHMM(v.generatedAt)}`);
-  else setStatusLine('verdict', `Verdict written ${romeHHMM(v.generatedAt)} (${hoursAgo(v.generatedAt)} h ago)`);
-
-  if (state.live) setStatusLine('live', `Live data ${romeHHMM(state.liveAt)}`);
-  else if (state.liveError) setStatusLine('live', 'Live data unavailable');
-  else setStatusLine('live', 'Loading live data…');
+  const verdict = { state: state.verdictState, generatedAt: v?.generatedAt };
+  const live = { state: state.live ? 'ok' : state.liveError ? 'error' : 'loading', at: state.liveAt };
+  $('status-line').textContent = statusLine(verdict, live);
 }
 
 function renderBanner() {
@@ -249,6 +297,31 @@ function renderBanner() {
 function renderSummary() {
   const text = state.verdict?.summary;
   $('summary').textContent = text || 'No summary yet.';
+}
+
+/** Top foehn card: today's value and class, and the strongest of the next five days. */
+function renderFoehnToday() {
+  const host = $('foehn-today');
+  if (!state.live) {
+    host.replaceChildren(el('p', { class: 'notice', text: 'The foehn index needs live data.' }));
+    return;
+  }
+  const today = romeDate();
+  const dp = dayFoehnDp(state.live.foehn, today);
+  const cls = foehnClass(dp);
+  const best = strongestNext(today);
+  // One line per item: label, the Bozen−Innsbruck value and the class badge (the badge says the class).
+  const south = (v) => (Number.isFinite(v) && v >= 0 ? ' (south flow)' : '');
+  host.replaceChildren(
+    el('p', { class: 'foehn-line' }, el('span', { text: `Today ${fmtDp(dp)}${south(dp)}` }), foehnBadge(cls)),
+    el(
+      'p',
+      { class: 'foehn-line' },
+      el('span', { text: best ? `Peak, next 5 days: ${dayLabel(best.date)} ${fmtDp(best.dp)}${south(best.dp)}` : 'Peak, next 5 days: no data' }),
+      best ? foehnBadge(foehnClass(best.dp)) : null
+    ),
+    el('p', { class: 'legend-note', text: 'Bozen−Innsbruck pressure difference; negative = north foehn.' })
+  );
 }
 
 function renderFullChart() {
@@ -323,11 +396,20 @@ function renderOutlook() {
   );
 }
 
-function verdictCard(dateKey) {
+/** Day's live foehn value and class; shows the verdict's class too when they differ. */
+function dayFoehnLine(dateKey, verdictCls) {
+  const dp = dayFoehnDp(state.live.foehn, dateKey);
+  const live = foehnClass(dp);
+  const differs = verdictCls !== null && live !== null && verdictCls !== live;
+  const badges = differs ? [foehnBadge(verdictCls, 'verdict'), foehnBadge(live, 'live')] : [foehnBadge(live)];
+  return el('p', { class: 'foehn-live' }, el('span', { text: `Foehn 09–17 live: ${fmtDp(dp)} ` }), ...badges);
+}
+
+function verdictCard(dateKey, foehnLine) {
   const day = state.verdict?.days.find((d) => d.date === dateKey) ?? null;
   if (!day) {
     const msg = state.verdictState === 'missing' ? 'No Claude verdict yet.' : 'No Claude verdict for this day yet.';
-    return el('section', { class: 'card notice' }, el('p', { text: msg }));
+    return el('section', { class: 'card notice' }, el('p', { text: msg }), foehnLine);
   }
   return el(
     'article',
@@ -336,45 +418,53 @@ function verdictCard(dateKey) {
     el('h3', { class: 'headline', text: day.headline }),
     day.window ? el('p', { class: 'window', text: `Window: ${day.window}` }) : null,
     el('p', { class: `badge foehn-${day.foehn ?? 'unknown'}`, text: foehnLabel(day.foehn) }),
+    foehnLine,
     day.foehnText ? el('p', { text: day.foehnText }) : null,
     day.text ? el('p', { text: day.text }) : null,
     day.mainRisk ? el('p', { class: 'risk' }, el('strong', { text: 'Main risk: ' }), day.mainRisk) : null
   );
 }
 
+function openHour(k) {
+  const col = dayCols[k];
+  if (!col) return;
+  const label = `${col.label}:00`;
+  $('hour-title').textContent = `${label}, ${col.score ? { green: 'good', amber: 'marginal', red: 'no' }[col.score] : 'no score'}`;
+  $('hour-body').replaceChildren(hourDetail(col, state.unit));
+  $('hour-dialog').showModal();
+}
+
 function renderDay(dateKey) {
-  const parts = [verdictCard(dateKey)];
+  const day = state.verdict?.days.find((d) => d.date === dateKey) ?? null;
+  const parts = [];
   if (!state.live) {
-    parts.push(el('p', { class: 'notice', text: 'Live tables are unavailable. Use Reload live data.' }));
+    dayCols = [];
+    parts.push(verdictCard(dateKey, null), el('p', { class: 'notice', text: 'Live tables are unavailable. Use Reload live data.' }));
   } else {
     const recs = hourRecords(dateKey);
     const { scores } = dayScores(dateKey, recs);
+    dayCols = recs.map((r, k) => ({ label: r.label, c: r.c, score: scores[k], all: r.all }));
+    const segments = hourStrip(HOURS, scores, parseWindow(day?.window));
     parts.push(
-      el('h3', { text: `Foehn, ${dayLabel(dateKey)} with a day either side` }),
-      el('p', { class: 'foehn-summary', text: foehnSummaryText(dateKey) }),
-      foehnChartSvg({
-        from: `${addDays(dateKey, -1)}T00:00`,
-        to: `${addDays(dateKey, 2)}T00:00`,
-        series: state.live.foehn,
-        ensemble: state.live.ensemble,
-        ensembleAfter: detEnd(),
-        idPrefix: 'foehn-day',
-      }),
-      foehnLegend(),
-      el('h3', { text: 'Hourly, 09–17 local (consensus of five models)' }),
+      verdictCard(dateKey, dayFoehnLine(dateKey, day?.foehn ?? null)),
       el(
-        'div',
-        { class: 'scroll' },
-        hourlyTable(
-          recs.map((r, k) => ({ label: r.label, c: r.c, score: scores[k] })),
-          state.unit
-        )
+        'section',
+        { class: 'strip-block', 'aria-label': 'Hours at a glance' },
+        el('p', { class: 'strip-head', text: `09–17 local, verdict: ${verdictLabel(day?.verdict ?? null)}` }),
+        hourStripEl(segments, openHour),
+        el('p', { class: 'legend-note', text: 'Green good, amber marginal, red no. Outlined: the verdict window. Tap an hour for every value.' })
       ),
+      el('h3', { text: 'Hourly, 09–17 local' }),
+      hourGrid(dayCols, state.unit, openHour),
+      el('p', {
+        class: 'legend-note',
+        text: 'Heights: 1000 m ≈ 900 hPa, 1500 m ≈ 850 hPa, 3000 m ≈ 700 hPa. N-flow: north part of the 850/700 hPa wind. Ceiling: cloud base in hundreds of metres.',
+      }),
       el(
         'details',
         { class: 'models-box' },
-        el('summary', { text: 'Model comparison: 10 m wind, speed (gust)' }),
-        el('div', { class: 'scroll' }, modelTable(recs.map((r) => ({ label: r.label, all: r.all })), state.unit))
+        el('summary', { text: 'Model comparison: 10 m, gust, 1000 m' }),
+        modelCharts(recs, state.unit)
       )
     );
   }
@@ -382,14 +472,24 @@ function renderDay(dateKey) {
   $('day-panel').setAttribute('aria-labelledby', `tab-${dateKey}`);
 }
 
+function renderLongRange() {
+  const host = $('longrange-body');
+  if (!state.live) host.replaceChildren(el('p', { class: 'notice', text: 'Long range needs live data. Use Reload live data.' }));
+  else if (!state.live.longRange) host.replaceChildren(el('p', { class: 'notice', text: 'Long-range data unavailable. Use Reload live data.' }));
+  else host.replaceChildren(longRangeView(state.live.longRange, state.unit));
+}
+
 function render() {
   renderStatus();
   renderBanner();
   renderSummary();
+  renderFoehnToday();
   renderFullChart();
   renderTabs();
   renderOutlook();
+  renderLongRange();
   renderDay(selectedDay(dayList()));
+  renderMenuUnit();
 }
 
 // ---- refresh verdict (poll after opening the routine) ----
@@ -397,6 +497,12 @@ function render() {
 function setRefreshStatus(text, spinning = false) {
   const children = spinning ? [el('span', { class: 'spinner', 'aria-hidden': 'true' })] : [];
   $('refresh-status').replaceChildren(...children, text);
+}
+
+/** Progress shown on the app bar while polling: a thin line under it and a dot on the menu button. */
+function setPolling(on) {
+  $('progress').hidden = !on;
+  $('menu-dot').hidden = !on;
 }
 
 let pollBaseline = null; // generatedAt when the current poll started
@@ -408,25 +514,62 @@ const poller = createPoller({
     const { data } = await fetchVerdict();
     return data && data.generatedAt !== pollBaseline ? data : null;
   },
-  onProgress: (checks) => setRefreshStatus(`Waiting for a new verdict… (${checks}/${POLL_MAX})`, true),
+  onProgress: (checks) => {
+    setPolling(true);
+    setRefreshStatus(`Waiting for a new verdict… (${checks}/${POLL_MAX})`, true);
+  },
   onFound: (data) => {
+    setPolling(false);
     state.verdict = data;
     state.verdictState = 'ok';
     setRefreshStatus(`New verdict written ${romeHHMM(data.generatedAt)}.`);
     render();
   },
-  onGiveUp: () => setRefreshStatus('No new verdict after 10 minutes. Check the routine on claude.ai.'),
+  onGiveUp: () => {
+    setPolling(false);
+    setRefreshStatus('No new verdict after 10 minutes. Check the routine on claude.ai.');
+  },
 });
 
-function startPolling() {
+function refreshVerdict() {
+  if (!state.refreshUrl) {
+    setRefreshStatus('Set the claude.ai routine link in Settings first.');
+    openSettings();
+    return;
+  }
+  window.open(state.refreshUrl, '_blank', 'noopener,noreferrer');
   pollBaseline = state.verdict?.generatedAt ?? null;
   poller.start();
 }
 
-// ---- settings ----
+// ---- menu, settings and dialogs ----
+
+/** Native dialog: a tap on the backdrop (the dialog element itself) closes it. */
+function wireSheet(dialog) {
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+}
+
+function openMenu() {
+  renderMenuUnit();
+  $('menu-dialog').showModal();
+  $('btn-menu').setAttribute('aria-expanded', 'true');
+}
+
+function renderMenuUnit() {
+  const other = state.unit === 'kt' ? 'km/h' : 'kt';
+  $('m-units').textContent = `Wind unit: ${state.unit === 'kt' ? 'kt' : 'km/h'} (switch to ${other})`;
+}
+
+function toggleUnit() {
+  state.unit = state.unit === 'kt' ? 'kmh' : 'kt';
+  writeStorage(UNIT_KEY, state.unit);
+  $('menu-dialog').close();
+  render();
+}
 
 function openSettings() {
-  $('unit-select').value = state.unit;
   $('refresh-url').value = state.refreshUrl ?? '';
   $('settings-error').textContent = '';
   $('settings-dialog').showModal();
@@ -442,13 +585,10 @@ function saveSettings() {
       return;
     }
   }
-  state.unit = $('unit-select').value === 'kt' ? 'kt' : 'kmh';
-  writeStorage(UNIT_KEY, state.unit);
   state.refreshUrl = url;
   if (url) writeStorage(REFRESH_KEY, url);
   else removeStorage(REFRESH_KEY);
   $('settings-dialog').close();
-  render();
 }
 
 // ---- start ----
@@ -463,19 +603,27 @@ function init() {
   state.unit = readStorage(UNIT_KEY) === 'kt' ? 'kt' : 'kmh';
   state.refreshUrl = validateRefreshUrl(readStorage(REFRESH_KEY) ?? '');
 
-  $('btn-refresh').addEventListener('click', () => {
-    if (!state.refreshUrl) {
-      setRefreshStatus('Set the claude.ai routine link in Settings first.');
-      openSettings();
-      return;
-    }
-    window.open(state.refreshUrl, '_blank', 'noopener,noreferrer');
-    startPolling();
-  });
   $('btn-reload').addEventListener('click', reloadLive);
-  $('btn-settings').addEventListener('click', openSettings);
+  $('btn-menu').addEventListener('click', openMenu);
+  $('menu-dialog').addEventListener('close', () => $('btn-menu').setAttribute('aria-expanded', 'false'));
+  $('m-refresh').addEventListener('click', () => {
+    $('menu-dialog').close();
+    refreshVerdict();
+  });
+  $('m-reload').addEventListener('click', () => {
+    $('menu-dialog').close();
+    reloadLive();
+  });
+  $('m-units').addEventListener('click', toggleUnit);
+  $('m-settings').addEventListener('click', () => {
+    $('menu-dialog').close();
+    openSettings();
+  });
+  $('m-close').addEventListener('click', () => $('menu-dialog').close());
   $('settings-save').addEventListener('click', saveSettings);
   $('settings-cancel').addEventListener('click', () => $('settings-dialog').close());
+  $('hour-close').addEventListener('click', () => $('hour-dialog').close());
+  for (const id of ['menu-dialog', 'settings-dialog', 'hour-dialog']) wireSheet($(id));
 
   registerServiceWorker();
   render();

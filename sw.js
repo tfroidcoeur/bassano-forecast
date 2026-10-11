@@ -1,7 +1,7 @@
 // Service worker: stale-while-revalidate for the app shell, network-first with cache fallback for data.
 // The shell is refreshed in the background, so a new deploy reaches the next load even without a bump.
 // Bump SHELL_VERSION when the cache layout changes; the activate step removes older caches.
-const SHELL_VERSION = 'v5';
+const SHELL_VERSION = 'v7';
 const SHELL_CACHE = `grappa-shell-${SHELL_VERSION}`;
 const DATA_CACHE = `grappa-data-${SHELL_VERSION}`;
 
@@ -18,11 +18,16 @@ const SHELL = [
   './lib/model.js',
   './lib/foehn.js',
   './lib/forecast-json.js',
+  './lib/longrange.js',
+  './lib/layout.js',
+  './lib/status.js',
   './lib/chart.js',
   './lib/icons.js',
   './ui/dom.js',
   './ui/chart.js',
   './ui/hourly.js',
+  './ui/longrange.js',
+  './ui/models.js',
   './manifest.webmanifest',
   './icons/icon.svg',
   './icons/icon-192.png',

@@ -10,8 +10,8 @@ Weather only. The local schools and the pilot decide whether to fly. Self-brief 
 
 | Path | What |
 |---|---|
-| `index.html` | The page: header, summary, foehn chart, day tabs, outlook, day panel, links, settings dialog |
-| `style.css` | Tokens for light and dark (`prefers-color-scheme`), layout, chart and table styles |
+| `index.html` | The page: app bar (refresh icon, menu), status line, summary, foehn card (today and strongest of the next five days), day chips, day panel (hour strip, compact hour grid, model sparklines), outlook, long-range section, full foehn chart with explanation, menu sheet (refresh, reload, units, settings, links, about), settings and hour dialogs |
+| `style.css` | Tokens for light and dark (`prefers-color-scheme`), app bar, cards, chips, strip, grid, sparklines, long-range chart and cards, sheets |
 | `app.js` | UI state, loading, the refresh poll, settings, service worker registration |
 | `lib/config.js` | Sites, foehn stations, wind limits, foehn thresholds, model lists, data URLs |
 | `lib/urls.js` | Open-Meteo URL builders (the app uses these exact URLs), refresh link validation |
@@ -22,8 +22,11 @@ Weather only. The local schools and the pilot decide whether to fly. Self-brief 
 | `lib/poll.js` | Verdict poll after "Refresh verdict", ignores results of a poll that was stopped |
 | `lib/foehn.js` | ΔP series from the multi-location response, ensemble percentiles, day extremes |
 | `lib/forecast-json.js` | Validation and labels for `forecast.json`. Strings are kept as plain text |
+| `lib/longrange.js` | Long-range ensemble per local day: rain chance, pooled wind percentiles, circular mean direction, north-flow probability, temperature medians, foehn range from the MSLP ensemble |
+| `lib/layout.js` | Screen geometry: verdict window parsing, hour strip segments, sparkline paths, range bars, unit scaling |
+| `lib/status.js` | One-line status under the app bar (verdict age, live time) |
 | `lib/chart.js`, `lib/icons.js` | Chart geometry, WMO weather code to icon shapes |
-| `ui/*.js` | DOM builders: SVG icons and arrows, the foehn chart, the hourly and model tables |
+| `ui/*.js` | DOM builders: SVG icons and arrows, the foehn chart, the hour strip and compact grid, model sparklines, the long-range chart and cards |
 | `sw.js` | Service worker: stale-while-revalidate app shell, network-first data with cache fallback (also for 429 and 5xx) |
 | `manifest.webmanifest`, `icons/` | PWA manifest, icons (SVG source, PNG 192, 512, maskable 512) |
 | `tests/*.test.mjs` | Unit tests for `lib/` (`node --test`) |
@@ -35,7 +38,8 @@ Weather only. The local schools and the pilot decide whether to fly. Self-brief 
    - `api.open-meteo.com`: hourly values at the launch point (elevation 830 m, as in `fetch_bassano.py`) for nine models in one request: 10 m wind, 900/925/850/700 hPa wind, 850 hPa humidity, precipitation, CAPE, low and mid cloud, weather code, boundary-layer height, 2 m temperature and dew point. km/h, 7 days.
    - Every Open-Meteo request uses `timezone=GMT`. Open-Meteo applies one UTC offset to a whole response, so with `Europe/Rome` the hours after the clock change would be mislabelled. `lib/time.js` converts each time to Italian local time, and all indexing (tables, scores, day foehn, chart, "now") uses the local time.
    - `api.open-meteo.com`: MSLP for Bolzano, Innsbruck, Zurich and Lugano from ECMWF and ICON (GMT, converted as above). ΔP is Bolzano − Innsbruck and Zurich − Lugano.
-   - `ensemble-api.open-meteo.com`: ECMWF ensemble MSLP for Bolzano and Innsbruck, 15 days (GMT, converted as above). Used for the outlook band after the deterministic range.
+   - `ensemble-api.open-meteo.com`: ECMWF ensemble MSLP for Bolzano and Innsbruck, 15 days (GMT, converted as above). Used for the outlook band after the deterministic range, and for the foehn range per day in the long-range table.
+   - `ensemble-api.open-meteo.com`: ECMWF ensemble at the launch point, 15 days, one request (GMT): precipitation, 2 m temperature, 850 and 700 hPa wind. Aggregated in `lib/longrange.js`; days 6 to 14 are shown faded as lower confidence.
 2. **Verdict (`data/forecast.json`).** Read from the GitHub API (`api.github.com`, raw media type), with `raw.githubusercontent.com` as a fallback. A 404 means "No Claude verdict yet"; the live tables still show.
 3. **Refresh verdict.** Opens the claude.ai routine link stored in Settings, then polls the verdict every 30 s for up to 10 minutes until `generated_at` changes.
 
