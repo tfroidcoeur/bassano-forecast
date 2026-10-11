@@ -74,8 +74,11 @@ function removeStorage(key) {
 
 // ---- network ----
 
+// A request that hangs (an API outage) must not keep the page on "loading" forever.
+const FETCH_TIMEOUT_MS = 20000;
+
 async function getJson(url, headers) {
-  const res = await fetch(url, { cache: 'no-store', headers });
+  const res = await fetch(url, { cache: 'no-store', headers, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
   if (!res.ok) throw Object.assign(new Error(`HTTP ${res.status}`), { status: res.status });
   const cached = Number(res.headers.get('X-Cached-At'));
   return { json: await res.json(), cachedAt: cached > 0 ? cached : null };
@@ -184,9 +187,12 @@ function updateCachedAt() {
 }
 
 async function loadAll() {
-  await Promise.all([loadVerdictState(), loadLiveState()]);
-  updateCachedAt();
-  render();
+  // Each part renders as soon as it arrives: the verdict (GitHub) never waits for the weather APIs.
+  const show = () => {
+    updateCachedAt();
+    render();
+  };
+  await Promise.all([loadVerdictState().then(show), loadLiveState().then(show)]);
 }
 
 async function reloadLive() {

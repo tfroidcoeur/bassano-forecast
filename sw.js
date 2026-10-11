@@ -1,7 +1,7 @@
 // Service worker: stale-while-revalidate for the app shell, network-first with cache fallback for data.
 // The shell is refreshed in the background, so a new deploy reaches the next load even without a bump.
 // Bump SHELL_VERSION when the cache layout changes; the activate step removes older caches.
-const SHELL_VERSION = 'v8';
+const SHELL_VERSION = 'v9';
 const SHELL_CACHE = `grappa-shell-${SHELL_VERSION}`;
 const DATA_CACHE = `grappa-data-${SHELL_VERSION}`;
 
@@ -86,11 +86,14 @@ async function shellResponse(event, req) {
   return update;
 }
 
+// Shorter than the page's 20 s, so a hanging API falls back to the stored copy before the page gives up.
+const NETWORK_TIMEOUT_MS = 15000;
+
 async function networkFirst(req) {
   const cache = await caches.open(DATA_CACHE);
   let res;
   try {
-    res = await fetch(req);
+    res = await fetch(req, { signal: AbortSignal.timeout(NETWORK_TIMEOUT_MS) });
   } catch (err) {
     const stored = await cache.match(req);
     if (stored) return stored;
