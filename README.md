@@ -1,0 +1,109 @@
+# Grappa forecast
+
+A small static, installable web app (PWA) with the paragliding forecast for Monte Grappa, near Bassano del Grappa (Italy). It shows live model numbers from Open-Meteo, a foehn index, and a written verdict that is produced elsewhere and published as a JSON file.
+
+It is plain HTML, CSS and ES modules. There is no build step and no runtime dependency. It is meant for GitHub Pages at `https://tfroidcoeur.github.io/bassano-forecast/` and is installed on Android with Chrome's "Add to home screen".
+
+Weather only. The local schools and the pilot decide whether to fly. Self-brief airspace and NOTAMs.
+
+## Layout
+
+| Path | What |
+|---|---|
+| `index.html` | The page: header, summary, foehn chart, day tabs, outlook, day panel, links, settings dialog |
+| `style.css` | Tokens for light and dark (`prefers-color-scheme`), layout, chart and table styles |
+| `app.js` | UI state, loading, the refresh poll, settings, service worker registration |
+| `lib/config.js` | Sites, foehn stations, wind limits, foehn thresholds, model lists, data URLs |
+| `lib/urls.js` | Open-Meteo URL builders (the app uses these exact URLs), refresh link validation |
+| `lib/time.js` | Italian local time helpers, day keys, conversion of the GMT times from Open-Meteo to local time |
+| `lib/wind.js` | Windy-style colour bands (in knots), unit formatting, northerly component, median, circular mean |
+| `lib/score.js` | Limit levels, foehn class, north flow and lee signature, hourly score |
+| `lib/model.js` | Per-model hour values, launch-wind fallback 900 → 925 → 850 hPa, consensus, ceiling |
+| `lib/poll.js` | Verdict poll after "Refresh verdict", ignores results of a poll that was stopped |
+| `lib/foehn.js` | ΔP series from the multi-location response, ensemble percentiles, day extremes |
+| `lib/forecast-json.js` | Validation and labels for `forecast.json`. Strings are kept as plain text |
+| `lib/chart.js`, `lib/icons.js` | Chart geometry, WMO weather code to icon shapes |
+| `ui/*.js` | DOM builders: SVG icons and arrows, the foehn chart, the hourly and model tables |
+| `sw.js` | Service worker: stale-while-revalidate app shell, network-first data with cache fallback (also for 429 and 5xx) |
+| `manifest.webmanifest`, `icons/` | PWA manifest, icons (SVG source, PNG 192, 512, maskable 512) |
+| `tests/*.test.mjs` | Unit tests for `lib/` (`node --test`) |
+| `robots.txt`, `.nojekyll` | Keep crawlers out; serve the files as they are on Pages |
+
+## Data flow
+
+1. **Live model data (browser, on every load and on "Reload live data").**
+   - `api.open-meteo.com`: hourly values at the launch point (elevation 830 m, as in `fetch_bassano.py`) for nine models in one request: 10 m wind, 900/925/850/700 hPa wind, 850 hPa humidity, precipitation, CAPE, low and mid cloud, weather code, boundary-layer height, 2 m temperature and dew point. km/h, 7 days.
+   - Every Open-Meteo request uses `timezone=GMT`. Open-Meteo applies one UTC offset to a whole response, so with `Europe/Rome` the hours after the clock change would be mislabelled. `lib/time.js` converts each time to Italian local time, and all indexing (tables, scores, day foehn, chart, "now") uses the local time.
+   - `api.open-meteo.com`: MSLP for Bolzano, Innsbruck, Zurich and Lugano from ECMWF and ICON (GMT, converted as above). ΔP is Bolzano − Innsbruck and Zurich − Lugano.
+   - `ensemble-api.open-meteo.com`: ECMWF ensemble MSLP for Bolzano and Innsbruck, 15 days (GMT, converted as above). Used for the outlook band after the deterministic range.
+2. **Verdict (`data/forecast.json`).** Read from the GitHub API (`api.github.com`, raw media type), with `raw.githubusercontent.com` as a fallback. A 404 means "No Claude verdict yet"; the live tables still show.
+3. **Refresh verdict.** Opens the claude.ai routine link stored in Settings, then polls the verdict every 30 s for up to 10 minutes until `generated_at` changes.
+
+Score per hour (green / amber / red) is computed in the browser from the consensus of five models (ICON, ECMWF, GFS, AROME, ICON-2I) against the limits in `lib/config.js`, plus the day's foehn class from the live ΔP. The same rules as `fetch_bassano.py`:
+
+- Consensus per hour: speeds and humidity take the median, directions the circular mean, 10 m gusts the maximum, precipitation the median (one wet model alone is not rain), CAPE the maximum.
+- Day foehn class: over 09–17 local, each of ECMWF and ICON takes its minimum Bozen−Innsbruck ΔP; the most negative of the two sets the class by its magnitude (under 2 hPa none, 2–3 weak, 3–6 moderate, over 6 strong). A positive value is none (south side).
+- North flow: the consensus wind at 850 or 700 hPa is at least 15 km/h and comes from within 60° of north.
+- Lee signature: north flow and consensus 850 hPa relative humidity below 40 %.
+- Red: rain, convective cells, strong foehn, and moderate foehn with a lee signature. Moderate foehn otherwise gives at least amber.
+
+The score is a starting point; the verdict text is the judgement.
+
+### forecast.json
+
+```json
+{
+  "generated_at": "2030-01-06T05:20:00Z",
+  "summary": "string, up to 1200 chars",
+  "days": [
+    { "date": "2030-01-06", "verdict": "good | marginal | no", "headline": "...",
+      "window": "11:00–15:00 or null", "foehn": "none | weak | moderate | strong",
+      "foehn_text": "...", "text": "...", "main_risk": "..." }
+  ],
+  "outlook": [
+    { "date": "2030-01-12", "verdict": "likely | possible | unlikely",
+      "confidence": "low | very_low", "foehn": "none | weak | moderate | strong", "text": "..." }
+  ]
+}
+```
+
+Unknown enum values are dropped (shown as "No verdict" or "Foehn unknown"). Long strings are cut to a fixed length.
+
+## Security and privacy
+
+The repository is public. Keep it that way.
+
+- No credentials, tokens, API keys, personal names, e-mail addresses, hotel names, trip dates or routine IDs in any file. The claude.ai routine link is typed in by the user and stored only in that browser's `localStorage`.
+- No third-party scripts, CDNs, fonts or analytics. All JavaScript and CSS is local.
+- Content-Security-Policy (meta tag in `index.html`): `default-src 'self'`; `connect-src` limited to the two Open-Meteo hosts, `api.github.com` and `raw.githubusercontent.com`; `script-src 'self'`; `style-src 'self'`; `frame-src 'none'`; `form-action 'none'`. There are no inline scripts and no inline style attributes.
+- Fetched data is rendered with `textContent`, `createElement` and `createElementNS` only. There is no `innerHTML` anywhere. Static SVG is authored in `lib/icons.js` and `ui/`.
+- Links from data are never rendered. The only links are the hard-coded ones in `index.html`, all with `rel="noopener noreferrer" target="_blank"`.
+- The refresh link must start with `https://claude.ai/` and must not carry credentials (`lib/urls.js`, tested).
+- `<meta name="robots" content="noindex,nofollow">` and `robots.txt` with `Disallow: /`.
+
+## Run and test locally
+
+```sh
+node --test tests/*.test.mjs          # or: npm test
+python3 -m http.server 8000           # then open http://localhost:8000/
+```
+
+The service worker only registers on `localhost` or HTTPS. The app shell is stale-while-revalidate: a changed file reaches the page on the load after the one that fetched it, even without a bump. Bump `SHELL_VERSION` in `sw.js` to force fresh caches; the activate step removes older caches.
+
+## Deploy
+
+GitHub Pages serves `main` from the repository root. The verdict file lives on the `claude/forecast-data` branch at `data/forecast.json`, which the app reads with the URLs in `lib/config.js`.
+
+## Tuning
+
+All thresholds are in `lib/config.js` and are starting points, not verified facts:
+
+- `LIMITS`: wind limits in km/h (launch height, 850 and 700 hPa, northerly component, 10 m gusts).
+- `FOEHN`: foehn class thresholds (2, 3, 6 hPa), north flow (15 km/h, within 60° of north), lee humidity (850 hPa RH below 40 %), rain (0.2 mm/h, median of the consensus models), convective CAPE (800 J/kg with showers).
+- `CONSENSUS_MODELS`: the five models the consensus and score use. Gusts and CAPE take the maximum across them (conservative). Precipitation and other speeds take the median; directions take the circular mean.
+
+## Known limits
+
+- Launch-height wind uses different pressure levels for different models (900, 925 or 850 hPa). The consensus mixes them.
+- The ensemble band is shown only after the deterministic range ends (day 7).
+- Modelled wind and especially gusts in complex terrain are weak signals.

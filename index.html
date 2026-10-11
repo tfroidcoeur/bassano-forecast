@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://api.open-meteo.com https://ensemble-api.open-meteo.com https://api.github.com https://raw.githubusercontent.com; img-src 'self' data:; style-src 'self'; script-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#1d4f91">
+  <meta name="description" content="Paragliding forecast for Monte Grappa, Bassano del Grappa.">
+  <title>Grappa forecast</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="top">
+    <h1>Grappa forecast</h1>
+    <p id="verdict-status" class="status" aria-live="polite"></p>
+    <p id="live-status" class="status"></p>
+    <div class="actions">
+      <button id="btn-refresh" type="button">Refresh verdict</button>
+      <button id="btn-reload" type="button">Reload live data</button>
+      <button id="btn-settings" type="button">Settings</button>
+    </div>
+    <p id="refresh-status" class="status refresh-status" role="status" aria-live="polite"></p>
+  </header>
+
+  <div id="offline-banner" class="banner" role="status" hidden></div>
+
+  <main>
+    <section class="card summary" aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Summary</h2>
+      <p id="summary"></p>
+    </section>
+
+    <section class="card" aria-labelledby="foehn-heading">
+      <h2 id="foehn-heading">Foehn index, 14 days</h2>
+      <div id="foehn-full"></div>
+    </section>
+
+    <nav class="tabs" role="tablist" aria-label="Days" id="day-tabs"></nav>
+
+    <section id="day-panel" class="day-panel" role="tabpanel" aria-live="polite"></section>
+
+    <section id="outlook" class="outlook" aria-labelledby="outlook-heading" hidden>
+      <h2 id="outlook-heading">Outlook — low confidence</h2>
+      <div id="outlook-strip" class="outlook-strip"></div>
+    </section>
+
+    <section class="card links" aria-labelledby="links-heading">
+      <h2 id="links-heading">Links</h2>
+      <ul>
+        <li><a href="https://meteo-parapente.com/#/45.82,11.77,11" target="_blank" rel="noopener noreferrer">meteo-parapente</a></li>
+        <li><a href="https://www.windy.com/45.820/11.770?45.820,11.770,11" target="_blank" rel="noopener noreferrer">Windy</a></li>
+        <li><a href="https://wetter.provinz.bz.it/de/foehndiagramm" target="_blank" rel="noopener noreferrer">South Tyrol foehn diagram</a></li>
+        <li><a href="https://www.srf.ch/meteo/surf-und-segelwetter/diagramme-foehn-und-bise" target="_blank" rel="noopener noreferrer">SRF foehn diagram</a></li>
+        <li><a href="https://www.windfinder.com/report/cima_grappa" target="_blank" rel="noopener noreferrer">Live wind Cima Grappa (windfinder)</a></li>
+        <li><a href="https://www.cimagrappa.it/en/stazione_meteo.php" target="_blank" rel="noopener noreferrer">Cima Grappa station</a></li>
+        <li><a href="https://www.vololiberomontegrappa.it/decolli" target="_blank" rel="noopener noreferrer">Club Volo Libero Montegrappa</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Model estimates, written partly by an AI. Weather only — the local schools and you decide whether to fly. Self-brief airspace and NOTAMs.</p>
+  </footer>
+
+  <dialog id="settings-dialog" aria-labelledby="settings-heading">
+    <h2 id="settings-heading">Settings</h2>
+    <p>
+      <label for="unit-select">Wind unit</label>
+      <select id="unit-select">
+        <option value="kmh">km/h</option>
+        <option value="kt">kt</option>
+      </select>
+    </p>
+    <p>
+      <label for="refresh-url">Routine link (https://claude.ai/…)</label>
+      <input id="refresh-url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://claude.ai/">
+    </p>
+    <p id="settings-error" class="error" role="alert"></p>
+    <p class="dialog-actions">
+      <button id="settings-cancel" type="button">Close</button>
+      <button id="settings-save" type="button">Save</button>
+    </p>
+  </dialog>
+</body>
+</html>
