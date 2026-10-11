@@ -2,8 +2,7 @@ import { formatSpeed, windBand } from '../lib/wind.js';
 import { levelFor } from '../lib/score.js';
 import { LIMITS, FOEHN, CONSENSUS_MODELS } from '../lib/config.js';
 import { wmoGroup, WMO_LABELS, WMO_SHAPES } from '../lib/icons.js';
-import { compass } from '../lib/longrange.js';
-import { barPct, ceilingHundreds, minMax } from '../lib/layout.js';
+import { barPct, ceilingHundreds, maxAngleDeviation, minMax } from '../lib/layout.js';
 import { el, svgEl, arrowSvg, iconSvg } from './dom.js';
 
 const DASH = '–';
@@ -54,37 +53,47 @@ function weatherCell(code) {
   return el('td', { class: 'wx-cell' }, iconSvg(group, WMO_SHAPES[group], WMO_LABELS[group]));
 }
 
-/** Accessible label for an hour: every value, with units. */
-export function hourAriaLabel(col, unit) {
-  const head = `${col.label}:00`;
-  const c = col.c;
-  if (!c) return `${head}, no data`;
+/** Consensus-model values of one hour, for the spread rows. */
+function consensusOf(col, pick) {
+  return (col.all ?? []).filter((m) => CONSENSUS_MODELS.includes(m.model)).map(pick);
+}
+
+/** The extra rows of the "More values" block. Every value is a plain cell; nothing is interactive. */
+function moreRows(unit) {
   const u = unitLabel(unit);
-  const parts = [
-    `score ${SCORE_WORDS[col.score] ?? 'unknown'}`,
-    `10 m ${speedText(c.ws10, unit)} ${u}`,
-    `gust ${speedText(c.gust, unit)} ${u}`,
-    `1000 m ${speedText(c.launch?.speed, unit)} ${u}`,
-    `1500 m ${speedText(c.aloft850.speed, unit)} ${u}`,
-    `3000 m ${speedText(c.aloft700.speed, unit)} ${u}`,
-    `rain ${Number.isFinite(c.precipMm) ? c.precipMm.toFixed(1) : DASH} mm`,
+  return [
+    ['Cloud %', (c) => (Number.isFinite(c.cloudLow) ? String(Math.round(c.cloudLow)) : DASH)],
+    ['Rain mm', (c) => (Number.isFinite(c.precipMm) ? c.precipMm.toFixed(1) : DASH)],
+    [
+      'Spr 10 m',
+      (c, col) => {
+        const s = minMax(consensusOf(col, (m) => m.ws10));
+        return s ? `${speedText(s.min, unit)}–${speedText(s.max, unit)}` : DASH;
+      },
+    ],
+    [
+      'Spr dir',
+      (c, col) => {
+        const d = maxAngleDeviation(consensusOf(col, (m) => m.wd10));
+        return d === null ? DASH : `±${Math.round(d)}`;
+      },
+    ],
+    [
+      'Spr gust',
+      (c, col) => {
+        const s = minMax(consensusOf(col, (m) => m.gust));
+        return s ? `${speedText(s.min, unit)}–${speedText(s.max, unit)}` : DASH;
+      },
+    ],
   ];
-  return `${head}, ${parts.join(', ')}`;
 }
 
 /**
- * Compact hourly grid: hours as columns, no scrolling. cols: [{ label, c, score, all }].
- * onPick(index) opens the detail for that hour. Heights in metres; ceiling in hundreds of metres.
+ * Compact hourly grid: hours as columns, no scrolling, no interactive cells. cols: [{ label, c, score, all }].
+ * showMore adds the extra rows. Heights in metres; ceiling in hundreds of metres.
  */
-export function hourGrid(cols, unit, onPick) {
-  const head = el(
-    'tr',
-    {},
-    el('th', { scope: 'col', class: 'lbl', text: 'Hour' }),
-    ...cols.map((col) =>
-      el('th', { scope: 'col' }, el('button', { type: 'button', class: 'hbtn', 'aria-label': hourAriaLabel(col, unit), text: col.label }))
-    )
-  );
+export function hourGrid(cols, unit, showMore = false) {
+  const head = el('tr', {}, el('th', { scope: 'col', class: 'lbl', text: 'Hour' }), ...cols.map((col) => el('th', { scope: 'col', text: col.label })));
   const rows = [
     ['Wx', (c) => weatherCell(c.wx)],
     ['10 m', (c) => windCell(c.ws10, c.wd10, 'wind', unit)],
@@ -99,49 +108,32 @@ export function hourGrid(cols, unit, onPick) {
   const body = rows.map(([label, cell]) =>
     el('tr', {}, el('th', { scope: 'row', class: 'lbl', text: label }), ...cols.map((col) => (col.c ? cell(col.c) : el('td', {}, DASH))))
   );
-  const table = el('table', { class: 'grid' }, el('thead', {}, head), el('tbody', {}, ...body));
-  table.querySelectorAll('button.hbtn').forEach((btn, k) => btn.addEventListener('click', () => onPick(k)));
-  return table;
-}
-
-/** Hour strip: one segment per hour, coloured by score; segments inside the verdict window are outlined. */
-export function hourStripEl(segments, onPick) {
-  const strip = el('div', { class: 'strip' });
-  segments.forEach((s, k) => {
-    const word = SCORE_WORDS[s.score] ?? 'no data';
-    const label = `${String(s.hour).padStart(2, '0')}:00, ${word}${s.inWindow ? ', in the verdict window' : ''}`;
-    const btn = el('button', { type: 'button', class: `seg score-${s.score ?? 'none'}${s.inWindow ? ' in-window' : ''}`, 'aria-label': label, text: String(s.hour).padStart(2, '0') });
-    btn.addEventListener('click', () => onPick(k));
-    strip.append(btn);
-  });
-  return strip;
-}
-
-/** Every value for one hour, for the detail dialog. col as in hourGrid. */
-export function hourDetail(col, unit) {
-  const dl = el('dl', { class: 'detail' });
-  const c = col.c;
-  if (!c) {
-    dl.append(el('dt', { text: 'Data' }), el('dd', { text: 'No data for this hour.' }));
-    return dl;
+  if (showMore) {
+    for (const [label, text] of moreRows(unit)) {
+      body.push(
+        el(
+          'tr',
+          { class: 'more-row' },
+          el('th', { scope: 'row', class: 'lbl', text: label }),
+          ...cols.map((col) => (col.c ? el('td', { text: text(col.c, col) }) : el('td', {}, DASH)))
+        )
+      );
+    }
   }
-  const u = unitLabel(unit);
-  const row = (label, value) => dl.append(el('dt', { text: label }), el('dd', { text: value }));
-  const wind = (label, speed, dir) => {
-    const from = Number.isFinite(dir) && compass(dir) ? ` from ${compass(dir)}` : '';
-    row(label, Number.isFinite(speed) ? `${speedText(speed, unit)} ${u}${from}` : DASH);
-  };
-  const spread = minMax(col.all ? col.all.filter((m) => CONSENSUS_MODELS.includes(m.model)).map((m) => m.ws10) : []);
-  wind('10 m wind', c.ws10, c.wd10);
-  row('10 m gust', Number.isFinite(c.gust) ? `${speedText(c.gust, unit)} ${u}` : DASH);
-  wind('1000 m wind', c.launch?.speed, c.launch?.dir);
-  wind('1500 m wind', c.aloft850.speed, c.aloft850.dir);
-  wind('3000 m wind', c.aloft700.speed, c.aloft700.dir);
-  row('N-flow (north part)', Number.isFinite(c.north) ? `${speedText(Math.max(0, c.north), unit)} ${u}` : DASH);
-  row('Rain', Number.isFinite(c.precipMm) ? `${c.precipMm.toFixed(1)} mm` : DASH);
-  row('Low cloud', Number.isFinite(c.cloudLow) ? `${Math.round(c.cloudLow)} %` : DASH);
-  row('Cloud base', Number.isFinite(c.ceiling) ? `${Math.round(c.ceiling)} m` : DASH);
-  row('Weather', WMO_LABELS[wmoGroup(c.wx)] ?? DASH);
-  row('10 m spread, five models', spread ? `${speedText(spread.min, unit)}–${speedText(spread.max, unit)} ${u}` : DASH);
-  return dl;
+  return el('table', { class: 'grid', id: 'hour-grid' }, el('thead', {}, head), el('tbody', {}, ...body));
+}
+
+/**
+ * Hour strip: one visual segment per hour, coloured by score. Segments in the verdict window carry an outline.
+ * Not interactive: the image has one summary label.
+ */
+export function hourStripEl(segments) {
+  const words = segments.map((s) => `${String(s.hour).padStart(2, '0')} ${SCORE_WORDS[s.score] ?? 'no data'}`);
+  const inWindow = segments.filter((s) => s.inWindow).map((s) => s.hour);
+  const windowText = inWindow.length ? `; verdict window ${String(inWindow[0]).padStart(2, '0')} to ${String(inWindow.at(-1) + 1).padStart(2, '0')}:00` : '';
+  const strip = el('div', { class: 'strip', role: 'img', 'aria-label': `Hour scores: ${words.join(', ')}${windowText}` });
+  for (const s of segments) {
+    strip.append(el('span', { class: `seg score-${s.score ?? 'none'}${s.inWindow ? ' in-window' : ''}`, 'aria-hidden': 'true', text: String(s.hour).padStart(2, '0') }));
+  }
+  return strip;
 }

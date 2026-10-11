@@ -30,6 +30,7 @@
         </button>
       </div>
     </div>
+    <nav class="day-tabs" id="day-tabs" role="tablist" aria-label="Days"></nav>
     <div id="progress" class="progress" hidden aria-hidden="true"></div>
   </header>
 
@@ -49,8 +50,6 @@
       <div id="foehn-today"></div>
       <p class="more"><a href="#foehn-detail">Details ↓</a></p>
     </section>
-
-    <nav class="tabs" role="tablist" aria-label="Days" id="day-tabs"></nav>
 
     <section id="day-panel" class="day-panel" role="tabpanel" aria-live="polite"></section>
 
@@ -129,12 +128,5 @@
     </div>
   </dialog>
 
-  <dialog id="hour-dialog" class="sheet" aria-labelledby="hour-title">
-    <div class="sheet-body">
-      <h2 id="hour-title">Hour</h2>
-      <div id="hour-body"></div>
-      <p class="dialog-actions"><button id="hour-close" type="button">Close</button></p>
-    </div>
-  </dialog>
 </body>
 </html>

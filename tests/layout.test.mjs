@@ -1,6 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseWindow, hourStrip, linePath, niceMax, rangeBox, barPct, speedIn, ceilingHundreds, minMax } from '../lib/layout.js';
+import { parseWindow, hourStrip, linePath, niceMax, rangeBox, barPct, speedIn, ceilingHundreds, minMax, maxAngleDeviation } from '../lib/layout.js';
+
+test('direction spread: largest distance from the circular mean, across north', () => {
+  assert.ok(Math.abs(maxAngleDeviation([350, 10]) - 10) < 1e-9, 'mean is north, both 10 degrees off');
+  assert.ok(Math.abs(maxAngleDeviation([90, 90, 90])) < 1e-9, 'no spread');
+  assert.ok(Math.abs(maxAngleDeviation([null, 180, 200]) - 10) < 1e-9, 'unknown bearings skipped');
+  assert.equal(maxAngleDeviation([null]), null);
+});
 import { statusLine } from '../lib/status.js';
 
 test('verdict window: hh:mm ranges with hyphen or en dash, junk gives null', () => {

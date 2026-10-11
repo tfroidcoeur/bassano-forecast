@@ -12,7 +12,7 @@ import { parseWindow, hourStrip } from './lib/layout.js';
 import { statusLine } from './lib/status.js';
 import { el } from './ui/dom.js';
 import { foehnChartSvg, foehnLegend } from './ui/chart.js';
-import { hourGrid, hourStripEl, hourDetail } from './ui/hourly.js';
+import { hourGrid, hourStripEl } from './ui/hourly.js';
 import { modelCharts } from './ui/models.js';
 import { longRangeView } from './ui/longrange.js';
 
@@ -40,10 +40,11 @@ const state = {
   liveCachedAt: null,
   liveError: false,
   cachedAt: null,
-  selected: null,
+  selected: null, // session only: not written to storage
+  showMore: false, // "More values" in the hour grid, kept for the session
 };
 
-let dayCols = []; // columns of the day on screen, for the hour dialog
+const SWIPE_PX = 50; // horizontal distance that switches the day
 
 // ---- storage (private mode can throw) ----
 
@@ -348,34 +349,63 @@ function selectedDay(days) {
   return state.selected;
 }
 
+/** Day tabs in the app bar: roving tabindex, arrow keys wrap, Home and End jump to the ends. */
+function onTabKey(e, days, k) {
+  let target;
+  if (e.key === 'ArrowRight') target = (k + 1) % days.length;
+  else if (e.key === 'ArrowLeft') target = (k - 1 + days.length) % days.length;
+  else if (e.key === 'Home') target = 0;
+  else if (e.key === 'End') target = days.length - 1;
+  else return;
+  e.preventDefault();
+  selectDay(days[target], { focus: true });
+}
+
 function renderTabs() {
   const days = dayList();
   const current = selectedDay(days);
   const byDate = new Map((state.verdict?.days ?? []).map((d) => [d.date, d]));
   $('day-tabs').replaceChildren(
-    ...days.map((date) => {
+    ...days.map((date, k) => {
       const verdict = byDate.get(date)?.verdict ?? null;
-      const button = el(
+      const [weekday, num] = dayLabel(date).split(' ');
+      const selected = date === current;
+      const tab = el(
         'button',
         {
           type: 'button',
-          class: 'tab',
+          class: 'day-tab',
           role: 'tab',
           id: `tab-${date}`,
-          'aria-selected': date === current ? 'true' : 'false',
+          'aria-selected': selected ? 'true' : 'false',
           'aria-controls': 'day-panel',
+          tabindex: selected ? '0' : '-1',
         },
-        el('span', { class: `dot dot-${verdict ?? 'none'}`, 'aria-hidden': 'true' }),
-        el('span', { text: dayLabel(date) }),
+        el('span', { class: 'dt-wd', text: weekday }),
+        el('span', { class: 'dt-num', text: num }),
+        el('span', { class: `dt-dot dot-${verdict ?? 'none'}`, 'aria-hidden': 'true' }),
         el('span', { class: 'visually-hidden', text: `, ${verdictLabel(verdict)}` })
       );
-      button.addEventListener('click', () => {
-        state.selected = date;
-        render();
-      });
-      return button;
+      tab.addEventListener('click', () => selectDay(date));
+      tab.addEventListener('keydown', (e) => onTabKey(e, days, k));
+      return tab;
     })
   );
+}
+
+/** Shows one day: its tab, its panel. Only the tabs and the day panel are rebuilt. */
+function selectDay(date, { focus = false } = {}) {
+  state.selected = date;
+  renderTabs();
+  renderDay(date);
+  if (focus) $(`tab-${date}`)?.focus();
+}
+
+/** Previous (-1) or next (+1) day; stops at the ends, no wrap-around for swipes. */
+function stepDay(delta) {
+  const days = dayList();
+  const next = days[days.indexOf(selectedDay(days)) + delta];
+  if (next) selectDay(next);
 }
 
 function renderOutlook() {
@@ -425,40 +455,44 @@ function verdictCard(dateKey, foehnLine) {
   );
 }
 
-function openHour(k) {
-  const col = dayCols[k];
-  if (!col) return;
-  const label = `${col.label}:00`;
-  $('hour-title').textContent = `${label}, ${col.score ? { green: 'good', amber: 'marginal', red: 'no' }[col.score] : 'no score'}`;
-  $('hour-body').replaceChildren(hourDetail(col, state.unit));
-  $('hour-dialog').showModal();
-}
-
 function renderDay(dateKey) {
   const day = state.verdict?.days.find((d) => d.date === dateKey) ?? null;
   const parts = [];
   if (!state.live) {
-    dayCols = [];
     parts.push(verdictCard(dateKey, null), el('p', { class: 'notice', text: 'Live tables are unavailable. Use Reload live data.' }));
   } else {
     const recs = hourRecords(dateKey);
     const { scores } = dayScores(dateKey, recs);
-    dayCols = recs.map((r, k) => ({ label: r.label, c: r.c, score: scores[k], all: r.all }));
+    const cols = recs.map((r, k) => ({ label: r.label, c: r.c, score: scores[k], all: r.all }));
     const segments = hourStrip(HOURS, scores, parseWindow(day?.window));
+    const more = el('button', {
+      type: 'button',
+      id: 'more-toggle',
+      class: 'more-toggle',
+      'aria-expanded': state.showMore ? 'true' : 'false',
+      'aria-controls': 'hour-grid',
+      text: state.showMore ? 'Fewer values' : 'More values',
+    });
+    more.addEventListener('click', () => {
+      state.showMore = !state.showMore;
+      renderDay(dateKey);
+      $('more-toggle')?.focus();
+    });
     parts.push(
       verdictCard(dateKey, dayFoehnLine(dateKey, day?.foehn ?? null)),
       el(
         'section',
         { class: 'strip-block', 'aria-label': 'Hours at a glance' },
         el('p', { class: 'strip-head', text: `09–17 local, verdict: ${verdictLabel(day?.verdict ?? null)}` }),
-        hourStripEl(segments, openHour),
-        el('p', { class: 'legend-note', text: 'Green good, amber marginal, red no. Outlined: the verdict window. Tap an hour for every value.' })
+        hourStripEl(segments),
+        el('p', { class: 'legend-note', text: 'Green good, amber marginal, red no. Outlined: the verdict window.' })
       ),
       el('h3', { text: 'Hourly, 09–17 local' }),
-      hourGrid(dayCols, state.unit, openHour),
+      hourGrid(cols, state.unit, state.showMore),
+      more,
       el('p', {
         class: 'legend-note',
-        text: 'Heights: 1000 m ≈ 900 hPa, 1500 m ≈ 850 hPa, 3000 m ≈ 700 hPa. N-flow: north part of the 850/700 hPa wind. Ceiling: cloud base in hundreds of metres.',
+        text: 'Heights: 1000 m ≈ 900 hPa, 1500 m ≈ 850 hPa, 3000 m ≈ 700 hPa. N-flow: north part of the 850/700 hPa wind. Ceiling: cloud base in hundreds of metres. Spr: range across the five consensus models (wind and gust in the chosen unit; dir in ± degrees).',
       }),
       el(
         'details',
@@ -622,8 +656,24 @@ function init() {
   $('m-close').addEventListener('click', () => $('menu-dialog').close());
   $('settings-save').addEventListener('click', saveSettings);
   $('settings-cancel').addEventListener('click', () => $('settings-dialog').close());
-  $('hour-close').addEventListener('click', () => $('hour-dialog').close());
-  for (const id of ['menu-dialog', 'settings-dialog', 'hour-dialog']) wireSheet($(id));
+  for (const id of ['menu-dialog', 'settings-dialog']) wireSheet($(id));
+
+  // Swipe on the day panel: horizontal moves only (the panel is pan-y in CSS), mouse ignored.
+  const panel = $('day-panel');
+  let swipe = null;
+  panel.addEventListener('pointerdown', (e) => {
+    swipe = e.pointerType === 'mouse' ? null : { x: e.clientX, y: e.clientY };
+  });
+  panel.addEventListener('pointercancel', () => {
+    swipe = null;
+  });
+  panel.addEventListener('pointerup', (e) => {
+    if (!swipe) return;
+    const dx = e.clientX - swipe.x;
+    const dy = e.clientY - swipe.y;
+    swipe = null;
+    if (Math.abs(dx) >= SWIPE_PX && Math.abs(dx) > 1.5 * Math.abs(dy)) stepDay(dx < 0 ? 1 : -1);
+  });
 
   registerServiceWorker();
   render();
