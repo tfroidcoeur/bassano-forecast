@@ -642,3 +642,8 @@ dialog input {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .progress::after { left: 0; width: 100%; opacity: 0.5; }
 }
+
+/* Live checks under the foehn chart */
+.check-live { padding-left: 1.1rem; margin: 0.3rem 0 0.2rem; }
+.check-live li { margin: 0.35rem 0; line-height: 1.4; }
+.check-live a { display: inline-block; min-height: 32px; line-height: 32px; }
