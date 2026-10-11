@@ -87,7 +87,7 @@ h3 { font-size: 1rem; margin: 0.9rem 0 0.4rem; }
 p { margin: 0.4rem 0; }
 a { color: var(--link); font-weight: 600; }
 
-/* App bar: slim, sticky, safe-area aware. It carries the day tabs; progress runs under the title row. */
+/* App bar: slim, sticky, safe-area aware; progress runs under the title row. */
 .app-bar {
   position: sticky;
   top: 0;
@@ -220,12 +220,17 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
   outline-offset: 2px;
 }
 
-/* Day tabs: Material fixed tabs in the app bar. Six equal tabs, no sideways scrolling. */
+/* Day tabs: Material fixed tabs below the summary and foehn cards. Six equal tabs, no sideways
+   scrolling; full-bleed, and sticky right under the app bar once scrolled to. */
 .day-tabs {
+  position: sticky;
+  top: calc(52px + env(safe-area-inset-top, 0px));
+  z-index: 9;
   display: flex;
   height: 48px;
-  margin: 0;
+  margin: 0.4rem -12px 0.6rem;
   padding: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   background: var(--bar-bg);
   color: var(--bar-ink);
 }
@@ -481,13 +486,36 @@ table.grid {
 }
 
 /* Model sparklines (collapsed by default) */
-.models-box summary {
+/* A collapsed section must look tappable: framed row with a chevron that turns when open. */
+.models-box summary, .about summary {
   min-height: 44px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0 0.9rem;
   font-weight: 700;
   cursor: pointer;
+  list-style: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
 }
+.models-box summary::-webkit-details-marker, .about summary::-webkit-details-marker { display: none; }
+/* Say it in words: "Show ▾" while collapsed, "Hide ▴" when open. */
+.models-box summary::after, .about summary::after {
+  content: "Show \25BE";
+  flex: 0 0 auto;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--accent);
+}
+.models-box[open] summary::after, .about[open] summary::after { content: "Hide \25B4"; }
+.models-box { margin: 0.6rem 0 0.8rem; }
+.models-box summary .sub { font-weight: 500; color: var(--muted); font-size: 0.85rem; }
 .models { padding-bottom: 0.4rem; }
 .spark-fig { margin: 0.4rem 0 0.8rem; }
 .spark-fig figcaption { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem; }
@@ -597,7 +625,6 @@ dialog#menu-dialog {
 .links-list { margin: 0; padding-left: 1.2rem; }
 .links-list li { min-height: 40px; display: flex; align-items: center; }
 .about { margin-top: 0.8rem; font-size: 0.9rem; color: var(--muted); }
-.about summary { min-height: 40px; display: flex; align-items: center; font-weight: 700; cursor: pointer; }
 dialog label { display: block; font-weight: 700; margin-bottom: 0.25rem; }
 dialog input {
   width: 100%;

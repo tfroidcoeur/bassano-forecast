@@ -503,7 +503,7 @@ function renderDay(dateKey) {
       el(
         'details',
         { class: 'models-box' },
-        el('summary', { text: 'Model comparison: 10 m, gust, 1000 m' }),
+        el('summary', {}, el('span', {}, el('span', { text: 'Compare the models' }), el('br'), el('span', { class: 'sub', text: 'wind at 10 m, gusts, wind at 1000 m — one line per model' }))),
         modelCharts(recs, state.unit)
       )
     );
