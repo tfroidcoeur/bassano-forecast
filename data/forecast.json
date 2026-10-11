@@ -1,0 +1,124 @@
+{
+  "generated_at": "2026-10-11T15:33:37Z",
+  "summary": "A north to north-east flow dominates the week. Monday brings strong E–NE wind at launch height and Tuesday a strong north wind aloft (lee on the south face). From Wednesday the flow aloft weakens and the days turn dry and sunny with light winds but weak, low thermals; the north component aloft eases to ~10 km/h by Friday. The Bozen−Innsbruck foehn index is moderate Sunday–Wednesday (−2 to −4.5 hPa), absent Thursday and weak Friday; the air stays too moist for a full lee signature. Next week is uncertain, with foehn signals early on.",
+  "days": [
+    {
+      "date": "2026-10-11",
+      "verdict": "marginal",
+      "headline": "Grey and humid with low cloud near the take-offs; light SE breeze, weak thermals, gusty on the plain.",
+      "window": "11:00–15:00",
+      "foehn": "moderate",
+      "foehn_text": "Bozen−Innsbruck −2.2 hPa (ECMWF) / −2.4 hPa (ICON), peaks −3.1/−3.6; Zurich−Lugano +4.1/+4.5 hPa. Index in the moderate band, but no lee signature at Bassano: no north flow at 850/700 hPa and moist air (RH 91–99 %). Described as a pressure gradient, not foehn at Grappa.",
+      "text": "Low cloud covers 70–90 % of the sky most of the day with RH above 90 % at 850 hPa. Model ceilings sit around 1100–1300 m in the morning, rising to roughly 1300–1650 m at midday, so the upper take-offs may be in or near cloud. Launch-height wind is light SE (8–12 km/h), 850 hPa light S–SE, 700 hPa W around 27–30 km/h. Thermals are weak (w* up to ~1.6 m/s, tops ~1750 m). Plain gusts reach 25–32 km/h in some models. Models disagree on the low-level wind direction (spread up to 130°). A trace of drizzle is possible near 17:00. Stella Alpina and Tappeti face the light S–SE flow.",
+      "main_risk": "Low cloud near the take-offs and gusts up to ~30 km/h; models disagree on low-level wind."
+    },
+    {
+      "date": "2026-10-12",
+      "verdict": "no",
+      "headline": "Strong E–NE wind at launch height in the morning (30–35 km/h, gusts ~50), then north wind building aloft to ~40 km/h.",
+      "window": null,
+      "foehn": "moderate",
+      "foehn_text": "Bozen−Innsbruck −3.2 hPa (ECMWF) / −4.4 hPa (ICON), peaks −3.5/−4.6; Zurich−Lugano +3.4/+4.8 hPa: moderate north foehn index, models agree. North flow present at Bassano, but air not dry (RH ~80–88 %), so no full lee signature.",
+      "text": "A strong easterly flow dominates the morning: launch-height wind 30–35 km/h from ENE, 850 hPa 27–32 km/h, and plain gusts of 50–54 km/h. The east wind eases after 13:00, but the 700 hPa wind turns north and strengthens from ~30 to ~41 km/h by 17:00, putting the south face in the lee of the massif. Expect rotor, gusts mixing down and the south breeze stalling or reversing. Partly cloudy, dry, no rain. Thermals weak to moderate (tops ~1750 m).",
+      "main_risk": "Strong E–NE wind and gusts ~50 km/h in the morning; north flow aloft above 30 km/h in the afternoon."
+    },
+    {
+      "date": "2026-10-13",
+      "verdict": "no",
+      "headline": "Strong north wind at 700 hPa (43–53 km/h) over a light southerly surface breeze: lee situation on the south face.",
+      "window": null,
+      "foehn": "moderate",
+      "foehn_text": "Bozen−Innsbruck −0.9 hPa (ECMWF, peak −2.0) vs −2.3 hPa (ICON, peak −3.1); Zurich−Lugano +1.4/+2.5 hPa. ECMWF and ICON disagree; ICON gives the moderate class. North flow at Bassano, RH 75–87 %, so not dry: no full lee signature.",
+      "text": "Near the ground the day looks quiet: light S–SW breeze at launch height (5–9 km/h) and light W–NW at 850 hPa. Above the ridge, however, the 700 hPa wind blows from the north at 43–53 km/h all day, strengthening towards evening. A calm or southerly launch under such a flow is not a reliable sign: turbulence and gusts from the north flow can mix down into the lee of the massif. Mostly sunny in the morning, more low and mid cloud in the afternoon. No rain. Plain gusts 25–35 km/h.",
+      "main_risk": "North wind of 43–53 km/h aloft: lee turbulence and rotor on the south face."
+    },
+    {
+      "date": "2026-10-14",
+      "verdict": "marginal",
+      "headline": "Sunny and dry, light winds near the ground, but north wind aloft (700 hPa ~25–33 km/h) easing during the day.",
+      "window": "13:00–16:00",
+      "foehn": "moderate",
+      "foehn_text": "Bozen−Innsbruck −3.1 hPa (ECMWF and ICON), peaks −3.7/−3.6; Zurich−Lugano +1.2/+2.0 hPa: moderate north foehn index, models agree. North flow at Bassano but RH ~52–60 %, not dry enough for the full lee signature.",
+      "text": "Clear skies all day. Launch-height wind is very light (2–5 km/h) and variable, the 850 hPa wind is light northerly in the morning (10 km/h) and fades to near calm by the afternoon. The 700 hPa wind stays northerly: 33 km/h at 09:00, easing to 21–25 km/h after 13:00, still enough to put the south face partly in the lee. Thermals are weak and shallow (tops ~1000 m, w* ~1 m/s), so the upper take-offs sit near or above the thermal top. Plain gusts ~20 km/h. Wind directions vary a lot between models in light wind.",
+      "main_risk": "Moderate foehn index with north wind aloft: possible lee turbulence; weak, shallow thermals."
+    },
+    {
+      "date": "2026-10-15",
+      "verdict": "marginal",
+      "headline": "Dry and mostly sunny with light winds; north to NNW wind of ~22–26 km/h at 700 hPa, weak thermals.",
+      "window": "12:00–16:00",
+      "foehn": "none",
+      "foehn_text": "Bozen−Innsbruck −1.3 hPa (ECMWF) / −0.8 hPa (ICON), peaks −1.5; Zurich−Lugano +1.0/+0.3 hPa: no north foehn, models agree. A moderate northerly flow aloft remains but without a foehn gradient.",
+      "text": "Little or no low cloud; some high cloud. Launch-height wind is very light (1–3 km/h) with no clear direction; 850 hPa light NW (5–8 km/h). The 700 hPa wind stays N to NNW at 22–26 km/h, in the marginal range for the north component. Thermals are weak, topping out around 1100–1300 m in the afternoon (w* up to ~1.4 m/s). Plain gusts below 20 km/h. No rain. Models disagree on the surface wind direction, typical in such light wind.",
+      "main_risk": "North component of 22–26 km/h aloft; weak thermals with low tops."
+    },
+    {
+      "date": "2026-10-16",
+      "verdict": "marginal",
+      "headline": "Dry with light winds; north wind aloft weakening to ~10 km/h; weak thermals; models disagree on wind speed.",
+      "window": "12:00–16:00",
+      "foehn": "weak",
+      "foehn_text": "Bozen−Innsbruck −2.6 hPa (ECMWF) / −2.5 hPa (ICON), peaks −2.7/−2.9; Zurich−Lugano +2.2/+3.1 hPa: weak north foehn index, models agree. Light north flow early at Bassano, RH ~50 %: no full lee signature.",
+      "text": "Mostly sunny; some mid cloud around midday, a little low cloud late afternoon. Launch-height wind is light E (2–6 km/h), 850 hPa light NE to N (4–9 km/h). The 700 hPa wind is N–NNE at 17–19 km/h in the morning, easing to ~10 km/h from midday. Thermals are weak (w* ~1 m/s, tops ~1150 m). Plain gusts under 18 km/h. No rain. Models differ by 9–16 km/h in wind speed, so confidence is limited.",
+      "main_risk": "Weak foehn gradient and model disagreement on wind speed; weak, low thermals."
+    }
+  ],
+  "outlook": [
+    {
+      "date": "2026-10-17",
+      "verdict": "possible",
+      "confidence": "low",
+      "foehn": "moderate",
+      "text": "Rain chance 18 %. Median wind light (850 hPa ~6, 700 hPa ~16 km/h). North flow in 37 % of members; Bozen−Innsbruck median −3.2 hPa (range −6.2 to −0.7): a moderate foehn signal."
+    },
+    {
+      "date": "2026-10-18",
+      "verdict": "unlikely",
+      "confidence": "low",
+      "foehn": "moderate",
+      "text": "Rain chance 32 %. 850 hPa ~10 km/h, 700 hPa ~17 km/h (up to 38). North flow in 41 % of members; Bozen−Innsbruck median −3.0 hPa (range −6.5 to +1.1): moderate foehn signal."
+    },
+    {
+      "date": "2026-10-19",
+      "verdict": "unlikely",
+      "confidence": "low",
+      "foehn": "weak",
+      "text": "Rain chance 22 %. 700 hPa median ~28 km/h (up to 48) from the north side; north flow in 51 % of members. Bozen−Innsbruck median −2.4 hPa (range −5.5 to +1.1): weak foehn signal."
+    },
+    {
+      "date": "2026-10-20",
+      "verdict": "possible",
+      "confidence": "very_low",
+      "foehn": "none",
+      "text": "Rain chance 13 %. 850 hPa ~11 km/h, 700 hPa ~24 km/h (up to 55 in some members). North flow in 44 %. Bozen−Innsbruck median −1.4 hPa (range −5.9 to +1.9)."
+    },
+    {
+      "date": "2026-10-21",
+      "verdict": "possible",
+      "confidence": "very_low",
+      "foehn": "none",
+      "text": "Rain chance 29 %. 850 hPa ~11 km/h (up to 40), 700 hPa ~30 km/h. North flow in 37 % of members. Bozen−Innsbruck median −1.2 hPa (range −5.7 to +2.0)."
+    },
+    {
+      "date": "2026-10-22",
+      "verdict": "possible",
+      "confidence": "very_low",
+      "foehn": "none",
+      "text": "Rain chance 18 %. 850 hPa ~11 km/h (up to 40), 700 hPa ~26 km/h. North flow in 35 % of members. Bozen−Innsbruck median −0.4 hPa (range −6.3 to +2.0)."
+    },
+    {
+      "date": "2026-10-23",
+      "verdict": "possible",
+      "confidence": "very_low",
+      "foehn": "none",
+      "text": "Rain chance 24 %. 850 hPa ~11 km/h, 700 hPa ~24 km/h. North flow in 32 % of members. Bozen−Innsbruck median −0.7 hPa (range −5.1 to +2.2)."
+    },
+    {
+      "date": "2026-10-24",
+      "verdict": "possible",
+      "confidence": "very_low",
+      "foehn": "none",
+      "text": "Rain chance 24 %. 850 hPa ~11 km/h, 700 hPa ~24 km/h. North flow in only 19 % of members. Bozen−Innsbruck median +0.5 hPa (range −4.4 to +2.9)."
+    }
+  ]
+}
