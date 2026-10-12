@@ -1,5 +1,6 @@
 import { bandPath, pathFromPoints } from '../lib/chart.js';
 import { compass } from '../lib/longrange.js';
+import { t, formatDecimal } from '../lib/i18n.js';
 import { barPct, niceMax, rangeBox, speedIn } from '../lib/layout.js';
 import { dayLabel, romeWall } from '../lib/time.js';
 import { el, svgEl } from './dom.js';
@@ -17,7 +18,11 @@ const RAIN_BOT = 172;
 const LABEL_Y = 190;
 
 const pct = (p) => `${Math.round(p * 100)} %`;
-const signed = (v) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v).toFixed(1)}`;
+const signed = (v) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${formatDecimal(Math.abs(v), 1)}`;
+const compassName = (deg) => {
+  const c = compass(deg);
+  return c ? t(`compass.${c}`) : null;
+};
 const rounded = (kmh, unit) => Math.round(speedIn(kmh, unit));
 
 /** Chart of the 14 days: median 1500 m and 3000 m wind with p10–p90 bands, rain chance bars below. */
@@ -28,9 +33,9 @@ function chartSvg(rows, unit, yMax) {
   const y = (v) => WIND_BOT - (Math.min(Math.max(v, 0), yMax) / yMax) * (WIND_BOT - WIND_TOP);
   const svg = svgEl('svg', { class: 'lr-chart', viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-labelledby': 'lr-title lr-desc' });
   svg.append(svgEl('title', { id: 'lr-title' }));
-  svg.firstChild.textContent = 'Long-range wind and rain chance, 14 days';
+  svg.firstChild.textContent = t('lr.title');
   const desc = svgEl('desc', { id: 'lr-desc' });
-  desc.textContent = 'Median 1500 m and 3000 m wind with shaded p10 to p90 bands, and a rain chance bar per day. Days from 6 ahead are faded.';
+  desc.textContent = t('lr.desc');
   svg.append(desc);
 
   svg.append(svgEl('rect', { class: 'lr-far-bg', x: PAD_L + LOW_CONFIDENCE_FROM * colW, y: WIND_TOP, width: (n - LOW_CONFIDENCE_FROM) * colW, height: RAIN_BOT - WIND_TOP }));
@@ -74,7 +79,7 @@ function chartSvg(rows, unit, yMax) {
   const nowX = PAD_L + (hour / 24) * colW;
   svg.append(svgEl('line', { class: 'lr-now', x1: nowX, x2: nowX, y1: WIND_TOP, y2: RAIN_BOT }));
   const label = svgEl('text', { class: 'lr-now-label', x: nowX + 3, y: WIND_TOP + 9 });
-  label.textContent = 'now';
+  label.textContent = t('chart.now');
   svg.append(label);
   return svg;
 }
@@ -86,13 +91,13 @@ function legend() {
     el(
       'ul',
       { class: 'legend-items' },
-      el('li', {}, el('span', { class: 'key key-med-solid', 'aria-hidden': 'true' }), '1500 m median (≈850 hPa)'),
-      el('li', {}, el('span', { class: 'key key-med-dash', 'aria-hidden': 'true' }), '3000 m median (≈700 hPa)'),
-      el('li', {}, el('span', { class: 'key key-band-ens', 'aria-hidden': 'true' }), 'p10–p90 band'),
-      el('li', {}, el('span', { class: 'key key-rain', 'aria-hidden': 'true' }), 'rain chance, ≥1 mm'),
-      el('li', {}, el('span', { class: 'key key-far', 'aria-hidden': 'true' }), 'faded: 6+ days ahead')
+      el('li', {}, el('span', { class: 'key key-med-solid', 'aria-hidden': 'true' }), t('lr.legMed1500')),
+      el('li', {}, el('span', { class: 'key key-med-dash', 'aria-hidden': 'true' }), t('lr.legMed3000')),
+      el('li', {}, el('span', { class: 'key key-band-ens', 'aria-hidden': 'true' }), t('lr.legBand')),
+      el('li', {}, el('span', { class: 'key key-rain', 'aria-hidden': 'true' }), t('lr.legRain')),
+      el('li', {}, el('span', { class: 'key key-far', 'aria-hidden': 'true' }), t('lr.legFar'))
     ),
-    el('p', { class: 'legend-note', text: 'Wind and rain 09–17 local. Km/h or kt as set in the menu.' })
+    el('p', { class: 'legend-note', text: t('lr.legNote') })
   );
 }
 
@@ -126,7 +131,7 @@ function row(label, bar, value) {
 
 function levelRow(label, level, unit, max) {
   if (!level) return row(label, null, DASH);
-  const dir = compass(level.dir);
+  const dir = compassName(level.dir);
   const text = `${rounded(level.p50, unit)} (${rounded(level.p10, unit)}–${rounded(level.p90, unit)})${dir ? ` ${dir}` : ''}`;
   return row(label, levelBar(level, unit, max), text);
 }
@@ -138,12 +143,12 @@ function dayCard(r, i, unit, max) {
     'li',
     { class: far ? 'lr-card far' : 'lr-card' },
     el('h3', { text: dayLabel(r.date) }),
-    row('Rain ≥1 mm', Number.isFinite(r.rain) ? rainBar(r.rain) : null, Number.isFinite(r.rain) ? pct(r.rain) : DASH),
-    levelRow('1500 m', r.aloft850, unit, max),
-    levelRow('3000 m', r.aloft700, unit, max),
-    row('N-flow', null, Number.isFinite(r.north) ? el('span', { class: northCls, text: pct(r.north) }) : DASH),
-    row('Foehn hPa', null, r.foehn ? `${signed(r.foehn.p50)} (${signed(r.foehn.p10)}/${signed(r.foehn.p90)})` : DASH),
-    row('Temp °C', null, r.temp ? `${Math.round(r.temp.min)} / ${Math.round(r.temp.max)}` : DASH)
+    row(t('lr.rain'), Number.isFinite(r.rain) ? rainBar(r.rain) : null, Number.isFinite(r.rain) ? pct(r.rain) : DASH),
+    levelRow(t('grid.h1500'), r.aloft850, unit, max),
+    levelRow(t('grid.h3000'), r.aloft700, unit, max),
+    row(t('lr.northFlow'), null, Number.isFinite(r.north) ? el('span', { class: northCls, text: pct(r.north) }) : DASH),
+    row(t('lr.foehn'), null, r.foehn ? `${signed(r.foehn.p50)} (${signed(r.foehn.p10)}/${signed(r.foehn.p90)})` : DASH),
+    row(t('lr.temp'), null, r.temp ? `${Math.round(r.temp.min)} / ${Math.round(r.temp.max)}` : DASH)
   );
 }
 

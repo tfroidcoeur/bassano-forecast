@@ -9,7 +9,7 @@
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#1d4f91">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1e293b">
   <meta name="description" content="Paragliding forecast for Monte Grappa, Bassano del Grappa.">
-  <title>Grappa forecast</title>
+  <title data-i18n="app.title">Grappa forecast</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
@@ -21,10 +21,10 @@
     <div class="bar-row">
       <h1 class="app-title">Grappa</h1>
       <div class="bar-actions">
-        <button id="btn-reload" class="icon-btn" type="button" aria-label="Reload live data" title="Reload live data">
+        <button id="btn-reload" class="icon-btn" type="button" aria-label="Reload live data" title="Reload live data" data-i18n-aria="app.reload" data-i18n-title="app.reload">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
         </button>
-        <button id="btn-menu" class="icon-btn" type="button" aria-label="Menu" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-dialog" title="Menu">
+        <button id="btn-menu" class="icon-btn" type="button" aria-label="Menu" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-dialog" title="Menu" data-i18n-aria="app.menu" data-i18n-title="app.menu">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="5" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg>
           <span id="menu-dot" class="menu-dot" hidden aria-hidden="true"></span>
         </button>
@@ -40,29 +40,29 @@
     <p id="refresh-status" class="status refresh-status" role="status" aria-live="polite"></p>
 
     <section class="card summary" aria-labelledby="summary-heading">
-      <h2 id="summary-heading">Summary</h2>
+      <h2 id="summary-heading" data-i18n="summary.heading">Summary</h2>
       <p id="summary"></p>
     </section>
 
     <section class="card foehn-today" aria-labelledby="foehn-today-heading">
-      <h2 id="foehn-today-heading">Foehn</h2>
+      <h2 id="foehn-today-heading" data-i18n="foehn.heading">Foehn</h2>
       <div id="foehn-today"></div>
-      <p class="more"><a href="#foehn-detail">Details ↓</a></p>
+      <p class="more"><a href="#foehn-detail" data-i18n="foehn.details">Details ↓</a></p>
     </section>
 
     <!-- Below the parts shared by all days; sticks under the app bar once scrolled to. -->
-    <nav class="day-tabs" id="day-tabs" role="tablist" aria-label="Days"></nav>
+    <nav class="day-tabs" id="day-tabs" role="tablist" aria-label="Days" data-i18n-aria="tabs.days"></nav>
 
     <section id="day-panel" class="day-panel" role="tabpanel" aria-live="polite"></section>
 
     <section id="outlook" class="outlook" aria-labelledby="outlook-heading" hidden>
-      <h2 id="outlook-heading">Outlook — low confidence</h2>
+      <h2 id="outlook-heading" data-i18n="outlook.heading">Outlook — low confidence</h2>
       <div id="outlook-strip" class="outlook-strip"></div>
     </section>
 
     <section class="longrange-section" aria-labelledby="longrange-heading">
-      <h2 id="longrange-heading">Long range — ensemble, low confidence</h2>
-      <p class="notice">
+      <h2 id="longrange-heading" data-i18n="lr.heading">Long range — ensemble, low confidence</h2>
+      <p class="notice" data-i18n="lr.note">
         ECMWF ensemble at the launch point, pooled over its members. Rain, wind and foehn use 09–17 local time, temperature the whole day.
         Wind: median with p10–p90 and the mean direction. Rain: share of members with at least 1 mm. North flow: share of member-hours
         at least 15 km/h from within 60° of north at 850 or 700 hPa. Foehn: Bozen−Innsbruck, member minimum, p10 / p50 / p90.
@@ -72,72 +72,73 @@
     </section>
 
     <section class="card" id="foehn-detail" aria-labelledby="foehn-heading">
-      <h2 id="foehn-heading">Foehn index, 14 days, full detail</h2>
+      <h2 id="foehn-heading" data-i18n="foehn.detailHeading">Foehn index, 14 days, full detail</h2>
       <div id="foehn-full"></div>
-      <p class="explain">
+      <p class="explain" data-i18n-rich="foehn.explain">
         Bozen−Innsbruck is the sea-level pressure in South Tyrol minus that in Innsbruck, in hPa. Negative values mean a north-south
         gradient over the Alps, i.e. north foehn in South Tyrol. Classes: under 2 hPa none, 2 to 3 weak, 3 to 6 moderate, over 6 strong.
         The shaded bands mark 3 and 6 hPa. The day class uses the most negative of ECMWF and ICON between 09 and 17 local time.
-        Cross-check with the <a href="https://wetter.provinz.bz.it/de/foehndiagramm" target="_blank" rel="noopener noreferrer">South Tyrol foehn diagram</a>
-        and the <a href="https://www.srf.ch/meteo/surf-und-segelwetter/diagramme-foehn-und-bise" target="_blank" rel="noopener noreferrer">SRF foehn diagram</a>.
+        Cross-check with the <a href="https://wetter.provinz.bz.it/de/foehndiagramm" target="_blank" rel="noopener noreferrer" data-link="bzDiagram" data-i18n="link.bzDiagram">South Tyrol foehn diagram</a>
+        and the <a href="https://www.srf.ch/meteo/surf-und-segelwetter/diagramme-foehn-und-bise" target="_blank" rel="noopener noreferrer" data-link="srfDiagram" data-i18n="link.srfDiagram">SRF foehn diagram</a>.
       </p>
-      <p class="explain">
+      <p class="explain" data-i18n="foehn.explainLimits">
         These thresholds come from South Tyrol, about 150 km north; they have not been checked against Grappa itself. The index says how
         strong the north flow across the Alps is, not how much of it reaches the south face.
       </p>
-      <h3>Check it live</h3>
+      <h3 data-i18n="foehn.checkLive">Check it live</h3>
       <ul class="check-live">
-        <li><a href="https://meteo.arpa.veneto.it/?page=DM" target="_blank" rel="noopener noreferrer">ARPAV Dolomiti Meteo</a> — the regional bulletin; it names foehn in the valleys and the Prealps when expected.</li>
-        <li><a href="https://www.arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_meteo" target="_blank" rel="noopener noreferrer">ARPAV live stations</a> — pick Monte Tomba (next to Grappa) for measured wind and gusts at ridge height.</li>
-        <li><a href="https://www.windfinder.com/report/cima_grappa" target="_blank" rel="noopener noreferrer">Live wind Cima Grappa</a> — the summit station.</li>
+        <li data-i18n-rich="live.dolomiti"><a href="https://meteo.arpa.veneto.it/?page=DM" target="_blank" rel="noopener noreferrer" data-link="link" data-i18n="link.dolomiti">ARPAV Dolomiti Meteo</a> — the regional bulletin; it names foehn in the valleys and the Prealps when expected.</li>
+        <li data-i18n-rich="live.stations"><a href="https://www.arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_meteo" target="_blank" rel="noopener noreferrer" data-link="link" data-i18n="link.stations">ARPAV live stations</a> — pick Monte Tomba (next to Grappa) for measured wind and gusts at ridge height.</li>
+        <li data-i18n-rich="live.windfinder"><a href="https://www.windfinder.com/report/cima_grappa" target="_blank" rel="noopener noreferrer" data-link="link" data-i18n="link.windfinder">Live wind Cima Grappa</a> — the summit station.</li>
       </ul>
     </section>
   </main>
 
   <footer>
-    <p>Model estimates, written partly by an AI. Weather only — the local schools and you decide whether to fly. Self-brief airspace and NOTAMs.</p>
+    <p data-i18n="footer.disclaimer">Model estimates, written partly by an AI. Weather only — the local schools and you decide whether to fly. Self-brief airspace and NOTAMs.</p>
   </footer>
 
   <dialog id="menu-dialog" class="sheet" aria-labelledby="menu-title">
     <div class="sheet-body">
-      <h2 id="menu-title">Menu</h2>
+      <h2 id="menu-title" data-i18n="app.menu">Menu</h2>
       <ul class="menu">
-        <li><button id="m-refresh" class="menu-item" type="button">Refresh verdict</button></li>
-        <li><button id="m-reload" class="menu-item" type="button">Reload live data</button></li>
-        <li><button id="m-units" class="menu-item" type="button">Units</button></li>
-        <li><button id="m-settings" class="menu-item" type="button">Settings</button></li>
+        <li><button id="m-refresh" class="menu-item" type="button" data-i18n="menu.refresh">Refresh verdict</button></li>
+        <li><button id="m-reload" class="menu-item" type="button" data-i18n="menu.reload">Reload live data</button></li>
+        <li><button id="m-units" class="menu-item" type="button">Wind unit: km/h (switch to kt)</button></li>
+        <li><button id="m-lang" class="menu-item" type="button">Language: English (switch to Nederlands)</button></li>
+        <li><button id="m-settings" class="menu-item" type="button" data-i18n="menu.settings">Settings</button></li>
       </ul>
-      <h3>Links</h3>
+      <h3 data-i18n="menu.links">Links</h3>
       <ul class="links-list">
-        <li><a href="https://meteo-parapente.com/#/45.82,11.77,11" target="_blank" rel="noopener noreferrer">meteo-parapente</a></li>
-        <li><a href="https://www.windy.com/45.820/11.770?45.820,11.770,11" target="_blank" rel="noopener noreferrer">Windy</a></li>
-        <li><a href="https://wetter.provinz.bz.it/de/foehndiagramm" target="_blank" rel="noopener noreferrer">South Tyrol foehn diagram</a></li>
-        <li><a href="https://www.srf.ch/meteo/surf-und-segelwetter/diagramme-foehn-und-bise" target="_blank" rel="noopener noreferrer">SRF foehn diagram</a></li>
-        <li><a href="https://www.windfinder.com/report/cima_grappa" target="_blank" rel="noopener noreferrer">Live wind Cima Grappa (windfinder)</a></li>
-        <li><a href="https://www.arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_meteo" target="_blank" rel="noopener noreferrer">ARPAV live stations (pick Monte Tomba)</a></li>
-        <li><a href="https://meteo.arpa.veneto.it/?page=DM" target="_blank" rel="noopener noreferrer">ARPAV Dolomiti Meteo bulletin</a></li>
-        <li><a href="https://www.cimagrappa.it/en/stazione_meteo.php" target="_blank" rel="noopener noreferrer">Cima Grappa station</a></li>
-        <li><a href="https://www.vololiberomontegrappa.it/decolli" target="_blank" rel="noopener noreferrer">Club Volo Libero Montegrappa</a></li>
+        <li><a href="https://meteo-parapente.com/#/45.82,11.77,11" target="_blank" rel="noopener noreferrer" data-i18n="link.meteoParapente">meteo-parapente</a></li>
+        <li><a href="https://www.windy.com/45.820/11.770?45.820,11.770,11" target="_blank" rel="noopener noreferrer" data-i18n="link.windy">Windy</a></li>
+        <li><a href="https://wetter.provinz.bz.it/de/foehndiagramm" target="_blank" rel="noopener noreferrer" data-i18n="link.bzDiagram">South Tyrol foehn diagram</a></li>
+        <li><a href="https://www.srf.ch/meteo/surf-und-segelwetter/diagramme-foehn-und-bise" target="_blank" rel="noopener noreferrer" data-i18n="link.srfDiagram">SRF foehn diagram</a></li>
+        <li><a href="https://www.windfinder.com/report/cima_grappa" target="_blank" rel="noopener noreferrer" data-i18n="link.windfinderMenu">Live wind Cima Grappa (windfinder)</a></li>
+        <li><a href="https://www.arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_meteo" target="_blank" rel="noopener noreferrer" data-i18n="link.stationsMenu">ARPAV live stations (pick Monte Tomba)</a></li>
+        <li><a href="https://meteo.arpa.veneto.it/?page=DM" target="_blank" rel="noopener noreferrer" data-i18n="link.dolomitiMenu">ARPAV Dolomiti Meteo bulletin</a></li>
+        <li><a href="https://www.cimagrappa.it/en/stazione_meteo.php" target="_blank" rel="noopener noreferrer" data-i18n="link.cimaStation">Cima Grappa station</a></li>
+        <li><a href="https://www.vololiberomontegrappa.it/decolli" target="_blank" rel="noopener noreferrer" data-i18n="link.club">Club Volo Libero Montegrappa</a></li>
       </ul>
       <details class="about">
-        <summary>About and disclaimer</summary>
-        <p>Model estimates from Open-Meteo, written partly by an AI. Weather only. The local schools and the pilot decide whether to fly. Self-brief airspace and NOTAMs.</p>
+        <summary data-i18n="menu.about" data-i18n-show="action.show" data-i18n-hide="action.hide">About and disclaimer</summary>
+        <p data-i18n="menu.aboutText">Model estimates from Open-Meteo, written partly by an AI. Weather only. The local schools and the pilot decide whether to fly. Self-brief airspace and NOTAMs.</p>
       </details>
-      <p class="dialog-actions"><button id="m-close" type="button">Close</button></p>
+      <p class="dialog-actions"><button id="m-close" type="button" data-i18n="action.close">Close</button></p>
     </div>
   </dialog>
 
   <dialog id="settings-dialog" class="sheet" aria-labelledby="settings-heading">
     <div class="sheet-body">
-      <h2 id="settings-heading">Settings</h2>
+      <h2 id="settings-heading" data-i18n="settings.title">Settings</h2>
       <p>
-        <label for="refresh-url">Routine link (https://claude.ai/…)</label>
+        <label for="refresh-url" data-i18n="settings.routineLabel">Routine link (https://claude.ai/…)</label>
         <input id="refresh-url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://claude.ai/">
       </p>
       <p id="settings-error" class="error" role="alert"></p>
       <p class="dialog-actions">
-        <button id="settings-cancel" type="button">Close</button>
-        <button id="settings-save" type="button">Save</button>
+        <button id="settings-cancel" type="button" data-i18n="action.close">Close</button>
+        <button id="settings-save" type="button" data-i18n="action.save">Save</button>
       </p>
     </div>
   </dialog>

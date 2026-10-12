@@ -1,12 +1,13 @@
 import { formatSpeed, windBand } from '../lib/wind.js';
 import { levelFor } from '../lib/score.js';
 import { LIMITS, FOEHN, CONSENSUS_MODELS } from '../lib/config.js';
-import { wmoGroup, WMO_LABELS, WMO_SHAPES } from '../lib/icons.js';
+import { wmoGroup, WMO_SHAPES } from '../lib/icons.js';
 import { barPct, ceilingHundreds, maxAngleDeviation, minMax } from '../lib/layout.js';
 import { el, svgEl, arrowSvg, iconSvg } from './dom.js';
+import { t, formatDecimal } from '../lib/i18n.js';
 
 const DASH = '–';
-const SCORE_WORDS = { green: 'good', amber: 'marginal', red: 'no' };
+const SCORE_WORDS = { green: 'score.good', amber: 'score.marginal', red: 'score.no' };
 const RAIN_BAR_MAX_MM = 4;
 
 const unitLabel = (unit) => (unit === 'kt' ? 'kt' : 'km/h');
@@ -43,14 +44,14 @@ function rainCell(mm) {
   bar.append(svgEl('rect', { class: 'rain-track', x: 0, y: 0, width: 30, height: 6, rx: 3 }));
   if (w > 0) bar.append(svgEl('rect', { class: 'rain-fill', x: 0, y: 0, width: (w / 100) * 30, height: 6, rx: 3 }));
   const cell = el('td', { class: mm >= FOEHN.rainMm ? 'rain-wet' : '' }, bar);
-  if (mm >= 0.1) cell.append(el('span', { class: 'rain-num', text: mm.toFixed(1) }));
+  if (mm >= 0.1) cell.append(el('span', { class: 'rain-num', text: formatDecimal(mm, 1) }));
   return cell;
 }
 
 function weatherCell(code) {
   const group = wmoGroup(code);
   if (!group) return el('td', {}, DASH);
-  return el('td', { class: 'wx-cell' }, iconSvg(group, WMO_SHAPES[group], WMO_LABELS[group]));
+  return el('td', { class: 'wx-cell' }, iconSvg(group, WMO_SHAPES[group], t(`wx.${group}`)));
 }
 
 /** Consensus-model values of one hour, for the spread rows. */
@@ -62,24 +63,24 @@ function consensusOf(col, pick) {
 function moreRows(unit) {
   const u = unitLabel(unit);
   return [
-    ['Cloud %', (c) => (Number.isFinite(c.cloudLow) ? String(Math.round(c.cloudLow)) : DASH)],
-    ['Rain mm', (c) => (Number.isFinite(c.precipMm) ? c.precipMm.toFixed(1) : DASH)],
+    [t('more.cloud'), (c) => (Number.isFinite(c.cloudLow) ? String(Math.round(c.cloudLow)) : DASH)],
+    [t('more.rainMm'), (c) => (Number.isFinite(c.precipMm) ? formatDecimal(c.precipMm, 1) : DASH)],
     [
-      'Spr 10 m',
+      t('more.spr10'),
       (c, col) => {
         const s = minMax(consensusOf(col, (m) => m.ws10));
         return s ? `${speedText(s.min, unit)}–${speedText(s.max, unit)}` : DASH;
       },
     ],
     [
-      'Spr dir',
+      t('more.sprDir'),
       (c, col) => {
         const d = maxAngleDeviation(consensusOf(col, (m) => m.wd10));
         return d === null ? DASH : `±${Math.round(d)}`;
       },
     ],
     [
-      'Spr gust',
+      t('more.sprGust'),
       (c, col) => {
         const s = minMax(consensusOf(col, (m) => m.gust));
         return s ? `${speedText(s.min, unit)}–${speedText(s.max, unit)}` : DASH;
@@ -93,17 +94,17 @@ function moreRows(unit) {
  * showMore adds the extra rows. Heights in metres; ceiling in hundreds of metres.
  */
 export function hourGrid(cols, unit, showMore = false) {
-  const head = el('tr', {}, el('th', { scope: 'col', class: 'lbl', text: 'Hour' }), ...cols.map((col) => el('th', { scope: 'col', text: col.label })));
+  const head = el('tr', {}, el('th', { scope: 'col', class: 'lbl', text: t('grid.hour') }), ...cols.map((col) => el('th', { scope: 'col', text: col.label })));
   const rows = [
-    ['Wx', (c) => weatherCell(c.wx)],
-    ['10 m', (c) => windCell(c.ws10, c.wd10, 'wind', unit)],
-    ['Gust', (c) => plainCell(c.gust, 'gust', unit)],
-    ['1000 m', (c) => windCell(c.launch?.speed, c.launch?.dir, 'aloft', unit)],
-    ['1500 m', (c) => windCell(c.aloft850.speed, c.aloft850.dir, 'aloft', unit)],
-    ['3000 m', (c) => windCell(c.aloft700.speed, c.aloft700.dir, 'aloft', unit)],
-    ['N-flow', (c) => northCell(c.north, unit)],
-    ['Rain', (c) => rainCell(c.precipMm)],
-    ['Ceiling', (c) => el('td', {}, Number.isFinite(c.ceiling) ? String(ceilingHundreds(c.ceiling)) : DASH)],
+    [t('grid.wx'), (c) => weatherCell(c.wx)],
+    [t('grid.wind10'), (c) => windCell(c.ws10, c.wd10, 'wind', unit)],
+    [t('grid.gust'), (c) => plainCell(c.gust, 'gust', unit)],
+    [t('grid.h1000'), (c) => windCell(c.launch?.speed, c.launch?.dir, 'aloft', unit)],
+    [t('grid.h1500'), (c) => windCell(c.aloft850.speed, c.aloft850.dir, 'aloft', unit)],
+    [t('grid.h3000'), (c) => windCell(c.aloft700.speed, c.aloft700.dir, 'aloft', unit)],
+    [t('grid.north'), (c) => northCell(c.north, unit)],
+    [t('grid.rain'), (c) => rainCell(c.precipMm)],
+    [t('grid.ceiling'), (c) => el('td', {}, Number.isFinite(c.ceiling) ? String(ceilingHundreds(c.ceiling)) : DASH)],
   ];
   const body = rows.map(([label, cell]) =>
     el('tr', {}, el('th', { scope: 'row', class: 'lbl', text: label }), ...cols.map((col) => (col.c ? cell(col.c) : el('td', {}, DASH))))
@@ -128,10 +129,12 @@ export function hourGrid(cols, unit, showMore = false) {
  * Not interactive: the image has one summary label.
  */
 export function hourStripEl(segments) {
-  const words = segments.map((s) => `${String(s.hour).padStart(2, '0')} ${SCORE_WORDS[s.score] ?? 'no data'}`);
+  const words = segments.map((s) => `${String(s.hour).padStart(2, '0')} ${t(SCORE_WORDS[s.score] ?? 'score.noData')}`);
   const inWindow = segments.filter((s) => s.inWindow).map((s) => s.hour);
-  const windowText = inWindow.length ? `; verdict window ${String(inWindow[0]).padStart(2, '0')} to ${String(inWindow.at(-1) + 1).padStart(2, '0')}:00` : '';
-  const strip = el('div', { class: 'strip', role: 'img', 'aria-label': `Hour scores: ${words.join(', ')}${windowText}` });
+  const windowText = inWindow.length
+    ? t('strip.window', { from: String(inWindow[0]).padStart(2, '0'), to: `${String(inWindow.at(-1) + 1).padStart(2, '0')}:00` })
+    : '';
+  const strip = el('div', { class: 'strip', role: 'img', 'aria-label': t('strip.label', { words: words.join(', '), window: windowText }) });
   for (const s of segments) {
     strip.append(el('span', { class: `seg score-${s.score ?? 'none'}${s.inWindow ? ' in-window' : ''}`, 'aria-hidden': 'true', text: String(s.hour).padStart(2, '0') }));
   }

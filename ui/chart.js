@@ -1,6 +1,7 @@
 import { makeScale, pathFromPoints, bandPath } from '../lib/chart.js';
 import { wallHours, romeWall, addDays, dayLabel } from '../lib/time.js';
 import { svgEl, el } from './dom.js';
+import { t } from '../lib/i18n.js';
 
 const W = 420;
 const H = 260;
@@ -46,11 +47,9 @@ export function foehnChartSvg(opt) {
     'aria-labelledby': `${prefix}-title ${prefix}-desc`,
   });
   svg.append(svgEl('title', { id: `${prefix}-title` }));
-  svg.firstChild.textContent = 'Foehn index: Bozen minus Innsbruck pressure difference';
+  svg.firstChild.textContent = t('chart.title');
   const desc = svgEl('desc', { id: `${prefix}-desc` });
-  desc.textContent =
-    'Negative values mean north foehn in South Tyrol. Solid line ECMWF, dashed ICON, thin grey Zurich minus Lugano (ECMWF). ' +
-    'Shaded bands at 3 and 6 hPa.';
+  desc.textContent = t('chart.desc');
   svg.append(desc);
 
   const plotTop = sc.y(yMax);
@@ -69,9 +68,9 @@ export function foehnChartSvg(opt) {
     svg.append(t);
   }
   const nModerate = svgEl('text', { class: 'band-label', x: PAD.l + 4, y: sc.y(-3.6) });
-  nModerate.textContent = 'N foehn moderate';
+  nModerate.textContent = t('chart.bandModerate');
   const nStrong = svgEl('text', { class: 'band-label', x: PAD.l + 4, y: sc.y(-6.6) });
-  nStrong.textContent = 'N foehn strong';
+  nStrong.textContent = t('chart.bandStrong');
   svg.append(nModerate, nStrong);
 
   // Midnights and day labels.
@@ -113,7 +112,7 @@ export function foehnChartSvg(opt) {
     const x = sc.x(wallHours(nowWall));
     svg.append(svgEl('line', { class: 'now', x1: x, x2: x, y1: PAD.t, y2: H - PAD.b }));
     const label = svgEl('text', { class: 'now-label', x: x + 3, y: PAD.t + 10 });
-    label.textContent = 'now';
+    label.textContent = t('chart.now');
     svg.append(label);
   }
   return svg;
@@ -124,15 +123,15 @@ export function foehnLegend() {
   return el(
     'div',
     { class: 'legend' },
-    el('p', { class: 'legend-note', text: 'Negative = north foehn (Bozen−Innsbruck); Zurich−Lugano positive = north foehn.' }),
+    el('p', { class: 'legend-note', text: t('chart.negative') }),
     el(
       'ul',
       { class: 'legend-items' },
-      el('li', {}, el('span', { class: 'key key-ecmwf', 'aria-hidden': 'true' }), 'Bozen−Innsbruck ECMWF'),
-      el('li', {}, el('span', { class: 'key key-icon', 'aria-hidden': 'true' }), 'Bozen−Innsbruck ICON'),
-      el('li', {}, el('span', { class: 'key key-zl', 'aria-hidden': 'true' }), 'Zurich−Lugano ECMWF'),
-      el('li', {}, el('span', { class: 'key key-ens', 'aria-hidden': 'true' }), 'Ensemble 10–90 % and median (beyond 7 days)'),
-      el('li', {}, el('span', { class: 'key key-band', 'aria-hidden': 'true' }), 'Shaded: 3 and 6 hPa')
+      el('li', {}, el('span', { class: 'key key-ecmwf', 'aria-hidden': 'true' }), t('chart.keyEcmwf')),
+      el('li', {}, el('span', { class: 'key key-icon', 'aria-hidden': 'true' }), t('chart.keyIcon')),
+      el('li', {}, el('span', { class: 'key key-zl', 'aria-hidden': 'true' }), t('chart.keyZl')),
+      el('li', {}, el('span', { class: 'key key-ens', 'aria-hidden': 'true' }), t('chart.keyEns')),
+      el('li', {}, el('span', { class: 'key key-band', 'aria-hidden': 'true' }), t('chart.keyBand'))
     )
   );
 }

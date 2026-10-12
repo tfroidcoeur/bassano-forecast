@@ -71,6 +71,8 @@ The score is a starting point; the verdict text is the judgement.
 }
 ```
 
+Text fields (summary, headline, foehn_text, text, main_risk) may be a plain English string or `{ "en": "...", "nl": "..." }`; a missing language shows the other one.
+
 Unknown enum values are dropped (shown as "No verdict" or "Foehn unknown"). Long strings are cut to a fixed length.
 
 ## Security and privacy

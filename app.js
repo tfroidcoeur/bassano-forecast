@@ -1,7 +1,8 @@
 import { DATA_URL, DATA_URL_FALLBACK, ALL_MODELS, CONSENSUS_MODELS } from './lib/config.js';
 import { forecastUrl, foehnUrl, ensembleUrl, longRangeUrl, validateRefreshUrl } from './lib/urls.js';
-import { romeDate, romeHHMM, romeHourly, addDays, dayLabel, wallFor } from './lib/time.js';
-import { normalizeForecast, verdictLabel, outlookLabel, confidenceLabel, foehnLabel } from './lib/forecast-json.js';
+import { romeDate, romeHHMM, romeHourly, addDays, dayLabel, weekdayShort, wallFor } from './lib/time.js';
+import { normalizeForecast, localizedText, verdictLabel, outlookLabel, confidenceLabel, foehnLabel } from './lib/forecast-json.js';
+import { t, setLang, getLang, detectLang, formatDecimal, LANGS, LANG_NAMES } from './lib/i18n.js';
 import { foehnSeries, ensembleSeries, dayFoehnDp, dayExtremes } from './lib/foehn.js';
 import { ensembleFoehnDaily, longRangeRows } from './lib/longrange.js';
 import { modelHour, consensusHour } from './lib/model.js';
@@ -15,10 +16,12 @@ import { foehnChartSvg, foehnLegend } from './ui/chart.js';
 import { hourGrid, hourStripEl } from './ui/hourly.js';
 import { modelCharts } from './ui/models.js';
 import { longRangeView } from './ui/longrange.js';
+import { applyStatic } from './ui/static.js';
 
 const HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17];
 const REFRESH_KEY = 'grappa.refreshUrl';
 const UNIT_KEY = 'grappa.unit';
+const LANG_KEY = 'grappa.lang';
 const POLL_MS = 30000;
 const POLL_MAX = 20; // 10 minutes
 const LONG_RANGE_DAYS = 15;
@@ -247,27 +250,18 @@ function dayScores(dateKey, recs) {
 
 function fmtDp(v) {
   if (!Number.isFinite(v)) return '–';
-  return `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v).toFixed(1)} hPa`;
+  return `${v > 0 ? '+' : v < 0 ? '−' : ''}${formatDecimal(Math.abs(v), 1)} hPa`;
 }
 
-/** Words for a day's foehn: a positive ΔP is south flow, otherwise '<class> north foehn'. */
-function foehnWords(dp, cls) {
-  if (!Number.isFinite(dp)) return 'foehn unknown';
-  if (dp >= 0) return 'no north foehn (south flow)';
-  return cls === 'none' ? 'no north foehn' : `${cls} north foehn`;
-}
-
+/** prefix: an already translated word ('verdict' or 'live'), or undefined. */
 function foehnBadge(cls, prefix) {
-  return el('span', { class: `badge foehn-${cls ?? 'unknown'}`, text: prefix ? `${prefix}: ${foehnLabel(cls)}` : foehnLabel(cls) });
+  return el('span', { class: `badge foehn-${cls ?? 'unknown'}`, text: prefix ? t('foehn.badgePrefixed', { prefix, label: foehnLabel(cls) }) : foehnLabel(cls) });
 }
 
 function foehnSummaryText(dateKey) {
   const ex = dayExtremes(state.live.foehn, dateKey);
   const cls = foehnClass(dayFoehnDp(state.live.foehn, dateKey));
-  return (
-    `09–17 most negative Bozen−Innsbruck: ECMWF ${fmtDp(ex.biEcmwfMin)}, ICON ${fmtDp(ex.biIconMin)} ` +
-    `(${cls ?? 'unknown'} north foehn). Zurich−Lugano ECMWF max ${fmtDp(ex.zlEcmwfMax)}.`
-  );
+  return t('foehn.summary', { ecmwf: fmtDp(ex.biEcmwfMin), icon: fmtDp(ex.biIconMin), cls: t(`foehn.cls.${cls ?? 'unknown'}`), zl: fmtDp(ex.zlEcmwfMax) });
 }
 
 /** The day with the most negative foehn value in the next five days (tomorrow to +5). */
@@ -298,19 +292,18 @@ function renderStatus() {
 function renderBanner() {
   const banner = $('offline-banner');
   banner.hidden = !state.cachedAt;
-  banner.textContent = state.cachedAt ? `Offline — data from ${romeHHMM(state.cachedAt)}` : '';
+  banner.textContent = state.cachedAt ? t('banner.offline', { time: romeHHMM(state.cachedAt) }) : '';
 }
 
 function renderSummary() {
-  const text = state.verdict?.summary;
-  $('summary').textContent = text || 'No summary yet.';
+  $('summary').textContent = localizedText(state.verdict?.summary) || t('summary.none');
 }
 
 /** Top foehn card: today's value and class, and the strongest of the next five days. */
 function renderFoehnToday() {
   const host = $('foehn-today');
   if (!state.live) {
-    host.replaceChildren(el('p', { class: 'notice', text: 'The foehn index needs live data.' }));
+    host.replaceChildren(el('p', { class: 'notice', text: t('foehn.needsLive') }));
     return;
   }
   const today = romeDate();
@@ -318,23 +311,25 @@ function renderFoehnToday() {
   const cls = foehnClass(dp);
   const best = strongestNext(today);
   // One line per item: label, the Bozen−Innsbruck value and the class badge (the badge says the class).
-  const south = (v) => (Number.isFinite(v) && v >= 0 ? ' (south flow)' : '');
+  const south = (v) => (Number.isFinite(v) && v >= 0 ? t('foehn.southFlow') : '');
   host.replaceChildren(
-    el('p', { class: 'foehn-line' }, el('span', { text: `Today ${fmtDp(dp)}${south(dp)}` }), foehnBadge(cls)),
+    el('p', { class: 'foehn-line' }, el('span', { text: t('foehn.today', { dp: fmtDp(dp), south: south(dp) }) }), foehnBadge(cls)),
     el(
       'p',
       { class: 'foehn-line' },
-      el('span', { text: best ? `Peak, next 5 days: ${dayLabel(best.date)} ${fmtDp(best.dp)}${south(best.dp)}` : 'Peak, next 5 days: no data' }),
+      el('span', {
+        text: best ? t('foehn.peak', { day: dayLabel(best.date), dp: fmtDp(best.dp), south: south(best.dp) }) : t('foehn.peakNone'),
+      }),
       best ? foehnBadge(foehnClass(best.dp)) : null
     ),
-    el('p', { class: 'legend-note', text: 'Bozen−Innsbruck pressure difference; negative = north foehn.' })
+    el('p', { class: 'legend-note', text: t('foehn.dpNote') })
   );
 }
 
 function renderFullChart() {
   const host = $('foehn-full');
   if (!state.live) {
-    host.replaceChildren(el('p', { class: 'notice', text: 'The foehn index needs live data.' }));
+    host.replaceChildren(el('p', { class: 'notice', text: t('foehn.needsLive') }));
     return;
   }
   const today = romeDate();
@@ -347,7 +342,7 @@ function renderFullChart() {
     compact: true,
     idPrefix: 'foehn-full',
   });
-  host.replaceChildren(el('p', { class: 'foehn-summary', text: `Today ${foehnSummaryText(today)}` }), chart, foehnLegend());
+  host.replaceChildren(el('p', { class: 'foehn-summary', text: t('foehn.todaySummary', { text: foehnSummaryText(today) }) }), chart, foehnLegend());
 }
 
 function selectedDay(days) {
@@ -374,7 +369,8 @@ function renderTabs() {
   $('day-tabs').replaceChildren(
     ...days.map((date, k) => {
       const verdict = byDate.get(date)?.verdict ?? null;
-      const [weekday, num] = dayLabel(date).split(' ');
+      const weekday = weekdayShort(date);
+      const num = String(Number(date.slice(8, 10)));
       const selected = date === current;
       const tab = el(
         'button',
@@ -390,7 +386,7 @@ function renderTabs() {
         el('span', { class: 'dt-wd', text: weekday }),
         el('span', { class: 'dt-num', text: num }),
         el('span', { class: `dt-dot dot-${verdict ?? 'none'}`, 'aria-hidden': 'true' }),
-        el('span', { class: 'visually-hidden', text: `, ${verdictLabel(verdict)}` })
+        el('span', { class: 'visually-hidden', text: t('tab.verdict', { verdict: verdictLabel(verdict) }) })
       );
       tab.addEventListener('click', () => selectDay(date));
       tab.addEventListener('keydown', (e) => onTabKey(e, days, k));
@@ -426,7 +422,7 @@ function renderOutlook() {
         el('p', { class: 'outverdict', text: outlookLabel(o.verdict) }),
         el('p', { class: 'badge', text: confidenceLabel(o.confidence) }),
         el('p', { class: `badge foehn-${o.foehn ?? 'unknown'}`, text: foehnLabel(o.foehn) }),
-        el('p', { class: 'outtext', text: o.text })
+        el('p', { class: 'outtext', text: localizedText(o.text) })
       )
     )
   );
@@ -437,27 +433,30 @@ function dayFoehnLine(dateKey, verdictCls) {
   const dp = dayFoehnDp(state.live.foehn, dateKey);
   const live = foehnClass(dp);
   const differs = verdictCls !== null && live !== null && verdictCls !== live;
-  const badges = differs ? [foehnBadge(verdictCls, 'verdict'), foehnBadge(live, 'live')] : [foehnBadge(live)];
-  return el('p', { class: 'foehn-live' }, el('span', { text: `Foehn 09–17 live: ${fmtDp(dp)} ` }), ...badges);
+  const badges = differs ? [foehnBadge(verdictCls, t('foehn.prefixVerdict')), foehnBadge(live, t('foehn.prefixLive'))] : [foehnBadge(live)];
+  return el('p', { class: 'foehn-live' }, el('span', { text: `${t('foehn.live', { dp: fmtDp(dp) })} ` }), ...badges);
 }
 
 function verdictCard(dateKey, foehnLine) {
   const day = state.verdict?.days.find((d) => d.date === dateKey) ?? null;
   if (!day) {
-    const msg = state.verdictState === 'missing' ? 'No Claude verdict yet.' : 'No Claude verdict for this day yet.';
+    const msg = state.verdictState === 'missing' ? t('verdict.noYet') : t('verdict.noDay');
     return el('section', { class: 'card notice' }, el('p', { text: msg }), foehnLine);
   }
+  const body = localizedText(day.text);
+  const foehnText = localizedText(day.foehnText);
+  const risk = localizedText(day.mainRisk);
   return el(
     'article',
     { class: `verdict verdict-${day.verdict ?? 'none'}` },
     el('p', { class: 'verdict-word', text: verdictLabel(day.verdict) }),
-    el('h3', { class: 'headline', text: day.headline }),
-    day.window ? el('p', { class: 'window', text: `Window: ${day.window}` }) : null,
+    el('h3', { class: 'headline', text: localizedText(day.headline) }),
+    day.window ? el('p', { class: 'window', text: t('card.window', { window: day.window }) }) : null,
     el('p', { class: `badge foehn-${day.foehn ?? 'unknown'}`, text: foehnLabel(day.foehn) }),
     foehnLine,
-    day.foehnText ? el('p', { text: day.foehnText }) : null,
-    day.text ? el('p', { text: day.text }) : null,
-    day.mainRisk ? el('p', { class: 'risk' }, el('strong', { text: 'Main risk: ' }), day.mainRisk) : null
+    foehnText ? el('p', { text: foehnText }) : null,
+    body ? el('p', { text: body }) : null,
+    risk ? el('p', { class: 'risk' }, el('strong', { text: `${t('card.risk')} ` }), risk) : null
   );
 }
 
@@ -465,7 +464,7 @@ function renderDay(dateKey) {
   const day = state.verdict?.days.find((d) => d.date === dateKey) ?? null;
   const parts = [];
   if (!state.live) {
-    parts.push(verdictCard(dateKey, null), el('p', { class: 'notice', text: 'Live tables are unavailable. Use Reload live data.' }));
+    parts.push(verdictCard(dateKey, null), el('p', { class: 'notice', text: t('day.needsLive') }));
   } else {
     const recs = hourRecords(dateKey);
     const { scores } = dayScores(dateKey, recs);
@@ -477,7 +476,7 @@ function renderDay(dateKey) {
       class: 'more-toggle',
       'aria-expanded': state.showMore ? 'true' : 'false',
       'aria-controls': 'hour-grid',
-      text: state.showMore ? 'Fewer values' : 'More values',
+      text: state.showMore ? t('more.hide') : t('more.show'),
     });
     more.addEventListener('click', () => {
       state.showMore = !state.showMore;
@@ -488,22 +487,26 @@ function renderDay(dateKey) {
       verdictCard(dateKey, dayFoehnLine(dateKey, day?.foehn ?? null)),
       el(
         'section',
-        { class: 'strip-block', 'aria-label': 'Hours at a glance' },
-        el('p', { class: 'strip-head', text: `09–17 local, verdict: ${verdictLabel(day?.verdict ?? null)}` }),
+        { class: 'strip-block', 'aria-label': t('day.strip') },
+        el('p', { class: 'strip-head', text: t('day.stripHead', { verdict: verdictLabel(day?.verdict ?? null) }) }),
         hourStripEl(segments),
-        el('p', { class: 'legend-note', text: 'Green good, amber marginal, red no. Outlined: the verdict window.' })
+        el('p', { class: 'legend-note', text: t('day.stripLegend') })
       ),
-      el('h3', { text: 'Hourly, 09–17 local' }),
+      el('h3', { text: t('day.hourly') }),
       hourGrid(cols, state.unit, state.showMore),
       more,
       el('p', {
         class: 'legend-note',
-        text: 'Heights: 1000 m ≈ 900 hPa, 1500 m ≈ 850 hPa, 3000 m ≈ 700 hPa. N-flow: north part of the 850/700 hPa wind. Ceiling: cloud base in hundreds of metres. Spr: range across the five consensus models (wind and gust in the chosen unit; dir in ± degrees).',
+        text: t('day.heights'),
       }),
       el(
         'details',
         { class: 'models-box' },
-        el('summary', {}, el('span', {}, el('span', { text: 'Compare the models' }), el('br'), el('span', { class: 'sub', text: 'wind at 10 m, gusts, wind at 1000 m — one line per model' }))),
+        el(
+          'summary',
+          { 'data-show': t('action.show'), 'data-hide': t('action.hide') },
+          el('span', {}, el('span', { text: t('day.compare') }), el('br'), el('span', { class: 'sub', text: t('day.compareSub') }))
+        ),
         modelCharts(recs, state.unit)
       )
     );
@@ -514,8 +517,8 @@ function renderDay(dateKey) {
 
 function renderLongRange() {
   const host = $('longrange-body');
-  if (!state.live) host.replaceChildren(el('p', { class: 'notice', text: 'Long range needs live data. Use Reload live data.' }));
-  else if (!state.live.longRange) host.replaceChildren(el('p', { class: 'notice', text: 'Long-range data unavailable. Use Reload live data.' }));
+  if (!state.live) host.replaceChildren(el('p', { class: 'notice', text: t('lr.needsLive') }));
+  else if (!state.live.longRange) host.replaceChildren(el('p', { class: 'notice', text: t('lr.unavailable') }));
   else host.replaceChildren(longRangeView(state.live.longRange, state.unit));
 }
 
@@ -529,14 +532,23 @@ function render() {
   renderOutlook();
   renderLongRange();
   renderDay(selectedDay(dayList()));
-  renderMenuUnit();
+  renderMenu();
 }
 
 // ---- refresh verdict (poll after opening the routine) ----
 
-function setRefreshStatus(text, spinning = false) {
-  const children = spinning ? [el('span', { class: 'spinner', 'aria-hidden': 'true' })] : [];
-  $('refresh-status').replaceChildren(...children, text);
+// The last message is kept as a key, so a language switch can redraw it.
+let refreshMsg = null;
+
+function setRefreshStatus(key, params = {}, spinning = false) {
+  refreshMsg = { key, params, spinning };
+  drawRefreshStatus();
+}
+
+function drawRefreshStatus() {
+  if (!refreshMsg) return;
+  const children = refreshMsg.spinning ? [el('span', { class: 'spinner', 'aria-hidden': 'true' })] : [];
+  $('refresh-status').replaceChildren(...children, t(refreshMsg.key, refreshMsg.params));
 }
 
 /** Progress shown on the app bar while polling: a thin line under it and a dot on the menu button. */
@@ -556,24 +568,24 @@ const poller = createPoller({
   },
   onProgress: (checks) => {
     setPolling(true);
-    setRefreshStatus(`Waiting for a new verdict… (${checks}/${POLL_MAX})`, true);
+    setRefreshStatus('refresh.waiting', { checks, max: POLL_MAX }, true);
   },
   onFound: (data) => {
     setPolling(false);
     state.verdict = data;
     state.verdictState = 'ok';
-    setRefreshStatus(`New verdict written ${romeHHMM(data.generatedAt)}.`);
+    setRefreshStatus('refresh.written', { time: romeHHMM(data.generatedAt) });
     render();
   },
   onGiveUp: () => {
     setPolling(false);
-    setRefreshStatus('No new verdict after 10 minutes. Check the routine on claude.ai.');
+    setRefreshStatus('refresh.giveUp');
   },
 });
 
 function refreshVerdict() {
   if (!state.refreshUrl) {
-    setRefreshStatus('Set the claude.ai routine link in Settings first.');
+    setRefreshStatus('refresh.setLink');
     openSettings();
     return;
   }
@@ -592,14 +604,16 @@ function wireSheet(dialog) {
 }
 
 function openMenu() {
-  renderMenuUnit();
+  renderMenu();
   $('menu-dialog').showModal();
   $('btn-menu').setAttribute('aria-expanded', 'true');
 }
 
-function renderMenuUnit() {
-  const other = state.unit === 'kt' ? 'km/h' : 'kt';
-  $('m-units').textContent = `Wind unit: ${state.unit === 'kt' ? 'kt' : 'km/h'} (switch to ${other})`;
+function renderMenu() {
+  const unit = state.unit === 'kt' ? 'kt' : 'km/h';
+  $('m-units').textContent = t('menu.unit', { unit, other: state.unit === 'kt' ? 'km/h' : 'kt' });
+  const lang = getLang();
+  $('m-lang').textContent = t('menu.language', { current: LANG_NAMES[lang], other: LANG_NAMES[lang === 'nl' ? 'en' : 'nl'] });
 }
 
 function toggleUnit() {
@@ -607,6 +621,21 @@ function toggleUnit() {
   writeStorage(UNIT_KEY, state.unit);
   $('menu-dialog').close();
   render();
+}
+
+function toggleLanguage() {
+  const next = getLang() === 'nl' ? 'en' : 'nl';
+  $('menu-dialog').close();
+  setLanguage(next);
+}
+
+/** Switches the language without refetching: static text, then the rendered parts. */
+function setLanguage(lang) {
+  setLang(lang);
+  writeStorage(LANG_KEY, lang);
+  applyStatic();
+  render();
+  drawRefreshStatus();
 }
 
 function openSettings() {
@@ -621,7 +650,7 @@ function saveSettings() {
   if (raw) {
     url = validateRefreshUrl(raw);
     if (!url) {
-      $('settings-error').textContent = 'The link must start with https://claude.ai/';
+      $('settings-error').textContent = t('settings.invalid');
       return;
     }
   }
@@ -642,6 +671,9 @@ function registerServiceWorker() {
 function init() {
   state.unit = readStorage(UNIT_KEY) === 'kt' ? 'kt' : 'kmh';
   state.refreshUrl = validateRefreshUrl(readStorage(REFRESH_KEY) ?? '');
+  const savedLang = readStorage(LANG_KEY);
+  setLang(LANGS.includes(savedLang) ? savedLang : detectLang(navigator.languages));
+  applyStatic();
 
   $('btn-reload').addEventListener('click', reloadLive);
   $('btn-menu').addEventListener('click', openMenu);
@@ -655,6 +687,7 @@ function init() {
     reloadLive();
   });
   $('m-units').addEventListener('click', toggleUnit);
+  $('m-lang').addEventListener('click', toggleLanguage);
   $('m-settings').addEventListener('click', () => {
     $('menu-dialog').close();
     openSettings();

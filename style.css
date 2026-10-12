@@ -502,9 +502,9 @@ table.grid {
   border-radius: 12px;
 }
 .models-box summary::-webkit-details-marker, .about summary::-webkit-details-marker { display: none; }
-/* Say it in words: "Show ▾" while collapsed, "Hide ▴" when open. */
+/* Say it in words: "Show ▾" while collapsed, "Hide ▴" when open. The words come from data-show and data-hide (translated in JS). */
 .models-box summary::after, .about summary::after {
-  content: "Show \25BE";
+  content: attr(data-show) " \25BE";
   flex: 0 0 auto;
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
@@ -513,7 +513,7 @@ table.grid {
   color: var(--accent-ink);
   background: var(--accent);
 }
-.models-box[open] summary::after, .about[open] summary::after { content: "Hide \25B4"; }
+.models-box[open] summary::after, .about[open] summary::after { content: attr(data-hide) " \25B4"; }
 .models-box { margin: 0.6rem 0 0.8rem; }
 .models-box summary .sub { font-weight: 500; color: var(--muted); font-size: 0.85rem; }
 .models { padding-bottom: 0.4rem; }

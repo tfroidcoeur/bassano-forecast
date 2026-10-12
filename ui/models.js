@@ -1,6 +1,7 @@
 import { ALL_MODELS, CONSENSUS_MODELS, MODEL_NAMES } from '../lib/config.js';
 import { linePath, niceMax, speedIn } from '../lib/layout.js';
 import { el, svgEl } from './dom.js';
+import { t } from '../lib/i18n.js';
 
 const W = 320;
 const H = 120;
@@ -8,9 +9,9 @@ const PAD = 14;
 const HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17];
 
 const SERIES = [
-  { id: 'ws10', title: '10 m wind', value: (m) => m.ws10 },
-  { id: 'gust', title: '10 m gust', value: (m) => m.gust },
-  { id: 'launch', title: '1000 m wind', value: (m) => m.launch?.speed },
+  { id: 'ws10', title: 'models.wind10', value: (m) => m.ws10 },
+  { id: 'gust', title: 'models.gust10', value: (m) => m.gust },
+  { id: 'launch', title: 'models.wind1000', value: (m) => m.launch?.speed },
 ];
 
 /** One chart: all models for one quantity over 09–17. recs: [{ all: modelHour[] }] per hour. */
@@ -32,7 +33,7 @@ function sparkline(series, recs, unit) {
     'aria-labelledby': `spark-${series.id}-title`,
   });
   svg.append(svgEl('title', { id: `spark-${series.id}-title` }));
-  svg.firstChild.textContent = `${series.title}, 09–17, ${unit === 'kt' ? 'kt' : 'km/h'}`;
+  svg.firstChild.textContent = t('models.sparkTitle', { title: t(series.title), unit: unit === 'kt' ? 'kt' : 'km/h' });
   // Gridlines at 0 and the top of the axis, with the top value.
   svg.append(svgEl('line', { class: 'grid-line', x1: PAD, x2: W - PAD, y1: H - PAD, y2: H - PAD }));
   svg.append(svgEl('line', { class: 'grid-line', x1: PAD, x2: W - PAD, y1: PAD, y2: PAD }));
@@ -65,7 +66,7 @@ function legend() {
     'div',
     { class: 'legend' },
     consensus,
-    el('p', { class: 'legend-note', text: `Thin grey: ${extra.join(', ')} (extra models).` })
+    el('p', { class: 'legend-note', text: t('models.extra', { models: extra.join(', ') }) })
   );
 }
 
@@ -77,8 +78,8 @@ export function modelCharts(recs, unit) {
   return el(
     'div',
     { class: 'models' },
-    ...SERIES.map((s) => el('figure', { class: 'spark-fig' }, el('figcaption', { text: `${s.title} (${unit === 'kt' ? 'kt' : 'km/h'})` }), sparkline(s, recs, unit))),
+    ...SERIES.map((s) => el('figure', { class: 'spark-fig' }, el('figcaption', { text: t('models.caption', { title: t(s.title), unit: unit === 'kt' ? 'kt' : 'km/h' }) }), sparkline(s, recs, unit))),
     legend(),
-    el('p', { class: 'legend-note', text: 'Abbreviations: ICON, ECMWF, GFS, AROME; 1000 m ≈ 900 hPa, 1500 m ≈ 850 hPa, 3000 m ≈ 700 hPa.' })
+    el('p', { class: 'legend-note', text: t('models.abbr') })
   );
 }
