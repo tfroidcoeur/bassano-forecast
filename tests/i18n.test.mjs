@@ -79,7 +79,7 @@ test('status line in Dutch, through the same function as the English one', () =>
   setLang('nl');
   try {
     assert.equal(statusLine(ok, live, now), 'Beoordeling geschreven 09:20 (2 u geleden) · live 10:05');
-    assert.equal(statusLine({ state: 'missing' }, { state: 'loading' }, now), 'Nog geen Claude-verdict · live laden…');
+    assert.equal(statusLine({ state: 'missing' }, { state: 'loading' }, now), 'Nog geen Claude-beoordeling · live laden…');
   } finally {
     setLang('en');
   }
