@@ -1,140 +1,140 @@
 {
-  "generated_at": "2026-10-12T16:17:42Z",
+  "generated_at": "2026-10-12T16:20:09Z",
   "summary": {
-    "en": "A north flow aloft dominates the first days: strong ENE wind at ridge height on Monday, then a north wind of 45–50 km/h at 3000 m on Tuesday. From Wednesday the north wind aloft eases to 20–30 km/h and the low levels go light; Saturday is the calmest day at all levels. Foehn index (pressure differences) unavailable this run, thermal profile unavailable, and the ensemble outlook beyond Saturday unavailable; foehn classes are estimated from the flow aloft only.",
-    "nl": "De eerste dagen staat er een noordelijke stroming in de hoogte: maandag harde ONO-wind op kamhoogte, dinsdag noordenwind van 45–50 km/u op 3000 m. Vanaf woensdag zakt de noordenwind in de hoogte naar 20–30 km/u en wordt het onderin zwak. Zaterdag is op alle niveaus de rustigste dag. Föhnindex (drukverschillen), thermiekprofiel en de ensemble-vooruitblik na zaterdag zijn deze keer niet beschikbaar; de föhnklassen zijn alleen geschat uit de stroming in de hoogte."
+    "en": "North flow aloft dominates the first half of the week: Monday has strong gusty ENE wind and a moderate foehn index, Tuesday a strong north wind at 3000 m. From Wednesday the north wind aloft weakens; Wednesday to Saturday are light at launch height with modest thermals and a low cloud base, all marginal. Foehn index: moderate Mon and Wed, weak Tue and Thu, none Fri; Saturday moderate on ICON only. No dry lee signature at Bassano on any day. The ensemble outlook beyond Saturday is unavailable this run.",
+    "nl": "De noordelijke stroming hoger op bepaalt de eerste helft van de week: maandag sterke, rukkerige ONO-wind en een matige föhnindex, dinsdag sterke noordenwind op 3000 m. Vanaf woensdag neemt de noordenwind hoger op af; woensdag tot zaterdag is de wind op starthoogte zwak, met matige thermiek en een lage wolkenbasis, telkens marginaal. Föhnindex: matig ma en wo, zwak di en do, geen vr; zaterdag matig alleen volgens ICON. Op geen enkele dag droge lijzijdesignalen bij Bassano. De ensemble-vooruitzichten na zaterdag zijn deze keer niet beschikbaar."
   },
   "days": [
     {
       "date": "2026-10-12",
       "verdict": "no",
       "headline": {
-        "en": "Strong ENE wind at launch height and gusts to 50–70 km/h, north wind of 30–38 km/h at 3000 m in the afternoon",
-        "nl": "Harde ONO-wind op starthoogte, rukwinden tot 50–70 km/u, 's middags noordenwind van 30–38 km/u op 3000 m"
+        "en": "Strong ENE wind at launch height in the morning, north flow aloft and a moderate foehn index.",
+        "nl": "'s Ochtends sterke ONO-wind op starthoogte, noordelijke stroming hoger op en een matige föhnindex."
       },
       "window": null,
-      "foehn": "weak",
+      "foehn": "moderate",
       "foehn_text": {
-        "en": "Foehn index unavailable this run: no Bozen−Innsbruck or Zurich−Lugano ΔP. Lee signature: north flow at 700 hPa yes (up to 37 km/h), dry air no (RH 76–92 %). Class estimated from the flow aloft only.",
-        "nl": "Föhnindex deze keer niet beschikbaar: geen drukverschil Bozen−Innsbruck of Zürich−Lugano. Lijzijdesignalen bij Bassano: noordenwind op 700 hPa ja (tot 37 km/u), droge lucht nee (RV 76–92 %). Klasse alleen geschat uit de stroming in de hoogte."
+        "en": "Bozen−Innsbruck −3.5 hPa (ECMWF) / −3.7 hPa (ICON), peaks −3.8/−4.4; Zurich−Lugano +3.7/+3.8 hPa, peaks +6.0/+5.7: moderate north foehn index. Signature: N flow at 700 hPa (25–37 km/h) but moist air (RH 76–92 %), so no dry lee.",
+        "nl": "Bozen−Innsbruck −3,5 hPa (ECMWF) / −3,7 hPa (ICON), pieken −3,8/−4,4; Zürich−Lugano +3,7/+3,8 hPa, pieken +6,0/+5,7: matige noordföhnindex. Lijzijdesignalen: noordenwind op 700 hPa (25–37 km/h), maar vochtige lucht (RV 76–92 %), dus geen droge lijzijde."
       },
       "text": {
-        "en": "Morning: ENE wind of 26–35 km/h at launch height (≈1000 m) and 32–35 km/h at 1500 m, with modelled gusts of 50–73 km/h on the plain. The low-level wind drops after 13:00, but the north wind at 3000 m increases to 32–38 km/h. Low cloud 50–80 %, ceiling around 1500–1700 m, dry. Models agree on the direction but differ strongly on speed in the morning (spread up to 38 km/h). Thermal profile unavailable this run.",
-        "nl": "Ochtend: ONO-wind van 26–35 km/u op starthoogte (≈1000 m) en 32–35 km/u op 1500 m, met gemodelleerde rukwinden van 50–73 km/u in de vlakte. Na 13:00 valt de wind onderin terug, maar de noordenwind op 3000 m neemt toe tot 32–38 km/u. Lage bewolking 50–80 %, plafond rond 1500–1700 m, droog. De modellen zijn het eens over de richting maar verschillen 's ochtends sterk in windsterkte (tot 38 km/u). Thermiekprofiel deze keer niet beschikbaar."
+        "en": "Morning: ENE wind at launch height 26–35 km/h with plain gusts of 49–73 km/h, and 850 hPa ENE 31–35 km/h. From 14:00 the low-level wind drops (launch 9–13 km/h, turning SE) but the 700 hPa wind is N 32–37 km/h all afternoon, with the south face in the lee of the massif. Low cloud 45–78 %, thermals weak (w* ≤ 1.4 m/s), thermal top about 1500–1700 m. No rain. Models agree on the pattern; AROME and GFS are the strongest at launch height (42–50 km/h at 11:00).",
+        "nl": "Ochtend: ONO-wind op starthoogte 26–35 km/h met rukwinden in de vlakte van 49–73 km/h, en op 850 hPa ONO 31–35 km/h. Vanaf 14:00 zakt de wind onderin (startplaats 9–13 km/h, draaiend naar ZO), maar op 700 hPa blijft de wind de hele namiddag N 32–37 km/h, met de zuidflank in de lijzijde van het massief. Lage bewolking 45–78 %, zwakke thermiek (w* ≤ 1,4 m/s), plafond rond 1500–1700 m. Geen regen. De modellen zijn het eens over het patroon; AROME en GFS geven de sterkste wind op starthoogte (42–50 km/h om 11:00)."
       },
       "main_risk": {
-        "en": "Strong ENE wind and gusts in the morning; north flow aloft putting the south face in the lee in the afternoon.",
-        "nl": "Harde ONO-wind en rukwinden in de ochtend; 's middags noordelijke stroming in de hoogte met de zuidflank in de lijzijde."
+        "en": "Strong gusty ENE wind in the morning, then N 32–37 km/h at 700 hPa over the lee side.",
+        "nl": "Sterke, rukkerige ONO-wind in de ochtend, daarna N 32–37 km/h op 700 hPa boven de lijzijde."
       }
     },
     {
       "date": "2026-10-13",
       "verdict": "no",
       "headline": {
-        "en": "North wind of 44–51 km/h at 3000 m all day over a light south breeze at launch",
-        "nl": "Hele dag noordenwind van 44–51 km/u op 3000 m boven een zwak zuidelijk briesje aan de startplaats"
+        "en": "Clear sky but strong north wind at 3000 m (44–54 km/h) over the lee of the massif.",
+        "nl": "Heldere hemel, maar sterke noordenwind op 3000 m (44–54 km/h) boven de lijzijde van het massief."
       },
       "window": null,
-      "foehn": "moderate",
+      "foehn": "weak",
       "foehn_text": {
-        "en": "Foehn index unavailable this run: no Bozen−Innsbruck or Zurich−Lugano ΔP. Lee signature: north flow yes (44–51 km/h at 700 hPa), dry air no (RH 71–75 %). Class estimated from the strength of the north flow aloft.",
-        "nl": "Föhnindex deze keer niet beschikbaar: geen drukverschil Bozen−Innsbruck of Zürich−Lugano. Lijzijdesignalen: noordenwind ja (44–51 km/u op 700 hPa), droge lucht nee (RV 71–75 %). Klasse geschat uit de sterkte van de noordelijke stroming in de hoogte."
+        "en": "Bozen−Innsbruck −1.2 hPa (ECMWF) / −2.0 hPa (ICON), peaks −2.1/−2.4; Zurich−Lugano +2.1/+2.0 hPa, peaks +2.2/+3.3: weak north foehn index. Signature: N flow at 700 hPa, air not dry (RH 70–75 %), no lee signature.",
+        "nl": "Bozen−Innsbruck −1,2 hPa (ECMWF) / −2,0 hPa (ICON), pieken −2,1/−2,4; Zürich−Lugano +2,1/+2,0 hPa, pieken +2,2/+3,3: zwakke noordföhnindex. Lijzijdesignalen: noordenwind op 700 hPa, lucht niet droog (RV 70–75 %), geen droge lijzijde."
       },
       "text": {
-        "en": "Clear morning, some cloud after 13:00, dry. At launch height only 6–8 km/h from SW, at 1500 m 8–11 km/h from WNW, but at 3000 m a steady north wind of 44–51 km/h, strongest late in the day. The light south breeze sits under a strong north flow: the south face is in the lee of the massif, with rotor and gusts mixing down. Modelled gusts on the plain 34–39 km/h in the afternoon. Ceiling 1450–1650 m. Thermal profile unavailable this run.",
-        "nl": "Heldere ochtend, wat bewolking na 13:00, droog. Op starthoogte maar 6–8 km/u uit het ZW, op 1500 m 8–11 km/u uit het WNW, maar op 3000 m een constante noordenwind van 44–51 km/u, het sterkst laat op de dag. Het zwakke zuidelijke briesje ligt onder een sterke noordelijke stroming: de zuidflank ligt in de lijzijde van het massief, met rotor en rukwinden die naar beneden mengen. Gemodelleerde rukwinden in de vlakte 34–39 km/u in de namiddag. Plafond 1450–1650 m. Thermiekprofiel deze keer niet beschikbaar."
+        "en": "At launch height the wind is light SW (6–8 km/h) and 850 hPa is light NW (8–11 km/h), but at 700 hPa the flow is N 44–50 km/h, rising to 54 km/h at 17:00. That north component is well above the limit and puts the south face in the lee: a light south breeze at launch can hide rotor and gusts mixing down. Plain gusts 26–39 km/h, highest 13:00–16:00. Little low cloud, no rain; thermals modest (w* ≤ 1.3 m/s, top about 1100–1250 m). Models agree.",
+        "nl": "Op starthoogte is de wind zwak ZW (6–8 km/h) en op 850 hPa zwak NW (8–11 km/h), maar op 700 hPa staat een noordenwind van 44–50 km/h, oplopend tot 54 km/h om 17:00. Die noordcomponent ligt ruim boven de limiet en zet de zuidflank in de lijzijde: een zwakke zuidelijke bries op de startplaats kan rotor en neerslaande rukwinden verbergen. Rukwinden in de vlakte 26–39 km/h, het sterkst tussen 13:00 en 16:00. Weinig lage bewolking, geen regen; matige thermiek (w* ≤ 1,3 m/s, plafond rond 1100–1250 m). De modellen zijn het eens."
       },
       "main_risk": {
-        "en": "Lee turbulence and rotor under a 45–50 km/h north wind aloft; a calm launch is misleading.",
-        "nl": "Turbulentie en rotor in de lijzijde onder 45–50 km/u noordenwind in de hoogte; een rustige startplaats is misleidend."
+        "en": "North wind 44–54 km/h at 700 hPa: lee turbulence and rotor on the south face.",
+        "nl": "Noordenwind 44–54 km/h op 700 hPa: lijzijdeturbulentie en rotor op de zuidflank."
       }
     },
     {
       "date": "2026-10-14",
       "verdict": "marginal",
       "headline": {
-        "en": "Clear and mild, north wind at 3000 m easing from 32 to 15–22 km/h in the afternoon",
-        "nl": "Helder en zacht, noordenwind op 3000 m zakt van 32 naar 15–22 km/u in de namiddag"
+        "en": "Moderate foehn index; north wind aloft eases and backs NW in the afternoon, weak thermals.",
+        "nl": "Matige föhnindex; de noordenwind hoger op neemt 's middags af en draait naar NW, zwakke thermiek."
       },
-      "window": "14:00–17:00",
-      "foehn": "weak",
+      "window": "14:00–16:00",
+      "foehn": "moderate",
       "foehn_text": {
-        "en": "Foehn index unavailable this run: no Bozen−Innsbruck or Zurich−Lugano ΔP. Lee signature: north flow yes in the morning (32 km/h at 700 hPa), dry air no (RH 53–56 %, near but above 40 %). Marked warming at 850 hPa vs Tuesday (+5 °C). Class estimated from the flow aloft.",
-        "nl": "Föhnindex niet beschikbaar: geen drukverschil Bozen−Innsbruck of Zürich−Lugano. Lijzijdesignalen: 's ochtends noordenwind ja (32 km/u op 700 hPa), droge lucht nee (RV 53–56 %). Opwarming op 850 hPa t.o.v. dinsdag (+5 °C). Klasse geschat uit de stroming in de hoogte."
+        "en": "Bozen−Innsbruck −3.3 hPa (ECMWF) / −3.0 hPa (ICON), peaks −3.8/−3.5; Zurich−Lugano +1.6/+2.4 hPa, peaks +2.1/+3.3: moderate north foehn index, the Swiss index weaker. Signature: N flow at 700 hPa in the morning, RH 54–59 %, not dry: no lee signature.",
+        "nl": "Bozen−Innsbruck −3,3 hPa (ECMWF) / −3,0 hPa (ICON), pieken −3,8/−3,5; Zürich−Lugano +1,6/+2,4 hPa, pieken +2,1/+3,3: matige noordföhnindex, de Zwitserse index zwakker. Lijzijdesignalen: 's ochtends noordenwind op 700 hPa, RV 54–59 %, niet droog: geen droge lijzijde."
       },
       "text": {
-        "en": "Cloudless and dry. Low-level wind light all day: 4–6 km/h at launch height, variable at 1500 m. At 3000 m the north wind is 30–32 km/h in the morning and eases to 15–22 km/h after 14:00. Modelled gusts on the plain 28–34 km/h around midday, below 25 km/h from 14:00. The airmass at 1500 m is about 5 °C warmer than Tuesday, which suggests a stable layer and modest thermals; ceiling 1350–1550 m. Models disagree on direction in the light low-level wind. Thermal profile unavailable this run.",
-        "nl": "Onbewolkt en droog. Onderin de hele dag zwakke wind: 4–6 km/u op starthoogte, wisselend op 1500 m. Op 3000 m 's ochtends noordenwind van 30–32 km/u, na 14:00 nog 15–22 km/u. Gemodelleerde rukwinden in de vlakte rond de middag 28–34 km/u, vanaf 14:00 onder 25 km/u. De lucht op 1500 m is zo'n 5 °C warmer dan dinsdag, wat wijst op een stabiele laag en matige thermiek; plafond 1350–1550 m. De modellen verschillen over de richting van de zwakke wind onderin. Thermiekprofiel deze keer niet beschikbaar."
+        "en": "Morning: N 30–33 km/h at 700 hPa and plain gusts up to 31–34 km/h until noon, with ICON showing N 20 km/h at 850 hPa where other models have under 10 km/h. From 14:00 the 700 hPa wind is NW 21–23 km/h, 850 hPa turns light SW and launch-height wind stays light (4–5 km/h SW), gusts drop under 25 km/h. Sky clear, but thermals are weak and low (w* about 1 m/s, top 900–1000 m), not much above the lower take-offs. A moderate index caps the day at marginal.",
+        "nl": "Ochtend: N 30–33 km/h op 700 hPa en rukwinden in de vlakte tot 31–34 km/h tot de middag; ICON geeft N 20 km/h op 850 hPa waar de andere modellen onder 10 km/h blijven. Vanaf 14:00 staat op 700 hPa NW 21–23 km/h, draait 850 hPa naar zwak ZW en blijft de wind op starthoogte zwak (4–5 km/h ZW); de rukwinden zakken onder 25 km/h. Onbewolkt, maar de thermiek is zwak en laag (w* rond 1 m/s, plafond 900–1000 m), nauwelijks boven de lagere startplaatsen. Een matige föhnindex beperkt de dag tot marginaal."
       },
       "main_risk": {
-        "en": "Residual north flow aloft and lee effects before the wind eases in the afternoon.",
-        "nl": "Resterende noordelijke stroming in de hoogte en lijzijde-effecten voordat de wind in de namiddag afneemt."
+        "en": "Residual north flow aloft with a moderate foehn index; weak, low thermals.",
+        "nl": "Resterende noordelijke stroming hoger op met een matige föhnindex; zwakke, lage thermiek."
       }
     },
     {
       "date": "2026-10-15",
       "verdict": "marginal",
       "headline": {
-        "en": "Light wind below 1500 m, steady NNW wind of 24–28 km/h at 3000 m, high cloud",
-        "nl": "Zwakke wind onder 1500 m, constante NNW-wind van 24–28 km/u op 3000 m, hoge bewolking"
+        "en": "Light winds low down, NNW 24–28 km/h at 3000 m, sunny with modest thermals.",
+        "nl": "Zwakke wind onderin, NNW 24–28 km/h op 3000 m, zonnig met matige thermiek."
       },
       "window": "11:00–15:00",
       "foehn": "weak",
       "foehn_text": {
-        "en": "Foehn index unavailable this run: no Bozen−Innsbruck or Zurich−Lugano ΔP. Lee signature: north flow yes (24–28 km/h at 700 hPa), dry air no (RH 64–74 %). Class estimated from the flow aloft.",
-        "nl": "Föhnindex deze keer niet beschikbaar: geen drukverschil Bozen−Innsbruck of Zürich−Lugano. Lijzijdesignalen: noordenwind ja (24–28 km/u op 700 hPa), droge lucht nee (RV 64–74 %). Klasse geschat uit de stroming in de hoogte."
+        "en": "Bozen−Innsbruck −1.9 hPa (ECMWF) / −2.2 hPa (ICON), peaks −2.1/−2.5; Zurich−Lugano +2.0/+2.6 hPa, peaks +2.4/+3.0: weak north foehn index. Signature: N flow at 700 hPa, RH 64–75 %, not dry: no lee signature.",
+        "nl": "Bozen−Innsbruck −1,9 hPa (ECMWF) / −2,2 hPa (ICON), pieken −2,1/−2,5; Zürich−Lugano +2,0/+2,6 hPa, pieken +2,4/+3,0: zwakke noordföhnindex. Lijzijdesignalen: noordenwind op 700 hPa, RV 64–75 %, niet droog: geen droge lijzijde."
       },
       "text": {
-        "en": "Dry, no low cloud, high cloud for much of the day. Wind at launch height 2–4 km/h and 3–7 km/h at 1500 m, from variable directions; at 3000 m a NNW wind of 24–28 km/h all day, slightly stronger late. Modelled gusts on the plain 13–24 km/h. Ceiling 1250–1450 m. Models agree on speed but not on the direction of the very light low-level wind. Thermal profile unavailable this run.",
-        "nl": "Droog, geen lage bewolking, een groot deel van de dag hoge bewolking. Wind op starthoogte 2–4 km/u en 3–7 km/u op 1500 m, uit wisselende richting; op 3000 m de hele dag NNW-wind van 24–28 km/u, laat iets sterker. Gemodelleerde rukwinden in de vlakte 13–24 km/u. Plafond 1250–1450 m. De modellen zijn het eens over de windsterkte, niet over de richting van de zeer zwakke wind onderin. Thermiekprofiel deze keer niet beschikbaar."
+        "en": "Launch-height wind light (3–5 km/h, E to SE), 850 hPa light NW (2–7 km/h), plain gusts 17–24 km/h. At 700 hPa the wind is NNW 24–28 km/h all day, a north component in the marginal band above the ridge. Clear sky with small cumulus possible from 11:00, base around 1100–1180 m, thermal top 1100–1240 m, w* 1.0–1.3 m/s. Some mid cloud late in the afternoon. Models agree on light winds low down; directions at launch height vary between them.",
+        "nl": "Wind op starthoogte zwak (3–5 km/h, O tot ZO), op 850 hPa zwak NW (2–7 km/h), rukwinden in de vlakte 17–24 km/h. Op 700 hPa staat de hele dag NNW 24–28 km/h, een noordcomponent in de marginale zone boven de kam. Heldere hemel met vanaf 11:00 mogelijk kleine cumulus, wolkenbasis rond 1100–1180 m, plafond 1100–1240 m, w* 1,0–1,3 m/s. Laat in de namiddag wat middelhoge bewolking. De modellen zijn het eens over zwakke wind onderin; de windrichting op starthoogte verschilt tussen de modellen."
       },
       "main_risk": {
-        "en": "North wind above the ridge: lee turbulence when climbing near or above the crest.",
-        "nl": "Noordenwind boven de kam: turbulentie in de lijzijde bij stijgen tot of boven de kamhoogte."
+        "en": "NNW 24–28 km/h at 700 hPa above the ridge; low cloud base near 1100 m.",
+        "nl": "NNW 24–28 km/h op 700 hPa boven de kam; lage wolkenbasis rond 1100 m."
       }
     },
     {
       "date": "2026-10-16",
       "verdict": "marginal",
       "headline": {
-        "en": "Light low-level wind, NNE wind of 22–27 km/h at 3000 m, cloud increasing in the afternoon",
-        "nl": "Zwakke wind onderin, NNO-wind van 22–27 km/u op 3000 m, toenemende bewolking in de namiddag"
+        "en": "No foehn; light southerly breeze at launch, NNE 24–29 km/h at 3000 m, weak thermals.",
+        "nl": "Geen föhn; zwakke zuidelijke bries op de startplaats, NNO 24–29 km/h op 3000 m, zwakke thermiek."
       },
-      "window": "11:00–15:00",
-      "foehn": "weak",
+      "window": "12:00–15:00",
+      "foehn": "none",
       "foehn_text": {
-        "en": "Foehn index unavailable this run: no Bozen−Innsbruck or Zurich−Lugano ΔP. Lee signature: north flow yes (22–27 km/h from NNE at 700 hPa), dry air no (RH 72–90 %). Class estimated from the flow aloft.",
-        "nl": "Föhnindex deze keer niet beschikbaar: geen drukverschil Bozen−Innsbruck of Zürich−Lugano. Lijzijdesignalen: noordenwind ja (22–27 km/u uit NNO op 700 hPa), droge lucht nee (RV 72–90 %). Klasse geschat uit de stroming in de hoogte."
+        "en": "Bozen−Innsbruck −1.2 hPa (ECMWF) / −0.1 hPa (ICON), peaks −1.9/−0.7; Zurich−Lugano +1.3 (ECMWF) / −1.2 hPa (ICON): no foehn; the two models disagree on the sign of the Swiss index. Signature: N flow at 700 hPa only, RH 72–87 %, not dry.",
+        "nl": "Bozen−Innsbruck −1,2 hPa (ECMWF) / −0,1 hPa (ICON), pieken −1,9/−0,7; Zürich−Lugano +1,3 (ECMWF) / −1,2 hPa (ICON): geen föhn; de modellen verschillen over het teken van de Zwitserse index. Lijzijdesignalen: alleen noordenwind op 700 hPa, RV 72–87 %, niet droog."
       },
       "text": {
-        "en": "Dry. Wind at launch height about 4 km/h, swinging from SE to S, and 3–6 km/h at 1500 m; at 3000 m a NNE wind of 22–27 km/h. Modelled gusts on the plain 12–19 km/h. Low and mid cloud build from 13:00 to 40 %, humidity rising late. Ceiling 1000 m in the morning, 1400–1550 m around midday. Models differ on the direction of the light low-level wind and somewhat on speed around 11:00. Thermal profile unavailable this run.",
-        "nl": "Droog. Wind op starthoogte rond 4 km/u, draaiend van ZO naar Z, en 3–6 km/u op 1500 m; op 3000 m NNO-wind van 22–27 km/u. Gemodelleerde rukwinden in de vlakte 12–19 km/u. Vanaf 13:00 lage en middelhoge bewolking tot 40 %, laat op de dag vochtiger. Plafond 's ochtends 1000 m, rond de middag 1400–1550 m. De modellen verschillen over de richting van de zwakke wind onderin en rond 11:00 wat in windsterkte. Thermiekprofiel deze keer niet beschikbaar."
+        "en": "Launch-height wind light (3–4 km/h), turning S to SSW from midday; 850 hPa light W (3–5 km/h); plain gusts under 18 km/h. At 700 hPa NNE 24–29 km/h, a north component in the marginal band. Thermals weak (w* up to 1.0 m/s from 13:00), top 1250–1340 m. Some low and mid cloud (up to 26 % low, 20–36 % mid), no rain. Models disagree on speed late morning (ICON 9 km/h at launch, AROME under 2 km/h).",
+        "nl": "Wind op starthoogte zwak (3–4 km/h), vanaf de middag draaiend naar Z tot ZZW; op 850 hPa zwak W (3–5 km/h); rukwinden in de vlakte onder 18 km/h. Op 700 hPa NNO 24–29 km/h, een noordcomponent in de marginale zone. Zwakke thermiek (w* tot 1,0 m/s vanaf 13:00), plafond 1250–1340 m. Wat lage en middelhoge bewolking (tot 26 % laag, 20–36 % middelhoog), geen regen. De modellen verschillen in windsterkte laat in de ochtend (ICON 9 km/h op starthoogte, AROME onder 2 km/h)."
       },
       "main_risk": {
-        "en": "North-east flow above the ridge and a low ceiling in the morning.",
-        "nl": "Noordoostelijke stroming boven de kam en een laag plafond in de ochtend."
+        "en": "North component of 24–29 km/h at 700 hPa above weak thermals.",
+        "nl": "Noordcomponent van 24–29 km/h op 700 hPa boven zwakke thermiek."
       }
     },
     {
       "date": "2026-10-17",
       "verdict": "marginal",
       "headline": {
-        "en": "Calmest day: light wind at all levels, partly cloudy, ceiling around 1300–1450 m",
-        "nl": "Rustigste dag: zwakke wind op alle niveaus, half bewolkt, plafond rond 1300–1450 m"
+        "en": "Light winds at all levels, mid cloud clearing by midday; ECMWF and ICON disagree on the pressure gradient.",
+        "nl": "Zwakke wind op alle niveaus, middelhoge bewolking trekt tegen de middag weg; ECMWF en ICON verschillen over het drukverschil."
       },
-      "window": "11:00–16:00",
-      "foehn": "none",
+      "window": "12:00–16:00",
+      "foehn": "moderate",
       "foehn_text": {
-        "en": "Foehn index unavailable this run: no Bozen−Innsbruck or Zurich−Lugano ΔP. Lee signature: north flow no (under 11 km/h at 700 hPa), dry air no (RH 73–86 %). Slight warming at 850 hPa. No foehn pattern in the flow at Bassano.",
-        "nl": "Föhnindex deze keer niet beschikbaar: geen drukverschil Bozen−Innsbruck of Zürich−Lugano. Lijzijdesignalen: noordenwind nee (onder 11 km/u op 700 hPa), droge lucht nee (RV 73–86 %). Lichte opwarming op 850 hPa. Geen föhnpatroon in de stroming bij Bassano."
+        "en": "Bozen−Innsbruck −1.3 hPa (ECMWF) / −1.9 hPa (ICON), ICON peak −3.5; Zurich−Lugano +2.1/+3.3 hPa, peaks +3.7/+6.9: moderate class from the ICON peak, models disagree. No lee signature: winds aloft only 4–8 km/h, no north flow, RH 73–85 %.",
+        "nl": "Bozen−Innsbruck −1,3 hPa (ECMWF) / −1,9 hPa (ICON), ICON-piek −3,5; Zürich−Lugano +2,1/+3,3 hPa, pieken +3,7/+6,9: matige klasse door de ICON-piek, de modellen verschillen. Geen lijzijdesignalen: wind hoger op maar 4–8 km/h, geen noordenwind, RV 73–85 %."
       },
       "text": {
-        "en": "Light wind everywhere: about 4–5 km/h at launch height from SW to S, 4–6 km/h at 1500 m and under 11 km/h at 3000 m. Modelled gusts on the plain 13–17 km/h. Dry; low cloud 10–50 % increasing through the day, ceiling 1100 m in the morning and 1300–1450 m in the afternoon. Models agree on the light speeds but not on direction, typical in such weak flow, which keeps the day at marginal. Thermal profile unavailable this run.",
-        "nl": "Overal zwakke wind: rond 4–5 km/u op starthoogte uit ZW tot Z, 4–6 km/u op 1500 m en onder 11 km/u op 3000 m. Gemodelleerde rukwinden in de vlakte 13–17 km/u. Droog; lage bewolking 10–50 %, toenemend in de loop van de dag, plafond 's ochtends 1100 m en 's middags 1300–1450 m. De modellen zijn het eens over de lage windsterkte maar niet over de richting, gewoon bij zo'n zwakke stroming; daardoor blijft de dag marginaal. Thermiekprofiel deze keer niet beschikbaar."
+        "en": "A slack day: launch-height wind 4–5 km/h (W turning S in the afternoon), 850 and 700 hPa under 8 km/h, plain gusts under 17 km/h. Mid cloud 74–92 % in the morning clears to under 10 % by 14:00, with low cloud 37–56 % in the afternoon. Thermals from 11:00, w* 1.2–1.3 m/s, cloud base around 1100–1200 m and top about 1300 m. The pressure gradient across the Alps is there in ICON but nothing of it reaches Bassano in the model winds. Only ECMWF, ICON and GFS reach this day.",
+        "nl": "Een windstille dag: wind op starthoogte 4–5 km/h (W, 's middags draaiend naar Z), op 850 en 700 hPa onder 8 km/h, rukwinden in de vlakte onder 17 km/h. 's Ochtends 74–92 % middelhoge bewolking, tegen 14:00 onder 10 %, met 's middags 37–56 % lage bewolking. Thermiek vanaf 11:00, w* 1,2–1,3 m/s, wolkenbasis rond 1100–1200 m en plafond rond 1300 m. Het drukverschil over de Alpen staat in ICON, maar in de modelwind bij Bassano is er niets van te zien. Alleen ECMWF, ICON en GFS reiken tot deze dag."
       },
       "main_risk": {
-        "en": "Low ceiling and uncertain thermal strength (no thermal profile this run).",
-        "nl": "Laag plafond en onzekere thermieksterkte (deze keer geen thermiekprofiel)."
+        "en": "Uncertain cross-Alpine gradient (ICON peak −3.5 hPa); low cloud base around 1100 m.",
+        "nl": "Onzeker drukverschil over de Alpen (ICON-piek −3,5 hPa); lage wolkenbasis rond 1100 m."
       }
     }
   ],
