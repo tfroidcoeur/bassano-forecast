@@ -1,11 +1,11 @@
 import { DATA_URL, DATA_URL_FALLBACK, ALL_MODELS, CONSENSUS_MODELS } from './lib/config.js';
-import { forecastUrl, foehnUrl, ensembleUrl, longRangeUrl, validateRefreshUrl } from './lib/urls.js';
+import { forecastUrl, foehnUrl, ensembleUrl, longRangeUrl, temperatureUrl, validateRefreshUrl } from './lib/urls.js';
 import { romeDate, romeHHMM, romeHourly, addDays, dayLabel, weekdayShort, wallFor } from './lib/time.js';
 import { normalizeForecast, localizedText, verdictLabel, outlookLabel, confidenceLabel, foehnLabel } from './lib/forecast-json.js';
 import { t, setLang, getLang, detectLang, formatDecimal, LANGS, LANG_NAMES } from './lib/i18n.js';
 import { foehnSeries, ensembleSeries, dayFoehnDp, dayExtremes } from './lib/foehn.js';
 import { ensembleFoehnDaily, longRangeRows } from './lib/longrange.js';
-import { modelHour, consensusHour } from './lib/model.js';
+import { modelHour, consensusHour, temperatureColumn } from './lib/model.js';
 import { scoreHour, foehnClass } from './lib/score.js';
 import { wmoGroup } from './lib/icons.js';
 import { createPoller } from './lib/poll.js';
@@ -122,7 +122,14 @@ function buildLongRange(json, ensembleLocal) {
   }
 }
 
-function buildLive(main, foehnLocations, ensembleLocations, longRangeJson) {
+/** The temperature response in local time, or null when it is unusable (the temperature rows show dashes). */
+function buildTemps(json) {
+  if (!Array.isArray(json?.hourly?.time)) return null;
+  const hourly = romeHourly(json.hourly);
+  return { hourly, index: new Map(hourly.time.map((t, i) => [t, i])) };
+}
+
+function buildLive(main, foehnLocations, ensembleLocations, longRangeJson, tempsJson = null) {
   if (!main?.hourly?.time || !Array.isArray(foehnLocations) || foehnLocations.length < 4) {
     throw new Error('unexpected Open-Meteo response');
   }
@@ -137,23 +144,26 @@ function buildLive(main, foehnLocations, ensembleLocations, longRangeJson) {
     foehn: foehnSeries(localLocations),
     ensemble: ensembleLocal ? ensembleSeries(ensembleLocal) : null,
     longRange: buildLongRange(longRangeJson, ensembleLocal),
+    temps: buildTemps(tempsJson),
   };
 }
 
 async function fetchLive() {
-  const [main, foehn, ens, lr] = await Promise.allSettled([
+  const [main, foehn, ens, lr, tmp] = await Promise.allSettled([
     getJson(forecastUrl()),
     getJson(foehnUrl()),
     getJson(ensembleUrl()),
     getJson(longRangeUrl()),
+    getJson(temperatureUrl()),
   ]);
   if (main.status === 'rejected') throw main.reason;
   if (foehn.status === 'rejected') throw foehn.reason;
   const ensemble = ens.status === 'fulfilled' ? ens.value : null;
   const longRange = lr.status === 'fulfilled' ? lr.value : null;
-  const cached = [main.value.cachedAt, foehn.value.cachedAt, ensemble?.cachedAt, longRange?.cachedAt].filter((x) => Number.isFinite(x));
+  const temps = tmp.status === 'fulfilled' ? tmp.value : null;
+  const cached = [main.value.cachedAt, foehn.value.cachedAt, ensemble?.cachedAt, longRange?.cachedAt, temps?.cachedAt].filter((x) => Number.isFinite(x));
   return {
-    live: buildLive(main.value.json, foehn.value.json, ensemble?.json ?? null, longRange?.json ?? null),
+    live: buildLive(main.value.json, foehn.value.json, ensemble?.json ?? null, longRange?.json ?? null, temps?.json ?? null),
     cachedAt: cached.length ? Math.min(...cached) : null,
   };
 }
@@ -221,6 +231,9 @@ function hourRecords(dateKey) {
     if (i === undefined) return { label, c: null, all: null };
     const all = ALL_MODELS.map((m) => modelHour(state.live.hourly, m, i));
     const c = consensusHour(all.filter((m) => CONSENSUS_MODELS.includes(m.model)));
+    const temps = state.live.temps;
+    const ti = temps?.index.get(wallFor(dateKey, h));
+    c.temps = ti === undefined ? null : temperatureColumn(temps.hourly, CONSENSUS_MODELS, ti);
     return { label, c, all };
   });
 }

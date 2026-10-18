@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { validateRefreshUrl, forecastUrl, foehnUrl, ensembleUrl } from '../lib/urls.js';
-import { ALL_MODELS } from '../lib/config.js';
+import { validateRefreshUrl, forecastUrl, foehnUrl, ensembleUrl, temperatureUrl } from '../lib/urls.js';
+import { ALL_MODELS, CONSENSUS_MODELS } from '../lib/config.js';
 
 test('refresh URL: only https://claude.ai/ is accepted', () => {
   assert.equal(validateRefreshUrl('https://claude.ai/code/routines/abc'), 'https://claude.ai/code/routines/abc');
@@ -34,4 +34,24 @@ test('Open-Meteo URLs: relative numbers only, no undefined values', () => {
 test('only the launch-point forecast carries an elevation', () => {
   assert.equal(new URL(foehnUrl()).searchParams.get('elevation'), null);
   assert.equal(new URL(ensembleUrl()).searchParams.get('elevation'), null);
+});
+
+test('temperature URL: landing point, consensus models, GMT, 2 m and the pressure-level profile', () => {
+  const u = new URL(temperatureUrl());
+  assert.equal(u.hostname, 'api.open-meteo.com');
+  assert.equal(u.searchParams.get('elevation'), '130');
+  assert.equal(u.searchParams.get('models'), CONSENSUS_MODELS.join(','));
+  assert.equal(u.searchParams.get('timezone'), 'GMT');
+  const hourly = u.searchParams.get('hourly').split(',');
+  assert.ok(hourly.includes('temperature_2m'));
+  for (const p of [925, 850, 700, 600]) {
+    assert.ok(hourly.includes(`temperature_${p}hPa`), p);
+    assert.ok(hourly.includes(`geopotential_height_${p}hPa`), p);
+  }
+});
+
+test('the main forecast stays without the profile: a larger request made Open-Meteo time out', () => {
+  const hourly = new URL(forecastUrl()).searchParams.get('hourly');
+  assert.ok(!hourly.includes('geopotential_height'));
+  assert.ok(!/temperature_\d+hPa/.test(hourly));
 });

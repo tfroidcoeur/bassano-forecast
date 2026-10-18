@@ -1,7 +1,7 @@
 // Service worker: stale-while-revalidate for the app shell, network-first with cache fallback for data.
 // The shell is refreshed in the background, so a new deploy reaches the next load even without a bump.
 // Bump SHELL_VERSION when the cache layout changes; the activate step removes older caches.
-const SHELL_VERSION = 'v18';
+const SHELL_VERSION = 'v19';
 const SHELL_CACHE = `grappa-shell-${SHELL_VERSION}`;
 const DATA_CACHE = `grappa-data-${SHELL_VERSION}`;
 

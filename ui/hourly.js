@@ -1,6 +1,6 @@
 import { formatSpeed, windBand } from '../lib/wind.js';
 import { levelFor } from '../lib/score.js';
-import { LIMITS, FOEHN, CONSENSUS_MODELS } from '../lib/config.js';
+import { LIMITS, FOEHN, CONSENSUS_MODELS, SITE, TEMP_HEIGHTS_M } from '../lib/config.js';
 import { wmoGroup, WMO_SHAPES } from '../lib/icons.js';
 import { barPct, ceilingHundreds, maxAngleDeviation, minMax } from '../lib/layout.js';
 import { el, svgEl, arrowSvg, iconSvg } from './dom.js';
@@ -46,6 +46,11 @@ function rainCell(mm) {
   const cell = el('td', { class: mm >= FOEHN.rainMm ? 'rain-wet' : '' }, bar);
   if (mm >= 0.1) cell.append(el('span', { class: 'rain-num', text: formatDecimal(mm, 1) }));
   return cell;
+}
+
+/** Temperature in whole °C, dash when unknown. Rounds first, so -0.4 shows 0, not -0. */
+function tempCell(celsius) {
+  return el('td', {}, Number.isFinite(celsius) ? formatDecimal(Math.round(celsius) + 0, 0) : DASH);
 }
 
 function weatherCell(code) {
@@ -105,6 +110,9 @@ export function hourGrid(cols, unit, showMore = false) {
     [t('grid.north'), (c) => northCell(c.north, unit)],
     [t('grid.rain'), (c) => rainCell(c.precipMm)],
     [t('grid.ceiling'), (c) => el('td', {}, Number.isFinite(c.ceiling) ? String(ceilingHundreds(c.ceiling)) : DASH)],
+    // Temperatures: the landing (2 m), then each height AMSL, highest last.
+    [t('grid.temp', { height: SITE.low.elevation }), (c) => tempCell(c.temps?.ground)],
+    ...TEMP_HEIGHTS_M.map((z, k) => [t('grid.temp', { height: z }), (c) => tempCell(c.temps?.alt[k])]),
   ];
   const body = rows.map(([label, cell]) =>
     el('tr', {}, el('th', { scope: 'row', class: 'lbl', text: label }), ...cols.map((col) => (col.c ? cell(col.c) : el('td', {}, DASH))))

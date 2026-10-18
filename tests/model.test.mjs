@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pickLaunch, modelHour, ceilingAmsl, consensusHour } from '../lib/model.js';
+import { pickLaunch, modelHour, ceilingAmsl, consensusHour, tempAtHeight, temperatureColumn } from '../lib/model.js';
 
 test('launch wind falls back 900 -> 925 -> 850', () => {
   const at900 = { speed: 12, dir: 200 };
@@ -89,4 +89,53 @@ test('consensus gust is the maximum across models, precipitation stays the media
   assert.equal(c.gust, 30, 'maximum, not the median (25)');
   assert.equal(c.precipMm, 0, 'median precipitation');
   assert.equal(consensusHour([mk('icon_seamless', null, 0)]).gust, null);
+});
+
+test('tempAtHeight interpolates between the levels around the height, without extrapolating', () => {
+  const levels = [
+    { z: 3151, t: 1.4 },
+    { z: 856, t: 14.1 },
+    { z: 1564, t: 9.8 },
+    { z: null, t: 7.0 }, // a level the model does not have
+  ];
+  assert.ok(Math.abs(tempAtHeight(levels, 1000) - (14.1 + ((9.8 - 14.1) * (1000 - 856)) / (1564 - 856))) < 1e-9);
+  assert.ok(Math.abs(tempAtHeight(levels, 3000) - (9.8 + ((1.4 - 9.8) * (3000 - 1564)) / (3151 - 1564))) < 1e-9);
+  assert.equal(tempAtHeight(levels, 856), 14.1);
+  assert.equal(tempAtHeight(levels, 500), null, 'below the lowest level');
+  assert.equal(tempAtHeight(levels, 4000), null, 'above the highest level');
+  assert.equal(tempAtHeight([], 1000), null);
+});
+
+test('temperatureColumn: each model interpolated, then the median per height; ECMWF-style missing levels skipped', () => {
+  const h = { time: ['2030-01-06T12:00'] };
+  const put = (m, p, z, t) => {
+    h[`geopotential_height_${p}hPa_${m}`] = [z];
+    h[`temperature_${p}hPa_${m}`] = [t];
+  };
+  // ECMWF: no 900 or 800 hPa.
+  put('ecmwf_ifs025', 925, 854, 13.5);
+  put('ecmwf_ifs025', 900, null, null);
+  put('ecmwf_ifs025', 850, 1562, 10.0);
+  put('ecmwf_ifs025', 700, 3153, 1.7);
+  put('ecmwf_ifs025', 600, 4379, -5.2);
+  put('icon_seamless', 925, 856, 14.1);
+  put('icon_seamless', 900, 1087, 12.6);
+  put('icon_seamless', 850, 1564, 9.8);
+  put('icon_seamless', 800, 2065, 7.0);
+  put('icon_seamless', 700, 3151, 1.4);
+  h.temperature_2m_ecmwf_ifs025 = [20.0];
+  h.temperature_2m_icon_seamless = [20.6];
+  const lin = (z, a, b) => a.t + ((b.t - a.t) * (z - a.z)) / (b.z - a.z);
+  const ecmwf1000 = lin(1000, { z: 854, t: 13.5 }, { z: 1562, t: 10.0 });
+  const icon1000 = lin(1000, { z: 856, t: 14.1 }, { z: 1087, t: 12.6 });
+  const ecmwf2000 = lin(2000, { z: 1562, t: 10.0 }, { z: 3153, t: 1.7 });
+  const icon2000 = lin(2000, { z: 1564, t: 9.8 }, { z: 2065, t: 7.0 });
+
+  const col = temperatureColumn(h, ['ecmwf_ifs025', 'icon_seamless', 'gfs_seamless'], 0);
+  assert.ok(Math.abs(col.ground - 20.3) < 1e-9, 'median 2 m at the landing; GFS has no data');
+  assert.ok(Math.abs(col.alt[0] - (ecmwf1000 + icon1000) / 2) < 1e-9);
+  assert.ok(Math.abs(col.alt[1] - (ecmwf2000 + icon2000) / 2) < 1e-9);
+  assert.ok(col.alt[2] > 1.4 && col.alt[2] < 9.8);
+  assert.deepEqual(temperatureColumn({ time: ['x'] }, ['icon_seamless'], 0), { ground: null, alt: [null, null, null] });
+  assert.deepEqual(temperatureColumn(null, ['icon_seamless'], 0), { ground: null, alt: [null, null, null] });
 });
