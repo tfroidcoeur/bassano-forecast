@@ -36,14 +36,14 @@ test('only the launch-point forecast carries an elevation', () => {
   assert.equal(new URL(ensembleUrl()).searchParams.get('elevation'), null);
 });
 
-test('temperature URL: landing point, consensus models, GMT, 2 m and the pressure-level profile', () => {
+test('temperature URL: launch point, consensus models, GMT, the pressure-level profile', () => {
   const u = new URL(temperatureUrl());
   assert.equal(u.hostname, 'api.open-meteo.com');
-  assert.equal(u.searchParams.get('elevation'), '130');
+  assert.equal(u.searchParams.get('elevation'), '830');
   assert.equal(u.searchParams.get('models'), CONSENSUS_MODELS.join(','));
   assert.equal(u.searchParams.get('timezone'), 'GMT');
   const hourly = u.searchParams.get('hourly').split(',');
-  assert.ok(hourly.includes('temperature_2m'));
+  assert.ok(!hourly.includes('temperature_2m'), 'the 2 m temperature comes from the main request');
   for (const p of [925, 850, 700, 600]) {
     assert.ok(hourly.includes(`temperature_${p}hPa`), p);
     assert.ok(hourly.includes(`geopotential_height_${p}hPa`), p);
