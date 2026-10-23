@@ -194,6 +194,7 @@ footer { padding-top: 0.5rem; padding-bottom: 2rem; font-size: 0.85rem; color: v
 .notice { color: var(--muted); }
 .error { color: var(--no); font-weight: 700; min-height: 1.2em; }
 .legend-note { font-size: 0.85rem; color: var(--muted); margin: 0.3rem 0; }
+.window-note { font-size: 0.85rem; color: var(--muted); margin: 0.2rem 0 0.4rem; }
 .visually-hidden {
   position: absolute;
   width: 1px;

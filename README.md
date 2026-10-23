@@ -46,11 +46,12 @@ Weather only. The local schools and the pilot decide whether to fly. Self-brief 
 
 Score per hour (green / amber / red) is computed in the browser from the consensus of five models (ICON, ECMWF, GFS, AROME, ICON-2I) against the limits in `lib/config.js`, plus the day's foehn class from the live ΔP. The same rules as `fetch_bassano.py`:
 
-- Consensus per hour: speeds and humidity take the median, directions the circular mean, 10 m gusts the maximum, precipitation the median (one wet model alone is not rain), CAPE the maximum.
-- Day foehn class: over 09–17 local, each of ECMWF and ICON takes its minimum Bozen−Innsbruck ΔP; the most negative of the two sets the class by its magnitude (under 2 hPa none, 2–3 weak, 3–6 moderate, over 6 strong). A positive value is none (south side).
-- North flow: the consensus wind at 850 or 700 hPa is at least 15 km/h and comes from within 60° of north.
+- Consensus per hour: speeds and humidity take the median, directions the circular mean, 10 m gusts the second-gustiest model (one outlier model does not set it; the maximum is kept as `gustMax`), precipitation the median (one wet model alone is not rain), CAPE the maximum.
+- Day foehn class: over 09–17 local, each of ECMWF and ICON takes its mean Bozen−Innsbruck ΔP (one hour's dip does not set the class); the more negative of the two sets the class by its magnitude (under 2 hPa none, 2–3 weak, 3–6 moderate, over 6 strong). A positive value is none (south side).
+- North flow: the consensus wind at 850 hPa (ridge level) is at least 20 km/h and comes from within 60° of north. A northerly at 700 hPa alone does not count.
 - Lee signature: north flow and consensus 850 hPa relative humidity below 40 %.
-- Red: rain, convective cells, strong foehn, and moderate foehn with a lee signature. Moderate foehn otherwise gives at least amber.
+- Red: rain, convective cells, strong foehn, and moderate foehn with a lee signature. Moderate foehn with north flow but moist air gives amber; moderate foehn without north flow at Bassano adds nothing to the hour.
+- Best slot: the hour strip outlines only window hours that are not red in the live data; when the written window contains a live red hour, the card says so.
 
 The score is a starting point; the verdict text is the judgement.
 
@@ -106,8 +107,8 @@ GitHub Pages serves `main` from the repository root. The verdict file lives on t
 All thresholds are in `lib/config.js` and are starting points, not verified facts:
 
 - `LIMITS`: wind limits in km/h (launch height, 850 and 700 hPa, northerly component, 10 m gusts).
-- `FOEHN`: foehn class thresholds (2, 3, 6 hPa), north flow (15 km/h, within 60° of north), lee humidity (850 hPa RH below 40 %), rain (0.2 mm/h, median of the consensus models), convective CAPE (800 J/kg with showers).
-- `CONSENSUS_MODELS`: the five models the consensus and score use. Gusts and CAPE take the maximum across them (conservative). Precipitation and other speeds take the median; directions take the circular mean.
+- `FOEHN`: foehn class thresholds (2, 3, 6 hPa), north flow (20 km/h at 850 hPa, within 60° of north), lee humidity (850 hPa RH below 40 %), rain (0.2 mm/h, median of the consensus models), convective CAPE (800 J/kg with showers).
+- `CONSENSUS_MODELS`: the five models the consensus and score use. Gusts take the second-highest model, CAPE the maximum. Precipitation and other speeds take the median; directions take the circular mean.
 
 ## Known limits
 

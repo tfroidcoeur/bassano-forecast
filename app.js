@@ -9,7 +9,7 @@ import { modelHour, consensusHour, temperatureColumn } from './lib/model.js';
 import { scoreHour, foehnClass } from './lib/score.js';
 import { wmoGroup } from './lib/icons.js';
 import { createPoller } from './lib/poll.js';
-import { parseWindow, hourStrip } from './lib/layout.js';
+import { parseWindow, hourStrip, windowHasRed } from './lib/layout.js';
 import { statusLine } from './lib/status.js';
 import { el } from './ui/dom.js';
 import { foehnChartSvg, foehnLegend } from './ui/chart.js';
@@ -450,7 +450,7 @@ function dayFoehnLine(dateKey, verdictCls) {
   return el('p', { class: 'foehn-live' }, el('span', { text: `${t('foehn.live', { dp: fmtDp(dp) })} ` }), ...badges);
 }
 
-function verdictCard(dateKey, foehnLine) {
+function verdictCard(dateKey, foehnLine, windowRed = false) {
   const day = state.verdict?.days.find((d) => d.date === dateKey) ?? null;
   if (!day) {
     const msg = state.verdictState === 'missing' ? t('verdict.noYet') : t('verdict.noDay');
@@ -465,6 +465,7 @@ function verdictCard(dateKey, foehnLine) {
     el('p', { class: 'verdict-word', text: verdictLabel(day.verdict) }),
     el('h3', { class: 'headline', text: localizedText(day.headline) }),
     day.window ? el('p', { class: 'window', text: t('card.window', { window: day.window }) }) : null,
+    day.window && windowRed ? el('p', { class: 'window-note', text: t('card.windowLiveRed') }) : null,
     el('p', { class: `badge foehn-${day.foehn ?? 'unknown'}`, text: foehnLabel(day.foehn) }),
     foehnLine,
     foehnText ? el('p', { text: foehnText }) : null,
@@ -482,7 +483,9 @@ function renderDay(dateKey) {
     const recs = hourRecords(dateKey);
     const { scores } = dayScores(dateKey, recs);
     const cols = recs.map((r, k) => ({ label: r.label, c: r.c, score: scores[k], all: r.all }));
-    const segments = hourStrip(HOURS, scores, parseWindow(day?.window));
+    const slot = parseWindow(day?.window);
+    const segments = hourStrip(HOURS, scores, slot);
+    const windowRed = windowHasRed(HOURS, scores, slot);
     const more = el('button', {
       type: 'button',
       id: 'more-toggle',
@@ -497,7 +500,7 @@ function renderDay(dateKey) {
       $('more-toggle')?.focus();
     });
     parts.push(
-      verdictCard(dateKey, dayFoehnLine(dateKey, day?.foehn ?? null)),
+      verdictCard(dateKey, dayFoehnLine(dateKey, day?.foehn ?? null), windowRed),
       el(
         'section',
         { class: 'strip-block', 'aria-label': t('day.strip') },

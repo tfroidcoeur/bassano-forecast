@@ -67,7 +67,7 @@ test('consensus: median speeds, median precipitation, GFS boundary layer', () =>
   assert.ok(c.north > 19.9 && c.north < 20.1, 'north at 850 from wind from 0 degrees');
 });
 
-test('consensus gust is the maximum across models, precipitation stays the median', () => {
+test('consensus gust is the second-gustiest model, precipitation stays the median', () => {
   const mk = (model, gust, precipMm) => ({
     model,
     ws10: 10,
@@ -86,7 +86,8 @@ test('consensus gust is the maximum across models, precipitation stays the media
     td2: null,
   });
   const c = consensusHour([mk('icon_seamless', 20, 0), mk('ecmwf_ifs025', 30, 0), mk('gfs_seamless', 25, 0.4)]);
-  assert.equal(c.gust, 30, 'maximum, not the median (25)');
+  assert.equal(c.gust, 25, 'second-highest: one gusty model does not set it');
+  assert.equal(c.gustMax, 30, 'the maximum is kept for information');
   assert.equal(c.precipMm, 0, 'median precipitation');
   assert.equal(consensusHour([mk('icon_seamless', null, 0)]).gust, null);
 });

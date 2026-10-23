@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { romeWallFromUtc, romeHourly, wallFor } from '../lib/time.js';
-import { foehnSeries, dayIndices, dayFoehnDp } from '../lib/foehn.js';
+import { foehnSeries, dayIndices, dayFoehnDp, dayExtremes } from '../lib/foehn.js';
 import { foehnClass } from '../lib/score.js';
 
 // Open-Meteo with timezone=GMT: times are UTC. Rome is CEST (+2) until 25 Oct 01:00 UTC, then CET (+1).
@@ -52,8 +52,8 @@ test('day foehn across the change: the window is read from the converted labels'
   const ib = { hourly: romeHourly({ time: utcHours, pressure_msl_ecmwf_ifs025: ibVals, pressure_msl_icon_seamless: ibVals }) };
   const flat = { hourly: romeHourly({ time: utcHours, pressure_msl_ecmwf_ifs025: utcHours.map(() => 1000) }) };
   const s = foehnSeries([bz, ib, flat, flat]);
-  assert.equal(dayFoehnDp(s, '2026-10-24'), -4);
-  assert.equal(dayFoehnDp(s, '2026-10-25'), -2);
-  assert.equal(foehnClass(dayFoehnDp(s, '2026-10-24')), 'moderate');
-  assert.equal(foehnClass(dayFoehnDp(s, '2026-10-25')), 'weak');
+  // The 09-local dip lands on the right day on both sides of the change (the class uses the mean, see foehn tests).
+  assert.equal(dayExtremes(s, '2026-10-24').biEcmwfMin, -4);
+  assert.equal(dayExtremes(s, '2026-10-25').biEcmwfMin, -2);
+  assert.ok(dayFoehnDp(s, '2026-10-24') < 0 && dayFoehnDp(s, '2026-10-24') > -4, 'the mean, not the dip');
 });

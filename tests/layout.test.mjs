@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseWindow, hourStrip, linePath, niceMax, rangeBox, barPct, speedIn, ceilingHundreds, minMax, maxAngleDeviation } from '../lib/layout.js';
+import { parseWindow, hourStrip, windowHasRed, linePath, niceMax, rangeBox, barPct, speedIn, ceilingHundreds, minMax, maxAngleDeviation } from '../lib/layout.js';
 
 test('direction spread: largest distance from the circular mean, across north', () => {
   assert.ok(Math.abs(maxAngleDeviation([350, 10]) - 10) < 1e-9, 'mean is north, both 10 degrees off');
@@ -19,12 +19,15 @@ test('verdict window: hh:mm ranges with hyphen or en dash, junk gives null', () 
   assert.equal(parseWindow(null), null);
 });
 
-test('hour strip: an hour is in the window when it starts inside [from, to)', () => {
+test('hour strip: an hour is in the window when it starts inside [from, to) and is not red live', () => {
   const seg = hourStrip([9, 10, 11, 12, 13, 14, 15, 16, 17], ['green', 'amber', 'green', 'green', 'red', null, 'green', 'green', 'amber'], { from: 11, to: 15 });
   assert.deepEqual(
     seg.map((s) => s.inWindow),
-    [false, false, true, true, true, true, false, false, false]
+    [false, false, true, true, false, true, false, false, false]
   );
+  assert.equal(windowHasRed([9, 10, 11, 12, 13, 14, 15, 16, 17], ['green', 'amber', 'green', 'green', 'red', null, 'green', 'green', 'amber'], { from: 11, to: 15 }), true);
+  assert.equal(windowHasRed([9, 10], ['red', 'green'], { from: 10, to: 11 }), false);
+  assert.equal(windowHasRed([9], ['red'], null), false);
   assert.equal(seg[1].score, 'amber');
   assert.equal(seg[5].score, null);
   assert.ok(hourStrip([9], ['red'], null)[0].inWindow === false, 'no window, nothing highlighted');

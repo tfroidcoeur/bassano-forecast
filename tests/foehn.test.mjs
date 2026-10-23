@@ -68,8 +68,8 @@ test('day window indices and day extremes', () => {
   assert.equal(dayFoehnDp(s, '2030-01-08'), null);
 });
 
-test('day foehn: most negative per-model minimum in 09-17, not a mean of the models', () => {
-  // 09: ECMWF -3.5, ICON -1 (mean -2.25, weak). 10: ECMWF 0, ICON -1. The day is moderate: ECMWF sets it.
+test('day foehn: per-model window mean, the more northerly model; one hour\'s dip does not set the class', () => {
+  // 09: ECMWF -3.5, ICON -1. 10: ECMWF 0, ICON -1. Means: ECMWF -1.75, ICON -1. ECMWF sets it: none.
   const t = ['2030-01-06T09:00', '2030-01-06T10:00', '2030-01-06T18:00'];
   const s = foehnSeries([
     { hourly: { time: t, pressure_msl_ecmwf_ifs025: [1016.5, 1020, 1000], pressure_msl_icon_seamless: [1019, 1019, 1000] } },
@@ -77,8 +77,9 @@ test('day foehn: most negative per-model minimum in 09-17, not a mean of the mod
     { hourly: { time: t } },
     { hourly: { time: t } },
   ]);
-  assert.equal(dayFoehnDp(s, '2030-01-06'), -3.5);
-  assert.equal(foehnClass(dayFoehnDp(s, '2030-01-06')), 'moderate');
+  assert.equal(dayFoehnDp(s, '2030-01-06'), -1.75);
+  assert.equal(foehnClass(dayFoehnDp(s, '2030-01-06')), 'none');
+  assert.equal(dayExtremes(s, '2030-01-06').biEcmwfMin, -3.5, 'the dip is still reported');
 });
 
 test('day foehn: an extreme outside 09-17 is ignored; a positive day is none', () => {
