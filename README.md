@@ -55,6 +55,8 @@ Score per hour (green / amber / red) is computed in the browser from the consens
 
 The score is a starting point; the verdict text is the judgement.
 
+The hour grid's CAPE row (J/kg) shows the consensus value, the highest of the five consensus models, coloured in bands at 50, 200, 400, 800 and 1500 J/kg (`CAPE_EDGES` in `lib/config.js`). From 800 J/kg, where the score counts CAPE with showers, the cells turn orange and then red.
+
 ### forecast.json
 
 ```json

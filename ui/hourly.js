@@ -1,5 +1,5 @@
 import { formatSpeed, windBand } from '../lib/wind.js';
-import { levelFor } from '../lib/score.js';
+import { levelFor, capeBand } from '../lib/score.js';
 import { LIMITS, FOEHN, CONSENSUS_MODELS, TEMP_HEIGHTS_M } from '../lib/config.js';
 import { wmoGroup, WMO_SHAPES } from '../lib/icons.js';
 import { barPct, ceilingHundreds, maxAngleDeviation, minMax } from '../lib/layout.js';
@@ -46,6 +46,13 @@ function rainCell(mm) {
   const cell = el('td', { class: mm >= FOEHN.rainMm ? 'rain-wet' : '' }, bar);
   if (mm >= 0.1) cell.append(el('span', { class: 'rain-num', text: formatDecimal(mm, 1) }));
   return cell;
+}
+
+/** CAPE in J/kg, coloured by capeBand; dash when unknown. */
+function capeCell(jkg) {
+  const band = capeBand(jkg);
+  if (band === null) return el('td', {}, DASH);
+  return el('td', { class: `band band-${band}` }, String(Math.round(jkg)));
 }
 
 /** Temperature in whole °C, dash when unknown. Rounds first, so -0.4 shows 0, not -0. */
@@ -109,6 +116,7 @@ export function hourGrid(cols, unit, showMore = false) {
     [t('grid.h3000'), (c) => windCell(c.aloft700.speed, c.aloft700.dir, 'aloft', unit)],
     [t('grid.north'), (c) => northCell(c.north, unit)],
     [t('grid.rain'), (c) => rainCell(c.precipMm)],
+    [t('grid.cape'), (c) => capeCell(c.cape)],
     [t('grid.ceiling'), (c) => el('td', {}, Number.isFinite(c.ceiling) ? String(ceilingHundreds(c.ceiling)) : DASH)],
     // Temperatures at the heights of the wind rows: 2 m at the launch (with the 10 m wind), then AMSL.
     [t('grid.temp2m'), (c) => tempCell(c.t2)],

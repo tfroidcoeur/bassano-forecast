@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { levelFor, foehnClass, scoreHour, isLee } from '../lib/score.js';
+import { levelFor, foehnClass, scoreHour, isLee, capeBand } from '../lib/score.js';
 import { LIMITS } from '../lib/config.js';
 
 const calm = {
@@ -103,4 +103,16 @@ test('moderate foehn without north flow at 850 hPa adds nothing; the north compo
 test('unknown wind gives null, a missing gust alone does not', () => {
   assert.equal(scoreHour({ ...calm, launch: null, aloft850: { speed: null, dir: null } }, 'none'), null);
   assert.equal(scoreHour({ ...calm, gust: null }, 'none'), 'green');
+});
+
+test('capeBand: one band per edge passed, edges stay in the lower band', () => {
+  assert.equal(capeBand(null), null);
+  assert.equal(capeBand(0), 0);
+  assert.equal(capeBand(50), 0);
+  assert.equal(capeBand(51), 1);
+  assert.equal(capeBand(400), 2);
+  assert.equal(capeBand(680), 3);
+  assert.equal(capeBand(800), 3); // 800 = FOEHN.convectiveCape: orange starts above it
+  assert.equal(capeBand(860), 4);
+  assert.equal(capeBand(2000), 5);
 });
