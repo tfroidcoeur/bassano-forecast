@@ -1,140 +1,140 @@
 {
-  "generated_at": "2026-10-24T01:24:27Z",
+  "generated_at": "2026-10-24T01:41:49Z",
   "summary": {
-    "en": "A changeable week on the south side of the Alps, 24–29 Oct. Saturday has a moderate north-foehn gradient (Bozen−Innsbruck −3.5 hPa) but no lee signature at Bassano: SE wind, midday gusts near 30 km/h. Sunday and Tuesday sit under a south-side gradient; Sunday a dry, strengthening W/SW flow aloft, Tuesday a strong early northerly at 3000 m easing off. Monday is light with a moderate NW wind aloft. Wednesday carries a strong north-foehn gradient (ICON −6.3 hPa) with dry air, red all day. Thursday is the lightest, weak gradient, moist and cloudy.",
-    "nl": "Wisselvallige week aan de zuidzijde van de Alpen, 24–29 okt. Zaterdag een matige noordföhn in de index (Bozen−Innsbruck −3,5 hPa), maar geen föhnteken bij Bassano: ZO-wind, rukwinden rond 30 km/u rond de middag. Zondag en dinsdag een zuidzijdige gradiënt; zondag droge, toenemende W/ZW-stroming op hoogte, dinsdag sterke noordenwind op 3000 m in de ochtend die wegzakt. Maandag licht met matige NW-wind op hoogte. Woensdag sterke noordföhn (ICON −6,3 hPa) met droge lucht, de hele dag rood. Donderdag het lichtst, zwakke gradiënt, vochtig en bewolkt."
+    "en": "High pressure holds all week: dry, surface winds mostly light, cloud only on Sat. Sat 24th is the least settled - SE breeze, gusts to ~30 km/h by midday, building mid cloud and CAPE, models far apart; marginal, calmest in the morning. Sun-Thu are clear and light at launch but carry strong west or north wind at 3000 m. Wed 28th stands out: a strong north-foehn gradient (Bozen-Innsbruck to -6 hPa), so no. Mon and Thu are the calmest. The foehn index swings day to day and the north flow aloft is the recurring theme.",
+    "nl": "Hogedruk houdt de hele week stand: droog, aan de grond meestal zwakke wind, bewolking enkel op zaterdag. Zaterdag 24 is het minst rustig - ZO-bries, rukwinden tot ~30 km/u rond de middag, oplopende middenbewolking en CAPE, modellen ver uiteen; marginaal, rustigst in de ochtend. Zon-don helder en zwak aan de start, maar met sterke westen- of noordenwind op 3000 m. Woensdag 28 springt eruit: een sterke noordfohn-gradient (Bozen-Innsbruck tot -6 hPa), dus niet vliegbaar. Maandag en donderdag zijn het rustigst. De fohnindex wisselt per dag; de noordenstroming op hoogte is het terugkerende thema."
   },
   "days": [
     {
       "date": "2026-10-24",
       "verdict": "marginal",
       "headline": {
-        "en": "SE wind builds through the day; gusts 28–30 km/h around midday, 35–38 km/h late afternoon.",
-        "nl": "ZO-wind neemt toe; rukwinden 28–30 km/u rond de middag, 35–38 km/u in de late namiddag."
+        "en": "Calm morning, then gusts ~30 km/h midday and building cloud; over 35 km/h after 16:00. Light SE at launch, moderate north gradient aloft.",
+        "nl": "Rustige ochtend, dan rukwinden ~30 km/u rond de middag en oplopende bewolking; boven 35 km/u na 16 uur. Zwakke ZO aan de start, matige noordgradient op hoogte."
       },
       "window": "09:00–12:00",
       "foehn": "moderate",
       "foehn_text": {
-        "en": "Bozen−Innsbruck −3.5 hPa (ECMWF) / −2.7 hPa (ICON), Zurich−Lugano +4.1/+4.9: a moderate north-foehn gradient. At Bassano the 1500 m wind stays E/SE, not northerly, so no lee signature on the south face; the two models disagree.",
-        "nl": "Bozen−Innsbruck −3,5 hPa (ECMWF) / −2,7 hPa (ICON), Zürich−Lugano +4,1/+4,9: matige noordföhn in de index. Bij Bassano blijft de wind op 1500 m uit O/ZO, niet noord, dus geen föhnteken op de zuidflank; de twee modellen zijn het oneens."
+        "en": "Bozen-Innsbruck -3.5 hPa (ECMWF) / -2.7 (ICON), Zurich-Lugano +4 to +5 hPa: a moderate north-foehn gradient aloft, models split on strength. At Bassano itself no north wind at 1500 m and moist air, so no sign the foehn reaches the south face; the surface stays SE.",
+        "nl": "Bozen-Innsbruck -3,5 hPa (ECMWF) / -2,7 (ICON), Zurich-Lugano +4 tot +5 hPa: een matige noordfohn-gradient op hoogte, modellen oneens over de sterkte. Bij Bassano zelf geen noordenwind op 1500 m en vochtige lucht: geen teken dat de fohn de zuidflank bereikt; aan de grond blijft het ZO."
       },
       "text": {
-        "en": "Calm launch early, around 5 km/h, with the wind at 1500 m 6–12 km/h from the E/SE. Launch wind rises to 16 km/h near midday; consensus gusts 28–30 km/h from 12:00 to 15:00, gust_max to 40 km/h. From 15:00 the 3000 m wind strengthens to 28–30 km/h from the NW and gusts reach 35–38 km/h. No rain; cloud mostly mid-level; CAPE to 500 J/kg around midday without precipitation. Wide model spread in both wind direction and speed all day.",
-        "nl": "Rustige start in de ochtend, rond 5 km/u, met de wind op 1500 m 6–12 km/u uit O/ZO. De startwind loopt op tot 16 km/u rond de middag; rukwinden 28–30 km/u van 12 tot 15 uur, piek tot 40 km/u. Vanaf 15 uur neemt de wind op 3000 m toe tot 28–30 km/u uit NW en rukwinden tot 35–38 km/u. Geen regen; vooral middelhoge bewolking; CAPE tot 500 J/kg rond de middag zonder neerslag. Grote spreiding tussen de modellen in richting en sterkte de hele dag."
+        "en": "Dry but the least settled day. Surface wind light SE, 3-8 km/h, turning to 100-135 deg; launch wind climbs to about 16 km/h around 12:00. Gusts near 14 km/h at 09:00 rise to 28-30 km/h from 12:00 to 15:00, then over 35 km/h at 16:00-17:00 (scored red). At 3000 m the wind backs from the NW and strengthens to 29-31 km/h with a north component near 22 km/h late in the day. Mid cloud fills in through the day (over 90% by midday) and 850 hPa RH climbs from 75% to 99%; CAPE peaks near 500 J/kg at 12:00 - overdevelopment signs, though no rain in the window. Models sit far apart on both direction and speed across the window (over 45 deg and over 10 km/h), which caps confidence. Calmest 09:00-12:00.",
+        "nl": "Droog maar de minst rustige dag. Aan de grond zwakke ZO-wind, 3-8 km/u, draaiend naar 100-135 graden; de startwind loopt op tot ongeveer 16 km/u rond 12 uur. Rukwinden rond 14 km/u om 09 uur lopen op tot 28-30 km/u van 12 tot 15 uur, daarna boven 35 km/u om 16-17 uur (rood gescoord). Op 3000 m ruimt de wind uit het NW en versterkt tot 29-31 km/u met een noordcomponent rond 22 km/u laat op de dag. De middenbewolking vult aan door de dag (boven 90% rond de middag) en de RV op 850 hPa stijgt van 75% naar 99%; CAPE piekt rond 500 J/kg om 12 uur - tekenen van overontwikkeling, al valt er geen regen in het venster. Modellen staan ver uiteen in richting en sterkte over het venster (meer dan 45 graden en meer dan 10 km/u), wat het vertrouwen begrenst. Rustigst 09-12 uur."
       },
       "main_risk": {
-        "en": "Midday gusts 28–30 km/h and strong NW wind aloft late afternoon; wide model disagreement.",
-        "nl": "Rukwinden 28–30 km/u rond de middag en sterke NW-wind op hoogte laat op de dag; grote spreiding tussen de modellen."
+        "en": "Afternoon gusts to 38 km/h and overdevelopment (CAPE ~500, 90%+ mid cloud, RH to 99%); wide model disagreement.",
+        "nl": "Rukwinden tot 38 km/u in de namiddag en overontwikkeling (CAPE ~500, 90%+ middenbewolking, RV tot 99%); grote modelspreiding."
       }
     },
     {
       "date": "2026-10-25",
       "verdict": "marginal",
       "headline": {
-        "en": "Dry SW regime; light launch 7–11 km/h, W/SW wind at 3000 m builds from 31 to 53 km/h.",
-        "nl": "Droge ZW-stroming; lichte start 7–11 km/u, W/ZW-wind op 3000 m neemt toe van 31 naar 53 km/u."
+        "en": "Clear, light at launch, but west wind at 3000 m strengthening from ~31 to ~50 km/h through the day.",
+        "nl": "Helder, zwak aan de start, maar westenwind op 3000 m die oploopt van ~31 naar ~50 km/u in de loop van de dag."
       },
-      "window": "10:00–13:00",
+      "window": "11:00–14:00",
       "foehn": "none",
       "foehn_text": {
-        "en": "Bozen−Innsbruck +5.9/+6.2 hPa and Zurich−Lugano −6.9/−7.4: a south-side gradient, no north foehn. The 1500 m wind is from the SW, RH 64–74%, no rain on the south side. The 1500 m level warms between 09:00 and 15:00.",
-        "nl": "Bozen−Innsbruck +5,9/+6,2 hPa en Zürich−Lugano −6,9/−7,4: zuidzijdige gradiënt, geen noordföhn. De wind op 1500 m komt uit ZW, RV 64–74 %, geen regen op de zuidzijde. Opwarming op 1500 m tussen 9 en 15 uur."
+        "en": "Bozen-Innsbruck +6 hPa, Zurich-Lugano -7 hPa: a south-side gradient, not north foehn. The 850 hPa layer warms through the day. No north wind at Bassano; the day is about the strong west wind aloft, not foehn.",
+        "nl": "Bozen-Innsbruck +6 hPa, Zurich-Lugano -7 hPa: een zuidelijke gradient, geen noordfohn. De 850 hPa-laag warmt op door de dag. Geen noordenwind bij Bassano; de dag draait om de sterke westenwind op hoogte, niet om fohn."
       },
       "text": {
-        "en": "Launch wind light all day, 7–11 km/h. At 1500 m 13–17 km/h from the SW. At 3000 m the W/SW wind increases from 31 km/h at 09:00 to 43 km/h by 14:00 and 53 km/h by 17:00. Consensus gusts 18–24 km/h, gust_max rising to 38–42 km/h in the afternoon. No rain, CAPE near zero, broken cloud. The SW flow matches the Stella, Tappeti and Camol take-offs; the models agree.",
-        "nl": "Startwind de hele dag licht, 7–11 km/u. Op 1500 m 13–17 km/u uit ZW. Op 3000 m neemt de W/ZW-wind toe van 31 km/u om 9 uur tot 43 km/u rond 14 uur en 53 km/u om 17 uur. Rukwinden 18–24 km/u, piek oplopend tot 38–42 km/u in de namiddag. Geen regen, CAPE bijna nul, wisselende bewolking. De ZW-stroming past bij de startplaatsen Stella, Tappeti en Camol; de modellen zijn het eens."
+        "en": "Clear and dry, essentially no cloud. Surface wind light from W/SW, 2-6 km/h; launch wind 7-11 km/h. Gusts 20-24 km/h, with a peak gust near 42 km/h midday. The story is aloft: the west wind at 3000 m rises through the day, from about 31 km/h at 09:00 to 40 km/h by 14:00 and roughly 50 km/h by evening (marginal to strong). At 1500 m the wind is 14-17 km/h from the west, with a near-zero north component. 850 hPa RH 64-74%, warming through the day. Best slot 11:00-14:00, before the upper wind firms up.",
+        "nl": "Helder en droog, nagenoeg geen bewolking. Aan de grond zwakke wind uit W/ZW, 2-6 km/u; startwind 7-11 km/u. Rukwinden 20-24 km/u, met een piekrukwind rond 42 km/u rond de middag. Het verhaal zit op hoogte: de westenwind op 3000 m loopt op door de dag, van ongeveer 31 km/u om 09 uur naar 40 km/u om 14 uur en zowat 50 km/u tegen de avond (marginaal tot sterk). Op 1500 m waait het 14-17 km/u uit het westen, met een noordcomponent rond nul. RV op 850 hPa 64-74%, opwarmend door de dag. Beste venster 11-14 uur, voordat de wind op hoogte aantrekt."
       },
       "main_risk": {
-        "en": "W/SW wind aloft strengthens to 43–53 km/h at 3000 m through the afternoon; gust_max to 42 km/h.",
-        "nl": "W/ZW-wind op hoogte neemt toe tot 43–53 km/u op 3000 m in de namiddag; rukwinden tot 42 km/u."
+        "en": "West wind at 3000 m strengthening to about 50 km/h by late afternoon.",
+        "nl": "Westenwind op 3000 m die oploopt tot ongeveer 50 km/u in de late namiddag."
       }
     },
     {
       "date": "2026-10-26",
       "verdict": "marginal",
       "headline": {
-        "en": "Light E/SE launch wind; NW wind at 3000 m 27–36 km/h, north component 15–22 km/h.",
-        "nl": "Lichte O/ZO-startwind; NW-wind op 3000 m 27–36 km/u, noordcomponent 15–22 km/u."
+        "en": "The calmest day: clear, light winds at launch, boundary layer ~1400 m; moderate NW wind at 3000 m with a marginal north component.",
+        "nl": "De rustigste dag: helder, zwakke wind aan de start, grenslaag ~1400 m; matige NW-wind op 3000 m met een marginale noordcomponent."
       },
-      "window": "12:00–15:00",
+      "window": "11:00–15:00",
       "foehn": "none",
       "foehn_text": {
-        "en": "Bozen−Innsbruck −0.4/−1.4 hPa, Zurich−Lugano +2.2/+1.5: a gradient below the foehn threshold, no class. At Bassano the 1500 m wind is light from the E/SE; the NW wind at 3000 m is a high-pressure northerly aloft, not a lee signature.",
-        "nl": "Bozen−Innsbruck −0,4/−1,4 hPa, Zürich−Lugano +2,2/+1,5: gradiënt onder de föhndrempel, geen klasse. Bij Bassano is de wind op 1500 m licht uit O/ZO; de NW-wind op 3000 m is een noordenwind op hoogte bij hogedruk, geen föhnteken."
+        "en": "Bozen-Innsbruck -0.4 hPa (ECMWF) / -1.4 (ICON), Zurich-Lugano +1 to +2 hPa: a negligible gradient, no foehn classification. A NW wind at 3000 m carries a marginal north component, but it is light and dry at launch. No north wind at the ridge at Bassano.",
+        "nl": "Bozen-Innsbruck -0,4 hPa (ECMWF) / -1,4 (ICON), Zurich-Lugano +1 tot +2 hPa: een verwaarloosbare gradient, geen fohn. Een NW-wind op 3000 m draagt een marginale noordcomponent, maar aan de start is het zwak en droog. Geen noordenwind op de kam bij Bassano."
       },
       "text": {
-        "en": "Launch wind 4–11 km/h from the E/SE. The 1500 m wind is light, 4–11 km/h. At 3000 m 27–36 km/h from the NW, north component 15–22 km/h through the day. Consensus gusts 11–20 km/h, gust_max to 29 km/h in late morning. No rain, CAPE zero, mid and low cloud. The model direction and speed spread is large in the morning (speed spread to 20 km/h at 09:00) and settles after midday.",
-        "nl": "Startwind 4–11 km/u uit O/ZO. De wind op 1500 m is licht, 4–11 km/u. Op 3000 m 27–36 km/u uit NW, noordcomponent 15–22 km/u door de dag. Rukwinden 11–20 km/u, piek tot 29 km/u in de late ochtend. Geen regen, CAPE nul, middelhoge en lage bewolking. De spreiding tussen de modellen in richting en sterkte is groot in de ochtend (spreiding tot 20 km/u om 9 uur) en wordt kleiner na de middag."
+        "en": "The quietest day of the week. Clear and dry, 1500 m RH 53-63%. Surface wind light, 2-7 km/h, from the E then SE (80-170 deg); launch wind 10-11 km/h midday, easing to about 4 km/h by 17:00. Gusts 11-21 km/h. At 3000 m a NW wind of 27-36 km/h with a north component of 15-22 km/h (marginal). The 1500 m wind is light, 4-11 km/h. Boundary layer near 1400 m, cloudbase about 1570 m, little cumulus. Models disagree on surface wind speed in the morning (spread ~16-21 km/h), settling by midday. Best slot 11:00-15:00.",
+        "nl": "De rustigste dag van de week. Helder en droog, RV op 1500 m 53-63%. Aan de grond zwakke wind, 2-7 km/u, uit het O en dan ZO (80-170 graden); startwind 10-11 km/u rond de middag, afnemend tot ongeveer 4 km/u tegen 17 uur. Rukwinden 11-21 km/u. Op 3000 m een NW-wind van 27-36 km/u met een noordcomponent van 15-22 km/u (marginaal). De wind op 1500 m is zwak, 4-11 km/u. Grenslaag rond 1400 m, wolkenbasis ongeveer 1570 m, weinig cumulus. Modellen zijn het in de ochtend oneens over de windsterkte aan de grond (spreiding ~16-21 km/u), daarna gelijklopend. Beste venster 11-15 uur."
       },
       "main_risk": {
-        "en": "Marginal north wind component 15–22 km/h at 3000 m; large model disagreement before midday.",
-        "nl": "Marginale noordcomponent 15–22 km/u op 3000 m; grote spreiding tussen de modellen voor de middag."
+        "en": "Moderate NW wind at 3000 m (27-36 km/h), north component marginal; models split on surface wind in the morning.",
+        "nl": "Matige NW-wind op 3000 m (27-36 km/u), noordcomponent marginaal; modellen oneens over de wind aan de grond in de ochtend."
       }
     },
     {
       "date": "2026-10-27",
       "verdict": "marginal",
       "headline": {
-        "en": "Strong N wind at 3000 m early (34 km/h), easing to 18–20 km/h by afternoon; very light launch.",
-        "nl": "Sterke noordenwind op 3000 m in de ochtend (34 km/u), zwakker tot 18–20 km/u in de namiddag; zeer lichte start."
+        "en": "Clear and very light at launch; strong north wind at 3000 m early (to 34 km/h), easing to ~18 km/h by late afternoon.",
+        "nl": "Helder en erg zwak aan de start; vroeg sterke noordenwind op 3000 m (tot 34 km/u), namiddag terug naar ~18 km/u."
       },
-      "window": "13:00–16:00",
+      "window": "11:00–16:00",
       "foehn": "none",
       "foehn_text": {
-        "en": "Bozen−Innsbruck +0.5/+2.1 hPa, Zurich−Lugano −2.2/−3.1: no north-foehn gradient in the index. But the 3000 m wind at Bassano is due north and strong early, 34 km/h at 09:00, easing to 18 km/h by 17:00; the 1500 m wind is light, so no lee signature.",
-        "nl": "Bozen−Innsbruck +0,5/+2,1 hPa, Zürich−Lugano −2,2/−3,1: geen noordföhn in de index. Maar de wind op 3000 m bij Bassano komt recht uit het noorden en is sterk in de ochtend, 34 km/u om 9 uur, zwakker tot 18 km/u om 17 uur; de wind op 1500 m is licht, dus geen föhnteken."
+        "en": "Bozen-Innsbruck +0.5 hPa (ECMWF) / +2.1 (ICON), Zurich-Lugano -2 to -3 hPa: no north-foehn gradient. A strong north wind at 3000 m early (34 km/h) eases to about 18 km/h by late afternoon; at launch the air stays light and southerly. 850 hPa warms. No north wind at ridge level at Bassano.",
+        "nl": "Bozen-Innsbruck +0,5 hPa (ECMWF) / +2,1 (ICON), Zurich-Lugano -2 tot -3 hPa: geen noordfohn-gradient. Sterke noordenwind op 3000 m in de ochtend (34 km/u), namiddag terug naar ~18 km/u; aan de start zwak en zuidelijk. De 850 hPa-laag warmt op. Op kamhoogte geen noordenwind bij Bassano."
       },
       "text": {
-        "en": "Early-morning N wind at 3000 m 31–34 km/h from due north (scored red at 09:00–10:00), easing steadily to 24 km/h at 13:00 and 18–20 km/h by late afternoon. Launch wind very light, 2–3 km/h. The 1500 m wind is 3–5 km/h. Consensus gusts 9–15 km/h. RH at 1500 m 42–50%, relatively dry; no rain, CAPE zero. The 1500 m level warms through the day.",
-        "nl": "Noordenwind op 3000 m in de vroege ochtend 31–34 km/u recht uit het noorden (rood om 9–10 uur), gestaag zwakker tot 24 km/u om 13 uur en 18–20 km/u in de late namiddag. Startwind zeer licht, 2–3 km/u. De wind op 1500 m is 3–5 km/u. Rukwinden 9–15 km/u. RV op 1500 m 42–50 %, vrij droog; geen regen, CAPE nul. De lucht op 1500 m warmt op door de dag."
+        "en": "Clear and very light at launch. Surface wind 1-5 km/h from S/SSE; launch wind only 2-3 km/h. Gusts 9-17 km/h. Aloft the north wind dominates: at 3000 m 34 km/h from the north at 09:00-10:00 (scored red), easing steadily to 27 km/h by midday and about 18-20 km/h by late afternoon. The 1500 m wind is light, 3-5 km/h. 850 hPa RH 42-50%, dry and warming. Cloud near zero, boundary layer about 1100 m. No north wind at ridge level at Bassano. Best slot 11:00-16:00, after the upper north wind eases.",
+        "nl": "Helder en erg zwak aan de start. Aan de grond 1-5 km/u uit Z/ZZO; startwind slechts 2-3 km/u. Rukwinden 9-17 km/u. Op hoogte overheerst de noordenwind: op 3000 m 34 km/u uit het noorden om 09-10 uur (rood gescoord), gestaag afnemend tot 27 km/u rond de middag en ongeveer 18-20 km/u in de late namiddag. De wind op 1500 m is zwak, 3-5 km/u. RV op 850 hPa 42-50%, droog en opwarmend. Nagenoeg geen bewolking, grenslaag rond 1100 m. Op kamhoogte geen noordenwind bij Bassano. Beste venster 11-16 uur, nadat de noordenwind op hoogte afneemt."
       },
       "main_risk": {
-        "en": "Strong northerly at 3000 m in the morning (31–34 km/h) over the lee south face; easing but present all day.",
-        "nl": "Sterke noordenwind op 3000 m in de ochtend (31–34 km/u) boven de lijzijde zuidflank; zwakker maar de hele dag aanwezig."
+        "en": "Strong north wind at 3000 m in the morning (to 34 km/h), easing through the day.",
+        "nl": "Sterke noordenwind op 3000 m in de ochtend (tot 34 km/u), afnemend door de dag."
       }
     },
     {
       "date": "2026-10-28",
       "verdict": "no",
       "headline": {
-        "en": "Strong north-foehn gradient all day; dry air at 1500 m (RH 31–36%), 1500 m wind SE 10–19 km/h.",
-        "nl": "Sterke noordföhn in de index de hele dag; droge lucht op 1500 m (RV 31–36 %), wind op 1500 m uit ZO 10–19 km/u."
+        "en": "Strong north-foehn gradient across the Alps (Bozen-Innsbruck -4 to -6 hPa); dry foehn air aloft, lee and sudden onset the risk.",
+        "nl": "Sterke noordfohn-gradient over de Alpen (Bozen-Innsbruck -4 tot -6 hPa); droge fohnlucht op hoogte, lijzijde en plotse inval het risico."
       },
       "window": null,
       "foehn": "strong",
       "foehn_text": {
-        "en": "Bozen−Innsbruck −3.9 hPa (ECMWF) / −6.3 hPa (ICON), Zurich−Lugano +6.2/+8.8: a strong north-foehn gradient, with the models disagreeing on strength (moderate vs strong). RH at 1500 m drops to 31–36%, very dry; the 1500 m wind is from the SE.",
-        "nl": "Bozen−Innsbruck −3,9 hPa (ECMWF) / −6,3 hPa (ICON), Zürich−Lugano +6,2/+8,8: sterke noordföhn in de index, met de modellen oneens over de sterkte (matig tegenover sterk). RV op 1500 m zakt naar 31–36 %, zeer droog; de wind op 1500 m komt uit ZO."
+        "en": "Bozen-Innsbruck -3.9 hPa (ECMWF) / -6.3 (ICON), Zurich-Lugano +6 to +9 hPa: a strong north-foehn gradient, ICON stronger. 850 hPa dries to ~31% RH midday. The surface stays light SE and the 1500 m wind weak, but with this gradient the lee and a sudden foehn breakthrough are the main risk.",
+        "nl": "Bozen-Innsbruck -3,9 hPa (ECMWF) / -6,3 (ICON), Zurich-Lugano +6 tot +9 hPa: een sterke noordfohn-gradient, ICON sterker. RV op 850 hPa zakt tot ~31% rond de middag. Aan de grond zwak ZO en de wind op 1500 m zwak, maar met deze gradient zijn lijzijde en een plotse fohninval het voornaamste risico."
       },
       "text": {
-        "en": "A strong cross-Alpine north gradient holds all day and every hour is scored red. At 1500 m the wind is from the SE, 10–19 km/h, and the air dries sharply, RH 31–36% around midday. At 3000 m the wind is light, 10–14 km/h, from the N/NE. Launch wind 5–11 km/h. Consensus gusts 7–17 km/h. No rain, CAPE zero. A strong gradient with dry descent is the north-foehn signature for the region; on such a day the south face of the massif sits in the lee, with rotor and sudden gusts mixing down.",
-        "nl": "Een sterke noord-gradiënt over de Alpen houdt de hele dag aan en elk uur is rood. Op 1500 m komt de wind uit ZO, 10–19 km/u, en de lucht droogt sterk uit, RV 31–36 % rond de middag. Op 3000 m is de wind licht, 10–14 km/u, uit N/NO. Startwind 5–11 km/u. Rukwinden 7–17 km/u. Geen regen, CAPE nul. Een sterke gradiënt met droge daling is het noordföhn-teken voor de streek; op zo'n dag ligt de zuidflank van het massief in de lijzijde, met rotor en plotse rukwinden die naar beneden mengen."
+        "en": "A strong north-foehn gradient across the Alps. At the surface the south face stays light, 2-4 km/h from the SE, launch wind 5-11 km/h, gusts 7-17 km/h - quiet-looking at launch. But 850 hPa RH drops to 31-36% midday (dry foehn air) and the cross-Alpine gradient is strong (Bozen-Innsbruck -4 to -6 hPa, ICON more so than ECMWF). At 3000 m the wind is light (10-15 km/h) and the 1500 m north component small, so the models do not show the foehn fully breaking through to the south face; yet with a gradient this strong, lee turbulence, rotor and a sudden afternoon foehn onset are the dominant risk. Clear skies, no rain. Every hour 09:00-17:00 scored red.",
+        "nl": "Een sterke noordfohn-gradient over de Alpen. Aan de grond blijft de zuidflank zwak, 2-4 km/u uit het ZO, startwind 5-11 km/u, rukwinden 7-17 km/u - ogenschijnlijk rustig aan de start. Maar de RV op 850 hPa zakt tot 31-36% rond de middag (droge fohnlucht) en de gradient over de Alpen is sterk (Bozen-Innsbruck -4 tot -6 hPa, ICON meer dan ECMWF). Op 3000 m is de wind zwak (10-15 km/u) en de noordcomponent op 1500 m klein, dus de modellen tonen niet dat de fohn volledig tot de zuidflank doorbreekt; toch zijn met zo'n sterke gradient lijzijdeturbulentie, rotor en een plotse fohninval in de namiddag het voornaamste risico. Heldere hemel, geen regen. Elk uur 09-17 uur rood gescoord."
       },
       "main_risk": {
-        "en": "Strong north-foehn gradient; lee turbulence and rotor on the south face, sudden gusts, a stalling or reversing south breeze.",
-        "nl": "Sterke noordföhn; lijturbulentie en rotor op de zuidflank, plotse rukwinden, een stilvallende of omkerende zuidenbries."
+        "en": "Strong north-foehn gradient; lee turbulence, rotor and a sudden foehn onset on the south face.",
+        "nl": "Sterke noordfohn-gradient; lijzijdeturbulentie, rotor en een plotse fohninval op de zuidflank."
       }
     },
     {
       "date": "2026-10-29",
       "verdict": "marginal",
       "headline": {
-        "en": "Lightest day; launch 4–8 km/h, gusts 10–16 km/h; weak north-foehn gradient, moist air and cloud.",
-        "nl": "Lichtste dag; start 4–8 km/u, rukwinden 10–16 km/u; zwakke noordföhn in de index, vochtige lucht en bewolking."
+        "en": "Settling again: clear to partly cloudy, light winds; weak north gradient aloft and ~10 km/h model disagreement on surface wind.",
+        "nl": "Weer rustiger: helder tot halfbewolkt, zwakke wind; zwakke noordgradient op hoogte en ~10 km/u modelverschil over de wind aan de grond."
       },
-      "window": "10:00–16:00",
+      "window": "11:00–16:00",
       "foehn": "weak",
       "foehn_text": {
-        "en": "Bozen−Innsbruck −2.4/−0.9 hPa, Zurich−Lugano +2.8/+1.6: a weak north-foehn gradient. At Bassano the 1500 m wind is light from the SE and the air is moist (RH 75–88%), so no lee signature; the 3000 m wind stays light, 15–19 km/h.",
-        "nl": "Bozen−Innsbruck −2,4/−0,9 hPa, Zürich−Lugano +2,8/+1,6: zwakke noordföhn in de index. Bij Bassano is de wind op 1500 m licht uit ZO en de lucht vochtig (RV 75–88 %), dus geen föhnteken; de wind op 3000 m blijft licht, 15–19 km/u."
+        "en": "Bozen-Innsbruck -2.4 hPa (ECMWF) / -0.9 (ICON), Zurich-Lugano +2 to +3 hPa: a weak north gradient, models split. Light NW wind at 3000 m (15-19 km/h) and moist air (RH ~85%); no north wind at launch and no dry descent at Bassano.",
+        "nl": "Bozen-Innsbruck -2,4 hPa (ECMWF) / -0,9 (ICON), Zurich-Lugano +2 tot +3 hPa: een zwakke noordgradient, modellen oneens. Zwakke NW-wind op 3000 m (15-19 km/u) en vochtige lucht (RV ~85%); geen noordenwind aan de start en geen droge daling bij Bassano."
       },
       "text": {
-        "en": "The lightest day of the period. Launch wind 4–8 km/h, the 1500 m wind 3–8 km/h, the 3000 m wind 15–19 km/h from the NW. Consensus gusts 10–16 km/h, gust_max to 22 km/h at midday. RH at 1500 m 75–88%, moist, with low and mid cloud; no rain, CAPE zero. Model speed spread around 8–11 km/h through the day. A small northerly component appears at 3000 m late afternoon, 15 km/h at 17:00.",
-        "nl": "De lichtste dag van de periode. Startwind 4–8 km/u, de wind op 1500 m 3–8 km/u, op 3000 m 15–19 km/u uit NW. Rukwinden 10–16 km/u, piek tot 22 km/u rond de middag. RV op 1500 m 75–88 %, vochtig, met lage en middelhoge bewolking; geen regen, CAPE nul. Spreiding tussen de modellen in sterkte rond 8–11 km/u door de dag. Een kleine noordcomponent verschijnt op 3000 m in de late namiddag, 15 km/u om 17 uur."
+        "en": "Settling again. Clear to partly cloudy, dry at the surface. Wind light, 2-6 km/h, from the E backing to S (85-170 deg); launch wind 4-8 km/h. Gusts 10-22 km/h. At 3000 m the wind is light for autumn, 15-19 km/h from the NW, north component 10-15 km/h. The 1500 m wind is light, 3-8 km/h, in moist air (RH 75-88%). Boundary layer about 1490 m with some cumulus. Models still differ by roughly 9-11 km/h on surface wind speed through the window. Best slot 11:00-16:00.",
+        "nl": "Weer rustiger. Helder tot halfbewolkt, droog aan de grond. Wind zwak, 2-6 km/u, uit het O krimpend naar Z (85-170 graden); startwind 4-8 km/u. Rukwinden 10-22 km/u. Op 3000 m is de wind zwak voor de herfst, 15-19 km/u uit het NW, noordcomponent 10-15 km/u. De wind op 1500 m is zwak, 3-8 km/u, in vochtige lucht (RV 75-88%). Grenslaag rond 1490 m met wat cumulus. Modellen verschillen nog ongeveer 9-11 km/u in windsterkte aan de grond over het venster. Beste venster 11-16 uur."
       },
       "main_risk": {
-        "en": "Moist, cloudy air with model speed disagreement around 8–11 km/h; low cloud may sit on the ridge.",
-        "nl": "Vochtige, bewolkte lucht met modelspreiding rond 8–11 km/u in sterkte; lage bewolking kan op de kam blijven hangen."
+        "en": "Weak north gradient and ~10 km/h model disagreement on surface wind; moist air, variable cloud.",
+        "nl": "Zwakke noordgradient en ~10 km/u modelverschil over de wind aan de grond; vochtige lucht, wisselende bewolking."
       }
     }
   ],
@@ -145,8 +145,8 @@
       "confidence": "low",
       "foehn": "none",
       "text": {
-        "en": "Ensemble for 30 Oct: median wind 7 km/h at 1500 m, 22 km/h at 3000 m (10–90%: 8–38 km/h). Chance of rain: 1%. Chance of northerly flow aloft: 50%. Bozen−Innsbruck median −0.7 hPa (range −4.2 to +1.1).",
-        "nl": "Ensemble voor 30 okt: mediaan 7 km/u op 1500 m, 22 km/u op 3000 m (10–90 %: 8–38 km/u). Kans op regen: 1 %. Kans op noordenstroming op hoogte: 50 %. Bozen−Innsbruck mediaan −0,7 hPa (spreiding −4,2 tot +1,1)."
+        "en": "High pressure continues: rain chance 1%, light winds (1500 m median ~7 km/h, 3000 m ~22 km/h from the N). Chance of northerly flow aloft: 50%. Bozen-Innsbruck median -1 hPa, spread -4 to +1, so a brush of north foehn is possible.",
+        "nl": "Hogedruk houdt aan: kans op regen 1%, zwakke wind (1500 m mediaan ~7 km/u, 3000 m ~22 km/u uit het N). Kans op noordenstroming op hoogte: 50%. Bozen-Innsbruck mediaan -1 hPa, spreiding -4 tot +1, dus een vleugje noordfohn is mogelijk."
       }
     },
     {
@@ -155,8 +155,8 @@
       "confidence": "low",
       "foehn": "none",
       "text": {
-        "en": "Ensemble for 31 Oct: median wind 9 km/h at 1500 m, 24 km/h at 3000 m (10–90%: 9–44 km/h). Chance of rain: 1%. Chance of northerly flow aloft: 51%. Bozen−Innsbruck median −1.1 hPa (range −4.0 to +1.4).",
-        "nl": "Ensemble voor 31 okt: mediaan 9 km/u op 1500 m, 24 km/u op 3000 m (10–90 %: 9–44 km/u). Kans op regen: 1 %. Kans op noordenstroming op hoogte: 51 %. Bozen−Innsbruck mediaan −1,1 hPa (spreiding −4,0 tot +1,4)."
+        "en": "Dry, rain chance 1%. 1500 m wind median ~9 km/h (up to 25 at the 90th percentile), 3000 m ~24 km/h. Chance of northerly flow aloft: 51%. Bozen-Innsbruck median -1 hPa, spread -4 to +1.",
+        "nl": "Droog, kans op regen 1%. Wind op 1500 m mediaan ~9 km/u (tot 25 op het 90e percentiel), 3000 m ~24 km/u. Kans op noordenstroming op hoogte: 51%. Bozen-Innsbruck mediaan -1 hPa, spreiding -4 tot +1."
       }
     },
     {
@@ -165,8 +165,8 @@
       "confidence": "low",
       "foehn": "weak",
       "text": {
-        "en": "Ensemble for 1 Nov: median wind 10 km/h at 1500 m, 19 km/h at 3000 m (10–90%: 7–41 km/h). Chance of rain: 4%. Chance of northerly flow aloft: 38%. Bozen−Innsbruck median −2.8 hPa (range −5.1 to +0.6): weak on the median.",
-        "nl": "Ensemble voor 1 nov: mediaan 10 km/u op 1500 m, 19 km/u op 3000 m (10–90 %: 7–41 km/u). Kans op regen: 4 %. Kans op noordenstroming op hoogte: 38 %. Bozen−Innsbruck mediaan −2,8 hPa (spreiding −5,1 tot +0,6): zwak op de mediaan."
+        "en": "Dry, rain chance 4%. 1500 m wind median ~10 km/h, 3000 m ~19 km/h. Chance of northerly flow aloft: 38%. Bozen-Innsbruck median -3 hPa (spread -5 to +1): a weak north gradient leans in.",
+        "nl": "Droog, kans op regen 4%. Wind op 1500 m mediaan ~10 km/u, 3000 m ~19 km/u. Kans op noordenstroming op hoogte: 38%. Bozen-Innsbruck mediaan -3 hPa (spreiding -5 tot +1): een zwakke noordgradient tekent zich af."
       }
     },
     {
@@ -175,8 +175,8 @@
       "confidence": "low",
       "foehn": "none",
       "text": {
-        "en": "Ensemble for 2 Nov: median wind 10 km/h at 1500 m, 23 km/h at 3000 m (10–90%: 9–46 km/h). Chance of rain: 2%. Chance of northerly flow aloft: 45%. Bozen−Innsbruck median −1.6 hPa (range −5.4 to +1.8).",
-        "nl": "Ensemble voor 2 nov: mediaan 10 km/u op 1500 m, 23 km/u op 3000 m (10–90 %: 9–46 km/u). Kans op regen: 2 %. Kans op noordenstroming op hoogte: 45 %. Bozen−Innsbruck mediaan −1,6 hPa (spreiding −5,4 tot +1,8)."
+        "en": "Dry, rain chance 2%. 1500 m wind median ~10 km/h, 3000 m ~23 km/h (up to 46 at the 90th percentile). Chance of northerly flow aloft: 45%. Bozen-Innsbruck median -2 hPa.",
+        "nl": "Droog, kans op regen 2%. Wind op 1500 m mediaan ~10 km/u, 3000 m ~23 km/u (tot 46 op het 90e percentiel). Kans op noordenstroming op hoogte: 45%. Bozen-Innsbruck mediaan -2 hPa."
       }
     },
     {
@@ -185,8 +185,8 @@
       "confidence": "very_low",
       "foehn": "none",
       "text": {
-        "en": "Ensemble for 3 Nov: median wind 12 km/h at 1500 m, 23 km/h at 3000 m (10–90%: 7–46 km/h). Chance of rain: 2%. Chance of northerly flow aloft: 44%. Bozen−Innsbruck median −1.2 hPa (range −6.2 to +2.8).",
-        "nl": "Ensemble voor 3 nov: mediaan 12 km/u op 1500 m, 23 km/u op 3000 m (10–90 %: 7–46 km/u). Kans op regen: 2 %. Kans op noordenstroming op hoogte: 44 %. Bozen−Innsbruck mediaan −1,2 hPa (spreiding −6,2 tot +2,8)."
+        "en": "Dry, rain chance 2%. 1500 m wind median ~12 km/h, 3000 m ~23 km/h. Chance of northerly flow aloft: 44%. Bozen-Innsbruck median -1 hPa, spread down to -6, so north foehn cannot be ruled out.",
+        "nl": "Droog, kans op regen 2%. Wind op 1500 m mediaan ~12 km/u, 3000 m ~23 km/u. Kans op noordenstroming op hoogte: 44%. Bozen-Innsbruck mediaan -1 hPa, spreiding tot -6, dus noordfohn is niet uit te sluiten."
       }
     },
     {
@@ -195,8 +195,8 @@
       "confidence": "very_low",
       "foehn": "none",
       "text": {
-        "en": "Ensemble for 4 Nov: median wind 10 km/h at 1500 m, 23 km/h at 3000 m (10–90%: 8–39 km/h). Chance of rain: 10%. Chance of northerly flow aloft: 34%. Bozen−Innsbruck median −1.7 hPa (range −6.1 to +2.0).",
-        "nl": "Ensemble voor 4 nov: mediaan 10 km/u op 1500 m, 23 km/u op 3000 m (10–90 %: 8–39 km/u). Kans op regen: 10 %. Kans op noordenstroming op hoogte: 34 %. Bozen−Innsbruck mediaan −1,7 hPa (spreiding −6,1 tot +2,0)."
+        "en": "Mostly dry, rain chance 10%. 1500 m wind median ~10 km/h, 3000 m ~23 km/h. Chance of northerly flow aloft: 34%. Bozen-Innsbruck median -2 hPa, spread -6 to +2.",
+        "nl": "Overwegend droog, kans op regen 10%. Wind op 1500 m mediaan ~10 km/u, 3000 m ~23 km/u. Kans op noordenstroming op hoogte: 34%. Bozen-Innsbruck mediaan -2 hPa, spreiding -6 tot +2."
       }
     },
     {
@@ -205,8 +205,8 @@
       "confidence": "very_low",
       "foehn": "none",
       "text": {
-        "en": "Ensemble for 5 Nov: median wind 9 km/h at 1500 m, 22 km/h at 3000 m (10–90%: 9–42 km/h). Chance of rain: 16%. Chance of northerly flow aloft: 26%. Bozen−Innsbruck median −0.2 hPa (range −5.5 to +3.7).",
-        "nl": "Ensemble voor 5 nov: mediaan 9 km/u op 1500 m, 22 km/u op 3000 m (10–90 %: 9–42 km/u). Kans op regen: 16 %. Kans op noordenstroming op hoogte: 26 %. Bozen−Innsbruck mediaan −0,2 hPa (spreiding −5,5 tot +3,7)."
+        "en": "Rain chance 16%. 1500 m wind median ~9 km/h, 3000 m ~22 km/h. Chance of northerly flow aloft: 26%. Bozen-Innsbruck median near 0 (spread -5 to +4).",
+        "nl": "Kans op regen 16%. Wind op 1500 m mediaan ~9 km/u, 3000 m ~22 km/u. Kans op noordenstroming op hoogte: 26%. Bozen-Innsbruck mediaan rond 0 (spreiding -5 tot +4)."
       }
     },
     {
@@ -215,8 +215,8 @@
       "confidence": "very_low",
       "foehn": "none",
       "text": {
-        "en": "Ensemble for 6 Nov: median wind 12 km/h at 1500 m, 23 km/h at 3000 m (10–90%: 11–47 km/h). Chance of rain: 12%. Chance of northerly flow aloft: 40%. Bozen−Innsbruck median −0.4 hPa (range −6.4 to +3.7).",
-        "nl": "Ensemble voor 6 nov: mediaan 12 km/u op 1500 m, 23 km/u op 3000 m (10–90 %: 11–47 km/u). Kans op regen: 12 %. Kans op noordenstroming op hoogte: 40 %. Bozen−Innsbruck mediaan −0,4 hPa (spreiding −6,4 tot +3,7)."
+        "en": "Rain chance 12%. 1500 m wind median ~12 km/h, 3000 m ~23 km/h. Chance of northerly flow aloft: 40%. Bozen-Innsbruck median near 0, spread down to -6.",
+        "nl": "Kans op regen 12%. Wind op 1500 m mediaan ~12 km/u, 3000 m ~23 km/u. Kans op noordenstroming op hoogte: 40%. Bozen-Innsbruck mediaan rond 0, spreiding tot -6."
       }
     },
     {
@@ -225,8 +225,8 @@
       "confidence": "very_low",
       "foehn": "none",
       "text": {
-        "en": "Ensemble for 7 Nov: median wind 14 km/h at 1500 m (10–90%: 4–27 km/h), flow from the SW. Chance of northerly flow aloft: 5%. Bozen−Innsbruck median +0.7 hPa (range −5.6 to +4.0). The 3000 m wind and rain probability are unavailable for this day.",
-        "nl": "Ensemble voor 7 nov: mediaan 14 km/u op 1500 m (10–90 %: 4–27 km/u), stroming uit ZW. Kans op noordenstroming op hoogte: 5 %. Bozen−Innsbruck mediaan +0,7 hPa (spreiding −5,6 tot +4,0). De wind op 3000 m en de kans op regen zijn voor deze dag niet beschikbaar."
+        "en": "Far out and partly missing data. Rain chance not available and the 3000 m wind is not available this run. 1500 m wind median ~14 km/h from the SW. Chance of northerly flow aloft: 5%.",
+        "nl": "Ver weg en deels ontbrekende data. Kans op regen niet beschikbaar en de wind op 3000 m is deze run niet beschikbaar. Wind op 1500 m mediaan ~14 km/u uit het ZW. Kans op noordenstroming op hoogte: 5%."
       }
     }
   ]
