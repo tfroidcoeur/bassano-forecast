@@ -2,6 +2,7 @@ import { ALL_MODELS, CONSENSUS_MODELS, MODEL_NAMES } from '../lib/config.js';
 import { linePath, niceMax, speedIn } from '../lib/layout.js';
 import { el, svgEl } from './dom.js';
 import { t } from '../lib/i18n.js';
+import { withInfo } from './info.js';
 
 const W = 320;
 const H = 120;
@@ -66,7 +67,7 @@ function legend() {
     'div',
     { class: 'legend' },
     consensus,
-    el('p', { class: 'legend-note', text: t('models.extra', { models: extra.join(', ') }) })
+    ...withInfo(el('p', { class: 'legend-note', text: t('models.extra', { models: extra.join(', ') }) }), 'compare', t('day.compare'), 'is-note')
   );
 }
 

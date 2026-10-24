@@ -1,7 +1,7 @@
 // Runs sw.js in node with a fake self, caches and fetch. The worker reads these globals at call time.
 import { test, before } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 
 const listeners = {};
 const keyOf = (req) => (typeof req === 'string' ? req : req.url);
@@ -186,4 +186,13 @@ test('other origins are not handled', () => {
   const ev = event('https://example.test/x.js');
   listeners.fetch(ev);
   assert.equal(ev.responded, null);
+});
+
+test('the app shell lists every script in lib/ and ui/', () => {
+  const sw = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
+  for (const dir of ['lib', 'ui']) {
+    for (const name of readdirSync(new URL(`../${dir}/`, import.meta.url)).filter((f) => f.endsWith('.js'))) {
+      assert.ok(sw.includes(`'./${dir}/${name}'`), `${dir}/${name} is not in SHELL`);
+    }
+  }
 });

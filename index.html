@@ -45,7 +45,11 @@
     </section>
 
     <section class="card foehn-today" aria-labelledby="foehn-today-heading">
-      <h2 id="foehn-today-heading" data-i18n="foehn.heading">Foehn</h2>
+      <div class="head-row">
+        <h2 id="foehn-today-heading" data-i18n="foehn.heading">Foehn</h2>
+        <button type="button" class="info-btn" data-info="foehnCard" data-static aria-expanded="false" aria-controls="info-foehnCard" aria-label="Models used" title="Models used">i</button>
+      </div>
+      <p class="info-note" id="info-foehnCard" hidden></p>
       <div id="foehn-today"></div>
       <p class="more"><a href="#foehn-detail" data-i18n="foehn.details">Details ↓</a></p>
     </section>
@@ -56,23 +60,35 @@
     <section id="day-panel" class="day-panel" role="tabpanel" aria-live="polite"></section>
 
     <section id="outlook" class="outlook" aria-labelledby="outlook-heading" hidden>
-      <h2 id="outlook-heading" data-i18n="outlook.heading">Outlook — low confidence</h2>
+      <div class="head-row">
+        <h2 id="outlook-heading" data-i18n="outlook.heading">Outlook — low confidence</h2>
+        <button type="button" class="info-btn" data-info="outlook" data-static aria-expanded="false" aria-controls="info-outlook" aria-label="Models used" title="Models used">i</button>
+      </div>
+      <p class="info-note" id="info-outlook" hidden></p>
       <div id="outlook-strip" class="outlook-strip"></div>
     </section>
 
     <section class="longrange-section" aria-labelledby="longrange-heading">
-      <h2 id="longrange-heading" data-i18n="lr.heading">Long range — ensemble, low confidence</h2>
+      <div class="head-row">
+        <h2 id="longrange-heading" data-i18n="lr.heading">Long range — ensemble, low confidence</h2>
+        <button type="button" class="info-btn" data-info="longRange" data-static aria-expanded="false" aria-controls="info-longRange" aria-label="Models used" title="Models used">i</button>
+      </div>
+      <p class="info-note" id="info-longRange" hidden></p>
       <p class="notice" data-i18n="lr.note">
         ECMWF ensemble at the launch point, pooled over its members. Rain, wind and foehn use 09–17 local time, temperature the whole day.
         Wind: median with p10–p90 and the mean direction. Rain: share of members with at least 1 mm. North flow: share of member-hours
-        at least 15 km/h from within 60° of north at 850 or 700 hPa. Foehn: Bozen−Innsbruck, member minimum, p10 / p50 / p90.
+        at least 20 km/h from within 60° of north at 850 or 700 hPa. Foehn: Bozen−Innsbruck, member minimum, p10 / p50 / p90.
         From day 6 on (faded) the forecast is less reliable.
       </p>
       <div id="longrange-body"></div>
     </section>
 
     <section class="card" id="foehn-detail" aria-labelledby="foehn-heading">
-      <h2 id="foehn-heading" data-i18n="foehn.detailHeading">Foehn index, 14 days, full detail</h2>
+      <div class="head-row">
+        <h2 id="foehn-heading" data-i18n="foehn.detailHeading">Foehn index, 14 days, full detail</h2>
+        <button type="button" class="info-btn" data-info="foehnChart" data-static aria-expanded="false" aria-controls="info-foehnChart" aria-label="Models used" title="Models used">i</button>
+      </div>
+      <p class="info-note" id="info-foehnChart" hidden></p>
       <div id="foehn-full"></div>
       <p class="explain" data-i18n-rich="foehn.explain">
         Bozen−Innsbruck is the sea-level pressure in South Tyrol minus that in Innsbruck, in hPa. Negative values mean a north-south

@@ -25,8 +25,9 @@ Weather only. The local schools and the pilot decide whether to fly. Self-brief 
 | `lib/longrange.js` | Long-range ensemble per local day: rain chance, pooled wind percentiles, circular mean direction, north-flow probability, temperature medians, foehn range from the MSLP ensemble |
 | `lib/layout.js` | Screen geometry: verdict window parsing, hour strip segments, sparkline paths, range bars, unit scaling |
 | `lib/status.js` | One-line status under the app bar (verdict age, live time) |
+| `lib/info.js` | Texts of the model-info notes: which models feed each part of the page, built from the model lists in `lib/config.js` |
 | `lib/chart.js`, `lib/icons.js` | Chart geometry, WMO weather code to icon shapes |
-| `ui/*.js` | DOM builders: SVG icons and arrows, the foehn chart, the hour strip and compact grid, model sparklines, the long-range chart and cards |
+| `ui/*.js` | DOM builders: SVG icons and arrows, the foehn chart, the hour strip and compact grid, model sparklines, the long-range chart and cards, the blue "i" model-info buttons (`ui/info.js`: a button after a heading opens its note; opened notes stay open across day switches) |
 | `sw.js` | Service worker: stale-while-revalidate app shell, network-first data with cache fallback (also for 429 and 5xx) |
 | `manifest.webmanifest`, `icons/` | PWA manifest, icons (SVG source, PNG 192, 512, maskable 512) |
 | `tests/*.test.mjs` | Unit tests for `lib/` (`node --test`) |
@@ -113,7 +114,8 @@ All thresholds are in `lib/config.js` and are starting points, not verified fact
 
 - `LIMITS`: wind limits in km/h (launch height, 850 hPa, northerly component at 850 hPa, 10 m gusts). 700 hPa has no limit: it is not scored.
 - `FOEHN`: foehn class thresholds (2, 3, 6 hPa), north flow (20 km/h at 850 hPa, within 60° of north), lee humidity (850 hPa RH below 40 %), rain (0.2 mm/h, median of the consensus models), convective CAPE (800 J/kg with showers).
-- `CONSENSUS_MODELS`: the five models the consensus and score use. Gusts take the second-highest model, CAPE the maximum. Precipitation and other speeds take the median; directions take the circular mean.
+- `CONSENSUS_MODELS`: the five models the consensus and score use. Gusts take the second-highest model. Precipitation, CAPE and other speeds take the median; directions take the circular mean.
+- `MODEL_SOURCES`: who runs each model, shown in the model-info notes next to the model names.
 
 ## Known limits
 
