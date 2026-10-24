@@ -27,7 +27,7 @@ Weather only. The local schools and the pilot decide whether to fly. Self-brief 
 | `lib/status.js` | One-line status under the app bar (verdict age, live time) |
 | `lib/info.js` | Texts of the model-info notes: which models feed each part of the page, built from the model lists in `lib/config.js` |
 | `lib/chart.js`, `lib/icons.js` | Chart geometry, WMO weather code to icon shapes |
-| `ui/*.js` | DOM builders: SVG icons and arrows, the foehn chart, the hour strip and compact grid, model sparklines, the long-range chart and cards, the blue "i" model-info buttons (`ui/info.js`: a button after a heading opens its note; opened notes stay open across day switches) |
+| `ui/*.js` | DOM builders: SVG icons and arrows, the foehn chart, the hour strip and compact grid, model sparklines, the long-range chart and cards, the blue "i" model-info buttons (`ui/info.js`: a button after a heading opens one popup next to it; a tap outside, Escape or the same button closes it) |
 | `sw.js` | Service worker: stale-while-revalidate app shell, network-first data with cache fallback (also for 429 and 5xx) |
 | `manifest.webmanifest`, `icons/` | PWA manifest, icons (SVG source, PNG 192, 512, maskable 512) |
 | `tests/*.test.mjs` | Unit tests for `lib/` (`node --test`) |

@@ -425,7 +425,7 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 .more-row th, .more-row td { font-size: 11px; color: var(--muted); }
 .more-row td, .more-row th { letter-spacing: -0.03em; }
 
-h3 + .grid, .head-row + .info-note + .grid { margin-top: 0.2rem; }
+h3 + .grid, .head-row + .grid { margin-top: 0.2rem; }
 table.grid {
   width: 100%;
   table-layout: fixed;
@@ -655,7 +655,8 @@ dialog input {
 .check-live li { margin: 0.35rem 0; line-height: 1.4; }
 .check-live a { display: inline-block; min-height: 32px; line-height: 32px; }
 
-/* Model info: a small blue "i" after a heading; the note opens under it. The row takes the heading's margins. */
+/* Model info: a small blue "i" after a heading; a tap opens one popup next to it (ui/info.js places it).
+   The row takes the heading's margins. */
 .head-row { display: flex; align-items: baseline; gap: 0.45rem; margin: 0 0 0.5rem; }
 .head-row > :not(.info-btn) { margin: 0; min-width: 0; }
 .head-row.is-h3 { margin: 0.9rem 0 0.4rem; }
@@ -681,12 +682,32 @@ dialog input {
 .info-btn::after { content: ""; position: absolute; inset: calc((1.3rem - 44px) / 2); }
 .info-btn[aria-expanded="true"] { box-shadow: 0 0 0 2px var(--card), 0 0 0 4px var(--info); }
 .info-btn:focus-visible { outline: 3px solid var(--info); outline-offset: 3px; }
-.info-note {
-  margin: 0 0 0.6rem;
-  padding: 0.45rem 0.65rem;
-  border-left: 3px solid var(--info);
-  border-radius: 6px;
+.info-pop {
+  position: fixed;
+  z-index: 20; /* over the sticky app bar and day tabs */
+  top: 0;
+  left: 0;
+  width: min(20rem, calc(100vw - 24px));
+  padding: 0.55rem 0.75rem 0.6rem;
+  border: 1px solid var(--info);
+  border-radius: 10px;
   background: var(--info-bg);
   color: var(--text);
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.22);
   font-size: 0.88rem;
+  line-height: 1.4;
 }
+.info-pop p { margin: 0; }
+.info-pop .info-pop-title { font-weight: 700; margin-bottom: 0.25rem; }
+.info-pop::before {
+  content: "";
+  position: absolute;
+  left: var(--arrow-x, 50%);
+  width: 12px;
+  height: 12px;
+  background: var(--info-bg);
+  border: 1px solid var(--info);
+  transform: translateX(-50%) rotate(45deg);
+}
+.info-pop[data-side="below"]::before { top: -7px; border-right: 0; border-bottom: 0; }
+.info-pop[data-side="above"]::before { bottom: -7px; border-left: 0; border-top: 0; }

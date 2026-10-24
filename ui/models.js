@@ -67,7 +67,7 @@ function legend() {
     'div',
     { class: 'legend' },
     consensus,
-    ...withInfo(el('p', { class: 'legend-note', text: t('models.extra', { models: extra.join(', ') }) }), 'compare', t('day.compare'), 'is-note')
+    withInfo(el('p', { class: 'legend-note', text: t('models.extra', { models: extra.join(', ') }) }), 'compare', t('day.compare'), 'is-note')
   );
 }
 

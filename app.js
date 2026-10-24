@@ -16,7 +16,7 @@ import { hourGrid, hourStripEl } from './ui/hourly.js';
 import { modelCharts } from './ui/models.js';
 import { longRangeView } from './ui/longrange.js';
 import { applyStatic } from './ui/static.js';
-import { withInfo, fillStaticInfo, wireInfo } from './ui/info.js';
+import { withInfo, fillStaticInfo, refreshInfo, wireInfo } from './ui/info.js';
 
 const HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17];
 const REFRESH_KEY = 'grappa.refreshUrl';
@@ -465,7 +465,7 @@ function verdictCard(dateKey, foehnLine, windowRed = false) {
   return el(
     'article',
     { class: `verdict verdict-${day.verdict ?? 'none'}` },
-    ...withInfo(el('p', { class: 'verdict-word', text: verdictLabel(day.verdict) }), 'verdict', t('info.whatVerdict'), 'is-verdict'),
+    withInfo(el('p', { class: 'verdict-word', text: verdictLabel(day.verdict) }), 'verdict', t('info.whatVerdict'), 'is-verdict'),
     el('h3', { class: 'headline', text: localizedText(day.headline) }),
     day.window ? el('p', { class: 'window', text: t('card.window', { window: day.window }) }) : null,
     day.window && windowRed ? el('p', { class: 'window-note', text: t('card.windowLiveRed') }) : null,
@@ -507,11 +507,11 @@ function renderDay(dateKey) {
       el(
         'section',
         { class: 'strip-block', 'aria-label': t('day.strip') },
-        ...withInfo(el('p', { class: 'strip-head', text: t('day.stripHead', { verdict: verdictLabel(day?.verdict ?? null) }) }), 'strip', t('day.strip'), 'is-strip'),
+        withInfo(el('p', { class: 'strip-head', text: t('day.stripHead', { verdict: verdictLabel(day?.verdict ?? null) }) }), 'strip', t('day.strip'), 'is-strip'),
         hourStripEl(segments),
         el('p', { class: 'legend-note', text: t('day.stripLegend') })
       ),
-      ...withInfo(el('h3', { text: t('day.hourly') }), 'grid', t('day.hourly'), 'is-h3'),
+      withInfo(el('h3', { text: t('day.hourly') }), 'grid', t('day.hourly'), 'is-h3'),
       hourGrid(cols, state.unit, state.showMore),
       more,
       el('p', {
@@ -553,6 +553,7 @@ function render() {
   renderLongRange();
   renderDay(selectedDay(dayList()));
   renderMenu();
+  refreshInfo();
 }
 
 // ---- refresh verdict (poll after opening the routine) ----
