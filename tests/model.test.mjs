@@ -139,3 +139,30 @@ test('temperatureColumn: 1000/1500/3000 m per model, then the median; ECMWF-styl
   assert.deepEqual(temperatureColumn({ time: ['x'] }, ['icon_seamless'], 0), [null, null, null]);
   assert.deepEqual(temperatureColumn(null, ['icon_seamless'], 0), [null, null, null]);
 });
+
+test('consensus: median CAPE and cloud, north component at 850 hPa only, launch-level spread', () => {
+  const mk = (model, cape, speed, dir) => ({
+    model,
+    ws10: 10,
+    wd10: 180,
+    gust: 20,
+    launch: { speed, dir },
+    aloft850: { speed: 10, dir: 90 },
+    aloft700: { speed: 40, dir: 0 },
+    rh850: 60,
+    precipMm: 0,
+    cape,
+    cloudLow: 10,
+    cloudMid: cape / 10,
+    wx: 2,
+    blh: null,
+    t2: null,
+    td2: null,
+  });
+  const c = consensusHour([mk('icon_seamless', 630, 5, 10), mk('ecmwf_ifs025', 430, 14, 80), mk('gfs_seamless', 190, 20, 350)]);
+  assert.equal(c.cape, 430, 'median, not the maximum');
+  assert.equal(c.cloudMid, 43);
+  assert.ok(Math.abs(c.north) < 1e-9, 'north at 3000 m does not count: 850 hPa is from the east');
+  assert.equal(c.speedSpread, 15);
+  assert.equal(c.dirSpread, 90, 'between 350 and 80 degrees');
+});

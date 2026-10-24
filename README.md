@@ -46,16 +46,19 @@ Weather only. The local schools and the pilot decide whether to fly. Self-brief 
 
 Score per hour (green / amber / red) is computed in the browser from the consensus of five models (ICON, ECMWF, GFS, AROME, ICON-2I) against the limits in `lib/config.js`, plus the day's foehn class from the live ΔP. The same rules as `fetch_bassano.py`:
 
-- Consensus per hour: speeds and humidity take the median, directions the circular mean, 10 m gusts the second-gustiest model (one outlier model does not set it; the maximum is kept as `gustMax`), precipitation the median (one wet model alone is not rain), CAPE the maximum.
+- Consensus per hour: speeds, humidity, cloud and CAPE take the median, directions the circular mean, 10 m gusts the second-gustiest model (one outlier model does not set it; the maximum is kept as `gustMax`), precipitation the median (one wet model alone is not rain). The model spread is the largest difference between two models in the launch-level wind speed and direction.
+- Levels: launch-level wind, 850 hPa wind, the north component at 850 hPa and the gust, against `LIMITS`. 3000 m (700 hPa) is not scored: thermals rarely reach it; its grid row shows it in colour.
 - Day foehn class: over 09–17 local, each of ECMWF and ICON takes its mean Bozen−Innsbruck ΔP (one hour's dip does not set the class); the more negative of the two sets the class by its magnitude (under 2 hPa none, 2–3 weak, 3–6 moderate, over 6 strong). A positive value is none (south side).
 - North flow: the consensus wind at 850 hPa (ridge level) is at least 20 km/h and comes from within 60° of north. A northerly at 700 hPa alone does not count.
 - Lee signature: north flow and consensus 850 hPa relative humidity below 40 %.
-- Red: rain, convective cells, strong foehn, and moderate foehn with a lee signature. Moderate foehn with north flow but moist air gives amber; moderate foehn without north flow at Bassano adds nothing to the hour.
+- Red: rain (median at least 0.2 mm), convective cells (CAPE above 800 J/kg with precipitation) and strong foehn. Only a strong foehn is red: Bassano sits far behind the main ridge. Moderate foehn gives amber only with the lee signature; without it the class adds nothing to the hour.
+- Amber from the models: a speed spread above 8 km/h, or a direction spread above 45° with at least 10 km/h at launch, except in a breeze hour.
+- Breeze hour: from 11:00, launch wind at most 12 km/h, 850 hPa wind at most 20 km/h, low and mid cloud at most 50 %, no precipitation, no north flow at 850 hPa and no strong foehn. The plain and upslope breeze then dominates, so the models' direction spread is expected (`BREEZE` in `lib/config.js`).
 - Best slot: the hour strip outlines only window hours that are not red in the live data; when the written window contains a live red hour, the card says so.
 
 The score is a starting point; the verdict text is the judgement.
 
-The hour grid's CAPE row (J/kg) shows the consensus value, the highest of the five consensus models, coloured in bands at 50, 200, 400, 800 and 1500 J/kg (`CAPE_EDGES` in `lib/config.js`). From 800 J/kg, where the score counts CAPE with showers, the cells turn orange and then red.
+The hour grid's CAPE row (J/kg) shows the consensus value, the median of the five consensus models, coloured in bands at 50, 200, 400, 800 and 1500 J/kg (`CAPE_EDGES` in `lib/config.js`). From 800 J/kg, where the score counts CAPE with showers, the cells turn orange and then red.
 
 ### forecast.json
 
@@ -108,7 +111,7 @@ GitHub Pages serves `main` from the repository root. The verdict file lives on t
 
 All thresholds are in `lib/config.js` and are starting points, not verified facts:
 
-- `LIMITS`: wind limits in km/h (launch height, 850 and 700 hPa, northerly component, 10 m gusts).
+- `LIMITS`: wind limits in km/h (launch height, 850 hPa, northerly component at 850 hPa, 10 m gusts). 700 hPa has no limit: it is not scored.
 - `FOEHN`: foehn class thresholds (2, 3, 6 hPa), north flow (20 km/h at 850 hPa, within 60° of north), lee humidity (850 hPa RH below 40 %), rain (0.2 mm/h, median of the consensus models), convective CAPE (800 J/kg with showers).
 - `CONSENSUS_MODELS`: the five models the consensus and score use. Gusts take the second-highest model, CAPE the maximum. Precipitation and other speeds take the median; directions take the circular mean.
 

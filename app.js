@@ -7,7 +7,6 @@ import { foehnSeries, ensembleSeries, dayFoehnDp, dayExtremes } from './lib/foeh
 import { ensembleFoehnDaily, longRangeRows } from './lib/longrange.js';
 import { modelHour, consensusHour, temperatureColumn } from './lib/model.js';
 import { scoreHour, foehnClass } from './lib/score.js';
-import { wmoGroup } from './lib/icons.js';
 import { createPoller } from './lib/poll.js';
 import { parseWindow, hourStrip, windowHasRed } from './lib/layout.js';
 import { statusLine } from './lib/status.js';
@@ -240,22 +239,25 @@ function hourRecords(dateKey) {
 
 function dayScores(dateKey, recs) {
   const dayFoehn = foehnClass(dayFoehnDp(state.live.foehn, dateKey));
-  const scores = recs.map((r) => {
+  const scores = recs.map((r, k) => {
     const c = r.c;
     if (!c) return null;
     return scoreHour(
       {
         launch: c.launch.speed,
         aloft850: c.aloft850,
-        aloft700: c.aloft700,
         north: c.north,
         gust: c.gust,
         rh850: c.rh850,
         precipMm: c.precipMm,
         cape: c.cape,
-        wxGroup: wmoGroup(c.wx),
+        cloudLow: c.cloudLow,
+        cloudMid: c.cloudMid,
+        dirSpread: c.dirSpread,
+        speedSpread: c.speedSpread,
       },
-      dayFoehn
+      dayFoehn,
+      HOURS[k]
     );
   });
   return { dayFoehn, scores };
